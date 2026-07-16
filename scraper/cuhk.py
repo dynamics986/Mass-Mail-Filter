@@ -71,7 +71,8 @@ def parse_detail(entry: ListEntry, html: str, fetched_at: str | None = None) -> 
         parsed = urlparse(url)
         if parsed.scheme in {"http", "https"} and url != entry.url and "/Digest/" not in parsed.path: urls.append(url)
     organizer = _extract_organizer(text)
-    return MailItem(id=entry.id, digestDate=entry.digest_date, category=entry.category, title=entry.title, bodyText=text[:30000], organizer=organizer, contactEmail=emails[0] if emails else None, sourceUrl=entry.url, applicationUrls=list(dict.fromkeys(urls))[:12], deadline=extract_deadline(text, entry.digest_date), compensation=extract_compensation(f"{entry.title}\n{text}"), tags=extract_tags(f"{entry.title}\n{text}"), requirements=extract_requirements(f"{entry.title}\n{text}"), publishedAt=f"{entry.digest_date[:4]}-{entry.digest_date[4:6]}-{entry.digest_date[6:]}T00:00:00+08:00", fetchedAt=fetched_at)
+    digest_iso = f"{entry.digest_date[:4]}-{entry.digest_date[4:6]}-{entry.digest_date[6:]}"
+    return MailItem(id=entry.id, digestDate=digest_iso, category=entry.category, title=entry.title, bodyText=text[:30000], organizer=organizer, contactEmail=emails[0] if emails else None, sourceUrl=entry.url, applicationUrls=list(dict.fromkeys(urls))[:12], deadline=extract_deadline(text, entry.digest_date), compensation=extract_compensation(f"{entry.title}\n{text}"), tags=extract_tags(f"{entry.title}\n{text}"), requirements=extract_requirements(f"{entry.title}\n{text}"), publishedAt=f"{digest_iso}T00:00:00+08:00", fetchedAt=fetched_at)
 
 def _extract_organizer(text: str) -> str | None:
     match = re.search(r"(?:^|\n)(?:From|Organizer|主辦單位|主办单位)\s*:\s*([^\n]{2,160})", text, re.I)

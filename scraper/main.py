@@ -26,9 +26,9 @@ def write_feed(items: list[MailItem]) -> None:
     FEED.parent.mkdir(parents=True, exist_ok=True)
     now = datetime.now(UTC).isoformat().replace("+00:00", "Z")
     latest = max(item.digestDate for item in items)
-    source = LIST_URL.format(date=latest)
+    source = LIST_URL.format(date=latest.replace("-", ""))
     FEED.write_text(json.dumps([json.loads(item.model_dump_json()) for item in items], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    meta = FeedMeta(latestDigest=f"{latest[:4]}-{latest[4:6]}-{latest[6:]}", fetchedAt=now, itemCount=len(items), status="ok", sourceUrl=source)
+    meta = FeedMeta(latestDigest=latest, fetchedAt=now, itemCount=len(items), status="ok", sourceUrl=source)
     META.write_text(meta.model_dump_json(indent=2) + "\n", encoding="utf-8")
 
 def run(dates: list[str]) -> int:
