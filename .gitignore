@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.npm-cache/
+.pnpm-store/
+.pydeps/
+.playwright-browsers/
+.env*
+!.env.example
+__pycache__/
+.pytest_cache/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo

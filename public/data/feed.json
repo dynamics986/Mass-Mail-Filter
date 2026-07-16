@@ -1,0 +1,99 @@
+[
+  {
+    "id": "sample-web-ai-helper",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "Recruitment of student helpers [Web development and AI Research]",
+    "bodyText": "Student helpers are invited to support web development and AI research. Undergraduate students with Python, JavaScript, data analysis or web development experience are welcome. Paid hourly work; details will be confirmed with shortlisted applicants.",
+    "organizer": "CUHK Research Team",
+    "contactEmail": "research@example.cuhk.edu.hk",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "deadline": "2026-08-15",
+    "compensation": { "type": "cash" },
+    "tags": ["Web", "AI", "Engineering", "Student helper", "Research"],
+    "requirements": [
+      { "field": "studentLevel", "operator": "equals", "value": "undergraduate", "confidence": "high", "evidence": "Undergraduate students with Python, JavaScript, data analysis or web development experience are welcome." },
+      { "field": "skill", "operator": "includes", "value": "Python", "confidence": "medium", "evidence": "with Python, JavaScript, data analysis or web development experience" }
+    ],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  },
+  {
+    "id": "sample-mandarin-eeg",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "HK$230 Stipend: EEG Experiment Opportunity for Chinese Mainland Students",
+    "bodyText": "Chinese Mainland undergraduate students are invited to take part in an EEG language-processing experiment. Native Mandarin speakers are preferred. Participants receive an HK$230 stipend after completion.",
+    "organizer": "Language Processing Laboratory",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "compensation": { "type": "allowance", "minHkd": 230, "maxHkd": 230 },
+    "tags": ["Language", "Research"],
+    "requirements": [
+      { "field": "residency", "operator": "equals", "value": "Mainland Chinese", "confidence": "high", "evidence": "Chinese Mainland undergraduate students are invited" },
+      { "field": "studentLevel", "operator": "equals", "value": "undergraduate", "confidence": "high", "evidence": "Chinese Mainland undergraduate students are invited" },
+      { "field": "nativeLanguage", "operator": "equals", "value": "Mandarin", "confidence": "high", "evidence": "Native Mandarin speakers are preferred." }
+    ],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  },
+  {
+    "id": "sample-cantonese-native",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "Recruitment of Native Cantonese-speaking Participants — HK$250",
+    "bodyText": "Native Cantonese speakers are invited to participate in a psychology experiment about Chinese two-character words. Participants will receive HK$250 after completion.",
+    "organizer": "Department of Psychology",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "compensation": { "type": "cash", "minHkd": 250, "maxHkd": 250 },
+    "tags": ["Language", "Research"],
+    "requirements": [{ "field": "nativeLanguage", "operator": "equals", "value": "Cantonese", "confidence": "high", "evidence": "Native Cantonese speakers are invited" }],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  },
+  {
+    "id": "sample-data-helper",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "Student Helper Recruitment (For data analysis)",
+    "bodyText": "A CUHK research project is recruiting a student helper for data cleaning and analysis. Experience with Python or R is an advantage. Work schedule and remuneration will be discussed during interview.",
+    "organizer": "CUHK Research Project",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "tags": ["Data", "Student helper", "Research"],
+    "requirements": [{ "field": "skill", "operator": "includes", "value": "Python", "confidence": "medium", "evidence": "Experience with Python or R is an advantage." }],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  },
+  {
+    "id": "sample-sleep-study",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "Up to HK$1100 cash — Sleep–Wake Patterns and Depressive Mood Study",
+    "bodyText": "Recruiting participants aged 18 or above for a study on sleep–wake patterns and depressive mood. Eligible participants may receive up to HK$1100 cash after completing all sessions.",
+    "organizer": "Faculty of Medicine",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "compensation": { "type": "cash", "maxHkd": 1100 },
+    "tags": ["Research"],
+    "requirements": [{ "field": "age", "operator": "min", "value": 18, "confidence": "high", "evidence": "participants aged 18 or above" }],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  },
+  {
+    "id": "sample-ai-music",
+    "digestDate": "2026-06-05",
+    "category": "Announcements",
+    "title": "AI + Music: Recruiting Young Music Lovers",
+    "bodyText": "Join an artificial intelligence and popular-song emotion categorization research study. Young music lovers are welcome. Eligibility and compensation details will be confirmed by the research team.",
+    "organizer": "AI and Music Research Team",
+    "sourceUrl": "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260605",
+    "applicationUrls": [],
+    "tags": ["AI", "Research"],
+    "requirements": [],
+    "publishedAt": "2026-06-05T00:00:00+08:00",
+    "fetchedAt": "2026-07-16T12:00:00Z"
+  }
+]

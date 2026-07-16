@@ -1,0 +1,13 @@
+export type RequirementField = "studentLevel" | "major" | "nativeLanguage" | "spokenLanguage" | "age" | "gender" | "residency" | "health" | "skill";
+export type Requirement = { field: RequirementField; operator: "equals" | "includes" | "min" | "max"; value: string | number; confidence: "high" | "medium"; evidence: string };
+export type Compensation = { type: "cash" | "voucher" | "allowance" | "prize" | "unknown"; minHkd?: number; maxHkd?: number };
+export type MailItem = { id: string; digestDate: string; category: string; title: string; bodyText: string; organizer?: string; contactEmail?: string; sourceUrl: string; applicationUrls: string[]; deadline?: string; compensation?: Compensation; tags: string[]; requirements: Requirement[]; publishedAt: string; fetchedAt: string };
+export type FeedMeta = { latestDigest: string; fetchedAt: string; itemCount: number; status: "ok" | "stale" | "error"; sourceUrl: string };
+export type Language = "zh" | "en";
+export type Eligibility = "eligible" | "likely" | "unknown" | "ineligible";
+export type Weights = { engineering: number; paid: number; interests: number; language: number; helper: number };
+export type Profile = { studentLevel: string; major: string; nativeLanguages: string[]; spokenLanguages: string[]; age?: number; gender?: string; residency?: string; health: string[]; skills: string[]; interests: string[]; excluded: string[]; preferPaid: boolean; weights: Weights; language: Language; onboarded: boolean };
+export type ScoreReason = { key: "engineering" | "paid" | "interests" | "language" | "helper" | "unknown"; points: number; label: string };
+export type Evaluation = { eligibility: Eligibility; evidence: string[]; score: number; reasons: ScoreReason[] };
+export type FavoriteSnapshot = Pick<MailItem, "id" | "title" | "digestDate" | "sourceUrl" | "category" | "deadline" | "tags">;
+export type LocalState = { profile: Profile; hidden: string[]; favorites: Record<string, FavoriteSnapshot>; corrections: string[] };
