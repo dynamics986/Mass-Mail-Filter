@@ -12,7 +12,9 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # A failed updater also emits workflow_run. Do not let that short, skipped
+  # run cancel a manual or push-triggered deployment that is already building.
+  cancel-in-progress: false
 jobs:
   test-and-build:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
