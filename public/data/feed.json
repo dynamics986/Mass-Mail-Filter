@@ -16,7 +16,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -55,8 +54,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -88,7 +85,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 250,
@@ -127,8 +123,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -160,8 +154,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI"
     ],
@@ -194,7 +186,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -246,10 +237,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 850
     },
     "tags": [
@@ -292,7 +281,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -336,7 +324,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 90,
@@ -374,8 +361,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -406,11 +391,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "cash",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "cash"
     },
     "tags": [
       "Research",
@@ -459,7 +441,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 800,
@@ -497,7 +478,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 850,
@@ -535,7 +515,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 180,
@@ -572,8 +551,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -603,7 +580,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 50,
@@ -668,7 +644,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 400,
@@ -712,7 +687,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 63,
@@ -751,8 +725,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -788,7 +760,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-08-10",
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -819,8 +790,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -851,8 +820,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -884,7 +851,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 200,
@@ -921,8 +887,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -952,8 +916,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -983,7 +945,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 67,
@@ -1027,7 +988,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -1064,8 +1024,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -1096,8 +1054,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Student helper",
       "Research"
@@ -1129,8 +1085,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -1162,8 +1116,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -1195,10 +1147,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 700
     },
     "tags": [
@@ -1246,7 +1196,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 200,
@@ -1298,10 +1247,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 300
     },
     "tags": [
@@ -1349,10 +1296,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 740
     },
     "tags": [
@@ -1387,7 +1332,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -1431,8 +1375,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research",
@@ -1479,10 +1421,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 300
     },
     "tags": [
@@ -1516,11 +1456,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "cash",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "cash"
     },
     "tags": [
       "Language"
@@ -1554,8 +1491,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -1585,8 +1520,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -1622,8 +1555,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Language"
@@ -1656,7 +1587,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 600,
@@ -1708,8 +1638,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -1756,10 +1684,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 400
     },
     "tags": [
@@ -1821,8 +1747,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -1861,7 +1785,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -1905,8 +1828,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -1936,8 +1857,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -1967,8 +1886,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -2001,7 +1918,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 30,
@@ -2036,11 +1952,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "cash",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "cash"
     },
     "tags": [
       "Research"
@@ -2080,10 +1993,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 500
     },
     "tags": [
@@ -2130,7 +2041,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -2174,7 +2084,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 500,
@@ -2233,10 +2142,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 400
     },
     "tags": [
@@ -2307,7 +2214,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 33,
@@ -2344,10 +2250,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 500
     },
     "tags": [
@@ -2395,7 +2299,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 67,
@@ -2434,7 +2337,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -2474,8 +2376,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -2516,8 +2416,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Engineering",
       "Research",
@@ -2551,8 +2449,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -2590,8 +2486,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -2624,11 +2518,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "allowance",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "allowance"
     },
     "tags": [
       "Language"
@@ -2660,8 +2551,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Engineering"
     ],
@@ -2693,7 +2582,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "prize",
       "minHkd": 100,
@@ -2730,8 +2618,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -2761,8 +2647,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI"
     ],
@@ -2794,7 +2678,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 230,
@@ -2841,8 +2724,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -2878,8 +2759,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Language"
@@ -2915,8 +2794,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -2947,7 +2824,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -2984,7 +2860,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 400,
@@ -3028,10 +2903,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 1000
     },
     "tags": [
@@ -3086,7 +2959,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 150,
@@ -3124,8 +2996,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research",
@@ -3160,7 +3030,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 33,
@@ -3197,7 +3066,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 90,
@@ -3236,8 +3104,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -3273,8 +3139,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research"
@@ -3307,8 +3171,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -3337,11 +3199,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "cash",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "cash"
     },
     "tags": [
       "Research",
@@ -3389,7 +3248,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 200,
@@ -3440,10 +3298,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 700
     },
     "tags": [
@@ -3492,10 +3348,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 300
     },
     "tags": [
@@ -3545,8 +3399,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research",
@@ -3579,7 +3431,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -3683,7 +3534,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 150,
@@ -3749,7 +3599,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 800,
@@ -3800,7 +3649,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 60,
@@ -3859,8 +3707,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -3894,8 +3740,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -3927,8 +3771,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -3959,8 +3801,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -4000,8 +3840,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -4034,8 +3872,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -4067,7 +3903,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -4104,10 +3939,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 250
     },
     "tags": [
@@ -4142,10 +3975,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 740
     },
     "tags": [
@@ -4181,7 +4012,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-07-10",
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -4214,7 +4044,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 67,
@@ -4257,7 +4086,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 300,
@@ -4297,8 +4125,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -4329,10 +4155,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 100
     },
     "tags": [
@@ -4366,10 +4190,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 300
     },
     "tags": [
@@ -4405,8 +4227,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -4446,8 +4266,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -4486,7 +4304,6 @@
       "https://www.scs.cuhk.edu.hk/ftdip/en/about-ftd/dsi/",
       "https://cumassmail.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -4521,10 +4338,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 400
     },
     "tags": [
@@ -4558,8 +4373,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research",
@@ -4606,7 +4419,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -4643,8 +4455,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -4691,8 +4501,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -4724,10 +4532,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 5
     },
     "tags": [
@@ -4776,7 +4582,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-07-14",
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -4813,7 +4618,6 @@
     "deadline": "2026-07-12",
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 50
     },
     "tags": [],
@@ -4847,8 +4651,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -4877,7 +4679,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 250,
@@ -4915,10 +4716,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 1000
     },
     "tags": [
@@ -4972,7 +4771,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 80,
@@ -5008,7 +4806,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -5046,7 +4843,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 90,
@@ -5085,8 +4881,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Web",
@@ -5122,8 +4916,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5155,7 +4947,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 90,
@@ -5195,8 +4986,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5228,8 +5017,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -5261,8 +5048,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Engineering",
       "Language"
@@ -5295,8 +5080,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -5328,8 +5111,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -5368,8 +5149,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5399,7 +5178,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -5440,8 +5218,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5473,8 +5249,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5505,8 +5279,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -5545,8 +5317,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -5576,7 +5346,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -5614,7 +5383,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 33,
@@ -5652,8 +5420,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -5700,10 +5466,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 850
     },
     "tags": [
@@ -5746,7 +5510,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -5784,8 +5547,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -5818,7 +5579,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 30,
@@ -5853,8 +5613,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Engineering",
       "AI",
@@ -5891,8 +5649,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -5931,7 +5687,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 100,
@@ -5975,8 +5730,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -6006,8 +5759,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI"
     ],
@@ -6041,10 +5792,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "prize",
-      "minHkd": null,
       "maxHkd": 10000
     },
     "tags": [
@@ -6078,7 +5827,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -6123,8 +5871,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Data",
       "Student helper",
@@ -6166,8 +5912,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -6200,8 +5944,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -6246,7 +5988,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -6283,8 +6024,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -6317,8 +6056,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -6349,8 +6086,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Web",
@@ -6386,7 +6121,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 400,
@@ -6430,10 +6164,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 200
     },
     "tags": [
@@ -6467,7 +6199,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 1,
@@ -6507,7 +6238,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-07-15",
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -6543,8 +6273,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Language"
@@ -6578,8 +6306,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -6636,8 +6362,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -6671,10 +6395,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 1000
     },
     "tags": [
@@ -6724,8 +6446,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -6759,10 +6479,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 500
     },
     "tags": [
@@ -6809,8 +6527,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -6839,7 +6555,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 80,
@@ -6876,7 +6591,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-06-28",
-    "compensation": null,
     "tags": [
       "Engineering",
       "Research"
@@ -6916,8 +6630,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -6947,7 +6659,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-06-30",
-    "compensation": null,
     "tags": [
       "Engineering"
     ],
@@ -6980,8 +6691,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -7015,8 +6724,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -7048,7 +6755,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 100,
@@ -7085,7 +6791,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 300,
@@ -7123,7 +6828,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 7500,
@@ -7160,8 +6864,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -7193,8 +6895,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -7227,10 +6927,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 500
     },
     "tags": [
@@ -7279,7 +6977,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 460,
@@ -7337,7 +7034,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -7390,7 +7086,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 750,
@@ -7427,11 +7122,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "voucher",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "voucher"
     },
     "tags": [
       "Research"
@@ -7465,7 +7157,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 850,
@@ -7503,8 +7194,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI"
     ],
@@ -7573,8 +7262,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -7660,8 +7347,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -7694,7 +7379,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 600,
@@ -7746,10 +7430,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 1100
     },
     "tags": [
@@ -7799,8 +7481,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Student helper"
@@ -7833,7 +7513,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 64,
@@ -7873,7 +7552,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 160,
@@ -7911,8 +7589,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -7942,8 +7618,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -7974,7 +7648,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 63,
@@ -8019,8 +7692,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -8056,7 +7727,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-06-30",
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -8088,8 +7758,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research",
       "Language"
@@ -8121,8 +7789,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -8152,8 +7818,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Engineering",
       "AI",
@@ -8187,7 +7851,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -8225,11 +7888,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
-      "type": "cash",
-      "minHkd": null,
-      "maxHkd": null
+      "type": "cash"
     },
     "tags": [
       "Research",
@@ -8265,8 +7925,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -8295,10 +7953,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 400
     },
     "tags": [
@@ -8347,10 +8003,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 250
     },
     "tags": [
@@ -8385,7 +8039,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 100,
@@ -8422,8 +8075,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -8455,8 +8106,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -8488,10 +8137,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 300
     },
     "tags": [],
@@ -8537,10 +8184,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 700
     },
     "tags": [
@@ -8588,7 +8233,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
       "minHkd": 200,
@@ -8646,8 +8290,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "AI",
       "Research",
@@ -8696,7 +8338,6 @@
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
     "deadline": "2026-07-14",
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -8728,10 +8369,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
-      "minHkd": null,
       "maxHkd": 400
     },
     "tags": [
@@ -8764,8 +8403,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [],
     "requirements": [
       {
@@ -8795,8 +8432,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Research"
     ],
@@ -8831,8 +8466,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web",
       "Research",
@@ -8871,7 +8504,6 @@
     "deadline": "2026-07-12",
     "compensation": {
       "type": "cash",
-      "minHkd": null,
       "maxHkd": 50
     },
     "tags": [],
@@ -8910,7 +8542,6 @@
       "https://www.scs.cuhk.edu.hk/ftdip/en/home-en/",
       "https://cumassmail.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 200,
@@ -8948,8 +8579,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -8985,8 +8614,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -9022,8 +8649,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Web"
     ],
@@ -9057,8 +8682,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
-    "compensation": null,
     "tags": [
       "Language"
     ],
@@ -9089,7 +8712,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "cash",
       "minHkd": 250,
@@ -9127,7 +8749,6 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "voucher",
       "minHkd": 250,
@@ -9164,10 +8785,8 @@
       "https://cumassmail.itsc.cuhk.edu.hk/",
       "http://servicedesk.itsc.cuhk.edu.hk/"
     ],
-    "deadline": null,
     "compensation": {
       "type": "allowance",
-      "minHkd": null,
       "maxHkd": 1000
     },
     "tags": [
