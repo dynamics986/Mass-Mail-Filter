@@ -17,6 +17,7 @@ def test_detail_is_plain_and_structured():
     item = parse_detail(entry, (FIXTURES / "detail.html").read_text(), "2026-07-10T05:00:00Z")
     assert item and "alert" not in item.bodyText
     assert item.digestDate == "2026-07-10"
+    assert str(item.sourceUrl).rstrip("/") == entry.url
     assert item.deadline == "2026-07-31"
     assert item.compensation and item.compensation.maxHkd == 500
     assert any(r.field == "nativeLanguage" and r.value == "Mandarin" for r in item.requirements)

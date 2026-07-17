@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { t } from "./i18n";
 import { loadFeed } from "./lib/data";
+import { getCuhkSource } from "./lib/links";
 import { evaluateItem, isClosingSoon, isEngineering, isExcluded, isHelper } from "./lib/ranking";
 import { clearState, defaultState, exportState, favoriteSnapshot, importState, loadState, saveState } from "./lib/storage";
 import type { Evaluation, FeedMeta, LocalState, MailItem, Profile } from "./types";
@@ -74,10 +75,11 @@ function Detail({ items, local, updateLocal }: { items: MailItem[]; local: Local
   if (!item) return <Empty text={lang === "zh" ? "找不到此项目，可能已经归档。" : "This item may have been archived."} />;
   const evaluation = evaluateItem(item, local.profile);
   const topic = item.tags[0] ?? item.category;
+  const source = getCuhkSource(item);
   return <article className="detail"><button className="back" onClick={() => navigate(-1)}>← {t(lang, "back")}</button><div className="detail-head"><div><EligibilityBadge evaluation={evaluation} lang={lang} /><p className="category">{item.category} · {fmtDate(item.digestDate, lang)}</p><h1>{item.title}</h1></div><div className="score-ring"><strong>{evaluation.score}</strong><span>/100</span></div></div>
     <div className="detail-grid"><section><h2>{t(lang, "evidence")}</h2>{evaluation.evidence.length ? <ul className="evidence">{evaluation.evidence.map((x, i) => <li key={i}>{x}</li>)}</ul> : <p className="muted">{lang === "zh" ? "邮件没有足够明确的资格信息，请核对原文。" : "The message does not state enough eligibility information. Check the original."}</p>}<div className="reasons large">{evaluation.reasons.map((r, i) => <div key={i}><b>{r.points > 0 ? "+" : ""}{r.points}</b><span>{r.label}</span></div>)}</div></section>
       <aside><Info label={t(lang, "compensation")} value={money(item)} /><Info label={lang === "zh" ? "截止日期" : "Deadline"} value={fmtDate(item.deadline, lang)} /><Info label={lang === "zh" ? "主办方" : "Organizer"} value={item.organizer ?? "—"} />{item.contactEmail && <a href={`mailto:${item.contactEmail}`}>{item.contactEmail}</a>}</aside></div>
-    <section className="message"><h2>{t(lang, "body")}</h2><p>{item.bodyText}</p></section><section className="link-list"><a className="primary" href={item.sourceUrl} target="_blank" rel="noreferrer">{t(lang, "source")} ↗</a>{item.applicationUrls.map(url => <a key={url} href={url} target="_blank" rel="noreferrer">{t(lang, "apply")} ↗</a>)}</section>
+    <section className="message"><h2>{t(lang, "body")}</h2><p>{item.bodyText}</p></section><section className="link-list"><a className="primary" href={source.url} target="_blank" rel="noreferrer">{source.direct ? t(lang, "source") : (lang === "zh" ? "查看该期 CUHK Digest" : "Open this CUHK Digest")} ↗</a>{item.applicationUrls.map(url => <a key={url} href={url} target="_blank" rel="noreferrer">{t(lang, "apply")} ↗</a>)}</section>
     <section className="feedback"><button className={feedbackState.disliked ? "confirmed" : ""} aria-pressed={feedbackState.disliked} onClick={() => { updateLocal(s => ({ ...s, profile: { ...s.profile, excluded: [...new Set([...s.profile.excluded, topic])] } })); setFeedbackState(state => ({ ...state, disliked: true })); }}>{feedbackState.disliked ? (lang === "zh" ? "✓ 已减少此类推荐" : "✓ Showing less like this") : t(lang, "dislike")}</button><button className={feedbackState.interested ? "confirmed" : ""} aria-pressed={feedbackState.interested} onClick={() => { updateLocal(s => ({ ...s, profile: { ...s.profile, interests: [...new Set([...s.profile.interests, topic])] } })); setFeedbackState(state => ({ ...state, interested: true })); }}>{feedbackState.interested ? (lang === "zh" ? "✓ 已加入兴趣" : "✓ Interest added") : t(lang, "addInterest")}</button><button onClick={() => updateLocal(s => ({ ...s, corrections: [...new Set([...s.corrections, item.id])] }))}>{local.corrections.includes(item.id) ? "✓" : ""} {t(lang, "correction")}</button></section>
   </article>;
 }
