@@ -27,7 +27,7 @@ def create_session() -> requests.Session:
     session.headers.update({"User-Agent": "CU-Link/1.0 personal academic project; low-frequency weekly fetch"})
     return session
 
-def candidate_dates(start: date | None = None, days: int = 8) -> list[str]:
+def candidate_dates(start: date | None = None, days: int = 35) -> list[str]:
     start = start or datetime.now().astimezone().date()
     return [(start - timedelta(days=i)).strftime("%Y%m%d") for i in range(days)]
 
@@ -78,8 +78,10 @@ def _extract_organizer(text: str) -> str | None:
     match = re.search(r"(?:^|\n)(?:From|Organizer|主辦單位|主办单位)\s*:\s*([^\n]{2,160})", text, re.I)
     return match.group(1).strip() if match else None
 
-def collect_digest(session: requests.Session, digest_date: str, delay: float = 0.7) -> list[MailItem]:
+def collect_digest(session: requests.Session, digest_date: str, delay: float = 0.7, skip_ids: set[str] | None = None) -> list[MailItem]:
     entries = parse_list(fetch_html(session, LIST_URL.format(date=digest_date)), digest_date)
+    if skip_ids:
+        entries = [entry for entry in entries if entry.id not in skip_ids]
     items = []
     for entry in entries:
         time.sleep(delay)

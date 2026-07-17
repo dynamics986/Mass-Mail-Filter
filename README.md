@@ -5,6 +5,7 @@ CU Link is a bilingual, installable PWA that collects the public CUHK Undergradu
 ## What it does
 
 - Finds a digest even when a holiday moves publication from Friday to Thursday.
+- Probes the previous 35 days on first run to backfill up to four available weekly issues.
 - Archives message text before CUHK detail links expire.
 - Extracts compensation, deadlines, tags, and explicit eligibility requirements.
 - Distinguishes a native-language requirement from general language ability.

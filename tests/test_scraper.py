@@ -1,11 +1,17 @@
 from datetime import date
 from pathlib import Path
-from scraper.cuhk import ListEntry, parse_detail, parse_list
+from scraper.cuhk import ListEntry, candidate_dates, parse_detail, parse_list
 from scraper.main import retain
 from scraper.models import MailItem
 from scraper.rules import extract_compensation, extract_deadline, extract_requirements
 
 FIXTURES = Path(__file__).parent / "fixtures"
+def test_default_discovery_covers_five_weeks():
+    dates = candidate_dates(date(2026, 7, 17))
+    assert len(dates) == 35
+    assert dates[0] == "20260717"
+    assert dates[-1] == "20260613"
+
 def test_valid_and_empty_digest():
     entries = parse_list((FIXTURES / "digest.html").read_text(), "20260710")
     assert [x.id for x in entries] == ["101001", "101002"]

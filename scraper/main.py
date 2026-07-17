@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from datetime import UTC, date, datetime
 from pathlib import Path
 from pydantic import TypeAdapter
@@ -35,14 +36,17 @@ def run(dates: list[str]) -> int:
     existing = load_existing(); known = {item.id for item in existing}; found: list[MailItem] = []
     session = create_session()
     for digest_date in dates:
-        try: fresh = collect_digest(session, digest_date)
+        try: fresh = collect_digest(session, digest_date, skip_ids=known)
         except Exception as exc:
             print(f"Skipping {digest_date}: {exc}"); continue
-        found.extend(item for item in fresh if item.id not in known)
+        found.extend(fresh)
+        known.update(item.id for item in fresh)
+        time.sleep(0.25)
     if not found:
         print("No new digest items; existing files left unchanged.")
         return 0 if existing else 1
-    merged = retain(existing + found)
+    real_existing = [item for item in existing if not item.id.startswith("sample-")]
+    merged = retain(real_existing + found)
     if not merged: raise RuntimeError("Refusing to publish an empty feed")
     write_feed(merged); print(f"Added {len(found)} items; published {len(merged)} items.")
     return 0
@@ -50,7 +54,8 @@ def run(dates: list[str]) -> int:
 def cli() -> int:
     parser = argparse.ArgumentParser(description="Fetch public CUHK UG Mass Mail digest data")
     parser.add_argument("--date", action="append", help="Digest date in YYYYMMDD; may be repeated")
+    parser.add_argument("--lookback-days", type=int, default=35, help="Days to probe when no explicit date is supplied")
     args = parser.parse_args()
-    return run(args.date or candidate_dates())
+    return run(args.date or candidate_dates(days=max(1, args.lookback_days)))
 
 if __name__ == "__main__": raise SystemExit(cli())
