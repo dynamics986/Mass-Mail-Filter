@@ -1,7 +1,10 @@
 name: Update CUHK digest data
 on:
   schedule:
-    - cron: "15 1,5,9 * * 4,5,6"
+    # Hong Kong time: Thursday and Saturday at 13:15.
+    - cron: "15 5 * * 4,6"
+    # Hong Kong time: Friday at 13:15, 15:15, and 18:15.
+    - cron: "15 5,7,10 * * 5"
   workflow_dispatch:
     inputs:
       digest_date:

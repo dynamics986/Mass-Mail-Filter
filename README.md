@@ -49,7 +49,7 @@ Playwright is configured separately with `npm run test:e2e`; install its browser
 3. Ensure workflow permissions allow Actions to write repository contents.
 4. Run **Update CUHK digest data** manually once, optionally supplying `YYYYMMDD`.
 
-The updater runs at 09:15, 13:15, and 17:15 Hong Kong time on Thursday, Friday, and Saturday. It commits only when new items are found. A failed or empty fetch never overwrites the last valid feed.
+The updater runs at 13:15 Hong Kong time on Thursday and Saturday, and at 13:15, 15:15, and 18:15 on Friday. It commits only when new items are found. A failed or empty fetch never overwrites the last valid feed.
 After a successful updater run, the Pages workflow runs again from the latest `main` branch so data commits made by `GITHUB_TOKEN` are published without relying on a second `push` event.
 
 ## Rule maintenance
