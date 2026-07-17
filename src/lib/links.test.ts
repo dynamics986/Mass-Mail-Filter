@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getCuhkSource } from "./links";
+import { getAnnouncementsUrl, getCuhkSource } from "./links";
 import type { MailItem } from "../types";
 
 const item = (id: string, sourceUrl: string): MailItem => ({
@@ -10,15 +10,22 @@ const item = (id: string, sourceUrl: string): MailItem => ({
 describe("CUHK source links", () => {
   it("constructs the canonical detail URL from date and numeric message ID", () => {
     expect(getCuhkSource(item("101234", "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260710"))).toEqual({
-      url: "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/Message/UG/20260710/101234", direct: true,
+      url: "http://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/Message/UG/20260710/101234", direct: true,
     });
   });
-  it("preserves an existing detail URL", () => {
+  it("normalizes an existing detail URL from the trusted date and message ID", () => {
     const url = "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/Message/UG/20260710/101234";
-    expect(getCuhkSource(item("101234", url))).toEqual({ url, direct: true });
+    expect(getCuhkSource(item("101234", url))).toEqual({
+      url: "http://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/Message/UG/20260710/101234", direct: true,
+    });
   });
-  it("labels placeholder data as a digest fallback", () => {
+  it("does not send placeholder data to the weekly digest", () => {
     const url = "https://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260710";
-    expect(getCuhkSource(item("sample-item", url))).toEqual({ url, direct: false });
+    expect(getCuhkSource(item("sample-item", url))).toEqual({ url: null, direct: false });
+  });
+  it("constructs the weekly Announcements URL separately", () => {
+    expect(getAnnouncementsUrl("2026-07-10")).toBe(
+      "http://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/List/UG/20260710/Announcements",
+    );
   });
 });

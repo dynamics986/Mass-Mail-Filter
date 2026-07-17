@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { t } from "./i18n";
 import { loadFeed } from "./lib/data";
-import { getCuhkSource } from "./lib/links";
+import { getAnnouncementsUrl, getCuhkSource } from "./lib/links";
 import { evaluateItem, isClosingSoon, isEngineering, isExcluded, isHelper } from "./lib/ranking";
 import { clearState, defaultState, exportState, favoriteSnapshot, importState, loadState, saveState } from "./lib/storage";
 import type { Evaluation, FeedMeta, LocalState, MailItem, Profile } from "./types";
@@ -29,6 +29,7 @@ function App() {
         <Route path="/" element={<Home items={items} meta={meta} local={local} updateLocal={updateLocal} />} />
         <Route path="/item/:id" element={<Detail items={items} local={local} updateLocal={updateLocal} />} />
         <Route path="/history" element={<History items={items} local={local} updateLocal={updateLocal} />} />
+        <Route path="/digests" element={<DigestArchive items={items} local={local} />} />
         <Route path="/settings" element={<Settings local={local} setLocal={setLocal} />} />
       </Routes>
     </main>
@@ -39,7 +40,7 @@ function App() {
 function Header({ local, setLocal }: { local: LocalState; setLocal: (state: LocalState) => void }) {
   const lang = local.profile.language;
   return <header className="topbar"><NavLink to="/" className="brand"><span className="brand-mark">CU</span><span><b>CU Link</b><small>Mass Mail Filter</small></span></NavLink>
-    <nav><NavLink to="/">{t(lang, "home")}</NavLink><NavLink to="/history">{t(lang, "history")}</NavLink><NavLink to="/settings">{t(lang, "settings")}</NavLink></nav>
+    <nav><NavLink to="/">{t(lang, "home")}</NavLink><NavLink to="/history">{t(lang, "history")}</NavLink><NavLink to="/digests">{lang === "zh" ? "每周公告" : "Weekly digests"}</NavLink><NavLink to="/settings">{t(lang, "settings")}</NavLink></nav>
     <button className="lang-button" onClick={() => setLocal({ ...local, profile: { ...local.profile, language: lang === "zh" ? "en" : "zh" } })}>{lang === "zh" ? "EN" : "中"}</button>
   </header>;
 }
@@ -79,7 +80,7 @@ function Detail({ items, local, updateLocal }: { items: MailItem[]; local: Local
   return <article className="detail"><button className="back" onClick={() => navigate(-1)}>← {t(lang, "back")}</button><div className="detail-head"><div><EligibilityBadge evaluation={evaluation} lang={lang} /><p className="category">{item.category} · {fmtDate(item.digestDate, lang)}</p><h1>{item.title}</h1></div><div className="score-ring"><strong>{evaluation.score}</strong><span>/100</span></div></div>
     <div className="detail-grid"><section><h2>{t(lang, "evidence")}</h2>{evaluation.evidence.length ? <ul className="evidence">{evaluation.evidence.map((x, i) => <li key={i}>{x}</li>)}</ul> : <p className="muted">{lang === "zh" ? "邮件没有足够明确的资格信息，请核对原文。" : "The message does not state enough eligibility information. Check the original."}</p>}<div className="reasons large">{evaluation.reasons.map((r, i) => <div key={i}><b>{r.points > 0 ? "+" : ""}{r.points}</b><span>{r.label}</span></div>)}</div></section>
       <aside><Info label={t(lang, "compensation")} value={money(item)} /><Info label={lang === "zh" ? "截止日期" : "Deadline"} value={fmtDate(item.deadline, lang)} /><Info label={lang === "zh" ? "主办方" : "Organizer"} value={item.organizer ?? "—"} />{item.contactEmail && <a href={`mailto:${item.contactEmail}`}>{item.contactEmail}</a>}</aside></div>
-    <section className="message"><h2>{t(lang, "body")}</h2><p>{item.bodyText}</p></section><section className="link-list"><a className="primary" href={source.url} target="_blank" rel="noreferrer">{source.direct ? t(lang, "source") : (lang === "zh" ? "查看该期 CUHK Digest" : "Open this CUHK Digest")} ↗</a>{item.applicationUrls.map(url => <a key={url} href={url} target="_blank" rel="noreferrer">{t(lang, "apply")} ↗</a>)}</section>
+    <section className="message"><h2>{t(lang, "body")}</h2><p>{item.bodyText}</p></section><section className="link-list">{source.url ? <a className="primary" href={source.url} target="_blank" rel="noreferrer">{t(lang, "source")} ↗</a> : <span className="source-unavailable">{lang === "zh" ? "演示项目没有真实 Message ID，无法打开通知原网页。" : "This demo item has no real Message ID, so its original page is unavailable."}</span>}{item.applicationUrls.map(url => <a key={url} href={url} target="_blank" rel="noreferrer">{t(lang, "apply")} ↗</a>)}</section>
     <section className="feedback"><button className={feedbackState.disliked ? "confirmed" : ""} aria-pressed={feedbackState.disliked} onClick={() => { updateLocal(s => ({ ...s, profile: { ...s.profile, excluded: [...new Set([...s.profile.excluded, topic])] } })); setFeedbackState(state => ({ ...state, disliked: true })); }}>{feedbackState.disliked ? (lang === "zh" ? "✓ 已减少此类推荐" : "✓ Showing less like this") : t(lang, "dislike")}</button><button className={feedbackState.interested ? "confirmed" : ""} aria-pressed={feedbackState.interested} onClick={() => { updateLocal(s => ({ ...s, profile: { ...s.profile, interests: [...new Set([...s.profile.interests, topic])] } })); setFeedbackState(state => ({ ...state, interested: true })); }}>{feedbackState.interested ? (lang === "zh" ? "✓ 已加入兴趣" : "✓ Interest added") : t(lang, "addInterest")}</button><button onClick={() => updateLocal(s => ({ ...s, corrections: [...new Set([...s.corrections, item.id])] }))}>{local.corrections.includes(item.id) ? "✓" : ""} {t(lang, "correction")}</button></section>
   </article>;
 }
@@ -91,6 +92,14 @@ function History({ items, local, updateLocal }: { items: MailItem[]; local: Loca
   const archived = view === "saved" ? Object.values(local.favorites).filter(f => !items.some(i => i.id === f.id)) : [];
   return <section className="page"><p className="eyebrow">ARCHIVE · SEARCH</p><h1>{t(lang, "history")}</h1><div className="search-row"><input type="search" placeholder={t(lang, "search")} value={query} onChange={e => setQuery(e.target.value)} /><div className="chips">{(["all", "saved", "hidden"] as const).map(x => <button className={view === x ? "chip active" : "chip"} onClick={() => setView(x)} key={x}>{x === "all" ? t(lang, "all") : x === "saved" ? t(lang, "saved") : t(lang, "hide")}</button>)}</div></div>
     <div className="list-view">{visible.map(item => <OpportunityCard key={item.id} item={item} evaluation={evaluateItem(item, local.profile)} local={local} updateLocal={updateLocal} />)}{archived.map(item => <article className="archived-card" key={item.id}><span>{t(lang, "archived")}</span><h3>{item.title}</h3><a href={item.sourceUrl} target="_blank" rel="noreferrer">{t(lang, "source")} ↗</a></article>)}</div></section>;
+}
+
+function DigestArchive({ items, local }: { items: MailItem[]; local: LocalState }) {
+  const lang = local.profile.language;
+  const digests = [...new Set(items.map(item => item.digestDate))].sort((a, b) => b.localeCompare(a));
+  return <section className="page digests"><p className="eyebrow">CUHK · WEEKLY ANNOUNCEMENTS</p><h1>{lang === "zh" ? "每周公告" : "Weekly digests"}</h1><p className="page-intro">{lang === "zh" ? "在这里查看每一期 Undergraduate Digest 的 Announcements 总表。具体通知请从机会详情页直接打开原网页。" : "Open each Undergraduate Digest Announcements list here. Individual message pages remain available from opportunity details."}</p>
+    {digests.length ? <div className="digest-list">{digests.map(date => { const count = items.filter(item => item.digestDate === date).length; return <a className="digest-row" href={getAnnouncementsUrl(date)} target="_blank" rel="noreferrer" key={date}><span><strong>{fmtDate(date, lang)}</strong><small>{count} {lang === "zh" ? "项已收录" : "items indexed"}</small></span><b>{lang === "zh" ? "查看该期 CUHK Digest" : "Open this CUHK Digest"} ↗</b></a>; })}</div> : <Empty text={lang === "zh" ? "暂时没有已收录的 Digest。" : "No digests have been indexed yet."} />}
+  </section>;
 }
 
 function Settings({ local, setLocal }: { local: LocalState; setLocal: (state: LocalState) => void }) {
