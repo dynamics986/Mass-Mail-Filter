@@ -12,8 +12,8 @@ from urllib3.util.retry import Retry
 from .models import MailItem
 from .rules import extract_compensation, extract_deadline, extract_requirements, extract_tags
 
-BASE = "https://cumassmail.itsc.cuhk.edu.hk"
-LIST_URL = BASE + "/weekly/Digest/List/UG/{date}"
+BASE = "http://cumassmail.itsc.cuhk.edu.hk"
+LIST_URL = BASE + "/weekly/Digest/List/UG/{date}/Announcements"
 MESSAGE_RE = re.compile(r"/weekly/Digest/Message/UG/(\d{8})/(\d+)", re.I)
 
 @dataclass(frozen=True)
@@ -23,6 +23,7 @@ class ListEntry:
 def create_session() -> requests.Session:
     session = requests.Session()
     retries = Retry(total=3, backoff_factor=1, status_forcelist=(429, 500, 502, 503, 504), allowed_methods=("GET",))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
     session.mount("https://", HTTPAdapter(max_retries=retries))
     session.headers.update({"User-Agent": "CU-Link/1.0 personal academic project; low-frequency weekly fetch"})
     return session

@@ -6,16 +6,17 @@ from scraper.models import MailItem
 from scraper.rules import extract_compensation, extract_deadline, extract_requirements
 
 FIXTURES = Path(__file__).parent / "fixtures"
-def test_default_discovery_covers_five_weeks():
-    dates = candidate_dates(date(2026, 7, 17))
-    assert len(dates) == 35
+def test_default_discovery_covers_nine_weeks():
+    dates = candidate_dates(date(2026, 7, 17), days=63)
+    assert len(dates) == 63
     assert dates[0] == "20260717"
-    assert dates[-1] == "20260613"
+    assert dates[-1] == "20260516"
 
 def test_valid_and_empty_digest():
     entries = parse_list((FIXTURES / "digest.html").read_text(), "20260710")
     assert [x.id for x in entries] == ["101001", "101002"]
     assert entries[0].category == "Announcements"
+    assert entries[0].url == "http://cumassmail.itsc.cuhk.edu.hk/weekly/Digest/Message/UG/20260710/101001"
     assert parse_list("<p>---------- No Digest Found ----------</p>", "20260710") == []
 
 def test_detail_is_plain_and_structured():

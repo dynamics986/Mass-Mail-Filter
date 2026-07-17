@@ -44,7 +44,8 @@ def run(dates: list[str]) -> int:
         time.sleep(0.25)
     if not found:
         print("No new digest items; existing files left unchanged.")
-        return 0 if existing else 1
+        has_real_data = any(not item.id.startswith("sample-") for item in existing)
+        return 0 if has_real_data else 1
     real_existing = [item for item in existing if not item.id.startswith("sample-")]
     merged = retain(real_existing + found)
     if not merged: raise RuntimeError("Refusing to publish an empty feed")
@@ -54,7 +55,7 @@ def run(dates: list[str]) -> int:
 def cli() -> int:
     parser = argparse.ArgumentParser(description="Fetch public CUHK UG Mass Mail digest data")
     parser.add_argument("--date", action="append", help="Digest date in YYYYMMDD; may be repeated")
-    parser.add_argument("--lookback-days", type=int, default=35, help="Days to probe when no explicit date is supplied")
+    parser.add_argument("--lookback-days", type=int, default=63, help="Days to probe when no explicit date is supplied")
     args = parser.parse_args()
     return run(args.date or candidate_dates(days=max(1, args.lookback_days)))
 
