@@ -1,0 +1,56 @@
+[
+  {
+    "id": "g-helper-deadline",
+    "title": "Student Helpers Recruitment (HK$64/hr)",
+    "body": "Student Helpers Recruitment\nHourly Rate: HK$64\nApply by 10 August 2026.\nDuties: reception and stage support.",
+    "digestDate": "2026-07-17",
+    "expect": {
+      "deadline": "2026-08-10",
+      "deadlineKind": "apply",
+      "type": "paid_work",
+      "hasCompensation": true
+    }
+  },
+  {
+    "id": "g-rolling",
+    "title": "Research Assistant wanted",
+    "body": "We are hiring a research assistant for an NLP project. Applications are reviewed on a rolling basis until the position is filled. Monthly allowance HK$8000.",
+    "digestDate": "2026-07-17",
+    "expect": {
+      "deadlineKind": "rolling",
+      "type": "research",
+      "hasCompensation": true
+    }
+  },
+  {
+    "id": "g-native-english",
+    "title": "Online experiment looking for native English speakers",
+    "body": "Prof. Hwang is looking for participants. English is your first/native and dominant language. You will get HK$250 in cash upon completion.",
+    "digestDate": "2026-07-17",
+    "expect": {
+      "type": "research",
+      "hasCompensation": true,
+      "nativeLanguage": "English"
+    }
+  },
+  {
+    "id": "g-cn-deadline",
+    "title": "講座報名",
+    "body": "歡迎同學參加就業講座。報名截止日期：2026年8月5日。名額有限。",
+    "digestDate": "2026-07-17",
+    "expect": {
+      "deadline": "2026-08-05",
+      "deadlineKind": "apply",
+      "type": "event"
+    }
+  },
+  {
+    "id": "g-admin",
+    "title": "ITSC system maintenance reminder",
+    "body": "Please note the office hours and system maintenance window this weekend. This is an administrative notice only.",
+    "digestDate": "2026-07-17",
+    "expect": {
+      "type": "admin"
+    }
+  }
+]

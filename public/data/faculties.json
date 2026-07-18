@@ -1,0 +1,656 @@
+{
+  "sourceUrl": "https://admission.cuhk.edu.hk/programmes/list/",
+  "fetchedAt": "2026-07-17T15:31:42.669856Z",
+  "faculties": [
+    {
+      "id": "arts",
+      "nameEn": "Faculty of Arts",
+      "nameZh": "文學院",
+      "programmes": [
+        {
+          "id": "arts-anthropology",
+          "nameEn": "Anthropology",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-bimodal-bilingual-studies",
+          "nameEn": "Bimodal Bilingual Studies",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-chinese-language-and-literature",
+          "nameEn": "Chinese Language and Literature",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-chinese-studies",
+          "nameEn": "Chinese Studies",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-english",
+          "nameEn": "English",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-fine-arts",
+          "nameEn": "Fine Arts",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-history",
+          "nameEn": "History",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-japanese-studies",
+          "nameEn": "Japanese Studies",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-linguistics",
+          "nameEn": "Linguistics",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-music",
+          "nameEn": "Music",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-philosophy",
+          "nameEn": "Philosophy",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-public-history",
+          "nameEn": "Public History",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-public-humanities",
+          "nameEn": "Public Humanities",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-religious-studies",
+          "nameEn": "Religious Studies",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-theology",
+          "nameEn": "Theology",
+          "nameZh": "",
+          "facultyId": "arts"
+        },
+        {
+          "id": "arts-translation",
+          "nameEn": "Translation",
+          "nameZh": "",
+          "facultyId": "arts"
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "nameEn": "Faculty of Business Administration",
+      "nameZh": "工商管理學院",
+      "programmes": [
+        {
+          "id": "business-bba-ibba-jd-double-degree-programme",
+          "nameEn": "BBA(IBBA)-JD Double Degree Programme",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-biotechnology-entrepreneurship-and-healthcare-management",
+          "nameEn": "Biotechnology, Entrepreneurship and Healthcare Management",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-global-business-studies",
+          "nameEn": "Global Business Studies",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-global-economics-and-finance",
+          "nameEn": "Global Economics and Finance",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-hospitality-and-real-estate",
+          "nameEn": "Hospitality and Real Estate",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-insurance-financial-and-actuarial-analysis",
+          "nameEn": "Insurance, Financial and Actuarial Analysis",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-integrated-bachelor-of-business-administration-programme",
+          "nameEn": "Integrated Bachelor of Business Administration Programme",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-interdisciplinary-data-analytics-x-double-major-programme",
+          "nameEn": "Interdisciplinary Data Analytics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-professional-accountancy",
+          "nameEn": "Professional Accountancy",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-quantitative-finance",
+          "nameEn": "Quantitative Finance",
+          "nameZh": "",
+          "facultyId": "business"
+        },
+        {
+          "id": "business-quantitative-finance-and-risk-management-science",
+          "nameEn": "Quantitative Finance and Risk Management Science",
+          "nameZh": "",
+          "facultyId": "business"
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "nameEn": "Faculty of Education",
+      "nameZh": "教育學院",
+      "programmes": [
+        {
+          "id": "education-chinese-language-studies-ba-and-chinese-language-education-bed",
+          "nameEn": "Chinese Language Studies (BA) and Chinese Language Education (BEd)",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-early-childhood-education",
+          "nameEn": "Early Childhood Education",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-early-childhood-education-ba",
+          "nameEn": "Early Childhood Education (BA)",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-english-studies-ba-and-english-language-education-bed",
+          "nameEn": "English Studies (BA) and English Language Education (BEd)",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-exercise-science-and-health-education",
+          "nameEn": "Exercise Science and Health Education",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-human-movement-science-and-health-studies",
+          "nameEn": "Human Movement Science and Health Studies",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-learning-design-and-technology",
+          "nameEn": "Learning Design and Technology",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-mathematics-and-mathematics-education",
+          "nameEn": "Mathematics and Mathematics Education",
+          "nameZh": "",
+          "facultyId": "education"
+        },
+        {
+          "id": "education-physical-education-exercise-science-and-health",
+          "nameEn": "Physical Education, Exercise Science and Health",
+          "nameZh": "",
+          "facultyId": "education"
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "nameEn": "Faculty of Engineering",
+      "nameZh": "工程學院",
+      "programmes": [
+        {
+          "id": "engineering-aerospace-science-and-earth-informatics-x-double-major-programme",
+          "nameEn": "Aerospace Science and Earth Informatics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-artificial-intelligence-systems-and-technologies",
+          "nameEn": "Artificial Intelligence: Systems and Technologies",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-biomedical-engineering",
+          "nameEn": "Biomedical Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-computational-data-science",
+          "nameEn": "Computational Data Science",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-computer-engineering",
+          "nameEn": "Computer Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-computer-science",
+          "nameEn": "Computer Science",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-computer-science-and-engineering",
+          "nameEn": "Computer Science and Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-electronic-engineering",
+          "nameEn": "Electronic Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-energy-and-environmental-engineering",
+          "nameEn": "Energy and Environmental Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-financial-technology",
+          "nameEn": "Financial Technology",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-information-engineering",
+          "nameEn": "Information Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-interdisciplinary-data-analytics-x-double-major-programme",
+          "nameEn": "Interdisciplinary Data Analytics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-learning-design-and-technology",
+          "nameEn": "Learning Design and Technology",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-materials-science-and-engineering",
+          "nameEn": "Materials Science and Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-mathematics-and-information-engineering",
+          "nameEn": "Mathematics and Information Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-mechanical-and-automation-engineering",
+          "nameEn": "Mechanical and Automation Engineering",
+          "nameZh": "",
+          "facultyId": "engineering"
+        },
+        {
+          "id": "engineering-systems-engineering-and-engineering-management",
+          "nameEn": "Systems Engineering and Engineering Management",
+          "nameZh": "",
+          "facultyId": "engineering"
+        }
+      ]
+    },
+    {
+      "id": "law",
+      "nameEn": "Faculty of Law",
+      "nameZh": "法律學院",
+      "programmes": [
+        {
+          "id": "law-bba-ibba-jd-double-degree-programme",
+          "nameEn": "BBA(IBBA)-JD Double Degree Programme",
+          "nameZh": "",
+          "facultyId": "law"
+        },
+        {
+          "id": "law-diplomacy-and-international-studies",
+          "nameEn": "Diplomacy and International Studies",
+          "nameZh": "",
+          "facultyId": "law"
+        },
+        {
+          "id": "law-laws",
+          "nameEn": "Laws",
+          "nameZh": "",
+          "facultyId": "law"
+        }
+      ]
+    },
+    {
+      "id": "medicine",
+      "nameEn": "Faculty of Medicine",
+      "nameZh": "醫學院",
+      "programmes": [
+        {
+          "id": "medicine-bachelor-of-medicine-and-bachelor-of-surgery-mbchb",
+          "nameEn": "Bachelor of Medicine and Bachelor of Surgery (MBChB)",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-bachelor-of-medicine-and-bachelor-of-surgery-global-physician-leadership-stream-",
+          "nameEn": "Bachelor of Medicine and Bachelor of Surgery – Global Physician-Leadership Stream (MBChB-GPS)",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-biomedical-sciences",
+          "nameEn": "Biomedical Sciences",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-biotechnology-entrepreneurship-and-healthcare-management",
+          "nameEn": "Biotechnology, Entrepreneurship and Healthcare Management",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-chinese-medicine",
+          "nameEn": "Chinese Medicine",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-community-health-practice",
+          "nameEn": "Community Health Practice",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-gerontology",
+          "nameEn": "Gerontology",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-nursing",
+          "nameEn": "Nursing",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-pharmacy",
+          "nameEn": "Pharmacy",
+          "nameZh": "",
+          "facultyId": "medicine"
+        },
+        {
+          "id": "medicine-public-health",
+          "nameEn": "Public Health",
+          "nameZh": "",
+          "facultyId": "medicine"
+        }
+      ]
+    },
+    {
+      "id": "science",
+      "nameEn": "Faculty of Science",
+      "nameZh": "理學院",
+      "programmes": [
+        {
+          "id": "science-aerospace-science-and-earth-informatics-x-double-major-programme",
+          "nameEn": "Aerospace Science and Earth Informatics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-biotechnology-entrepreneurship-and-healthcare-management",
+          "nameEn": "Biotechnology, Entrepreneurship and Healthcare Management",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-computational-data-science",
+          "nameEn": "Computational Data Science",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-earth-and-environmental-sciences",
+          "nameEn": "Earth and Environmental Sciences",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-enrichment-mathematics",
+          "nameEn": "Enrichment Mathematics",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-enrichment-stream-in-theoretical-physics",
+          "nameEn": "Enrichment Stream in Theoretical Physics",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-interdisciplinary-data-analytics-x-double-major-programme",
+          "nameEn": "Interdisciplinary Data Analytics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-learning-design-and-technology",
+          "nameEn": "Learning Design and Technology",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-materials-science-and-engineering",
+          "nameEn": "Materials Science and Engineering",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-mathematics-and-information-engineering",
+          "nameEn": "Mathematics and Information Engineering",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-natural-sciences",
+          "nameEn": "Natural Sciences",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-quantitative-finance-and-risk-management-science",
+          "nameEn": "Quantitative Finance and Risk Management Science",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-risk-management-science",
+          "nameEn": "Risk Management Science",
+          "nameZh": "",
+          "facultyId": "science"
+        },
+        {
+          "id": "science-science",
+          "nameEn": "Science",
+          "nameZh": "",
+          "facultyId": "science"
+        }
+      ]
+    },
+    {
+      "id": "social-science",
+      "nameEn": "Faculty of Social Science",
+      "nameZh": "社會科學院",
+      "programmes": [
+        {
+          "id": "social-science-aerospace-science-and-earth-informatics-x-double-major-programme",
+          "nameEn": "Aerospace Science and Earth Informatics & X Double Major Programme",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-architectural-studies",
+          "nameEn": "Architectural Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-data-science-and-policy-studies",
+          "nameEn": "Data Science and Policy Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-diplomacy-and-international-studies",
+          "nameEn": "Diplomacy and International Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-economics",
+          "nameEn": "Economics",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-economics-cuhk-tsinghua-university-dual-undergraduate-degree-programme",
+          "nameEn": "Economics (CUHK-Tsinghua University Dual Undergraduate Degree Programme)",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-gender-studies",
+          "nameEn": "Gender Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-geography-and-resource-management",
+          "nameEn": "Geography and Resource Management",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-global-communication",
+          "nameEn": "Global Communication",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-global-economics-and-finance",
+          "nameEn": "Global Economics and Finance",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-global-studies",
+          "nameEn": "Global Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-government-and-public-administration",
+          "nameEn": "Government and Public Administration",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-journalism-and-communication",
+          "nameEn": "Journalism and Communication",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-psychology",
+          "nameEn": "Psychology",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-social-science-broad-based",
+          "nameEn": "Social Science (Broad-based)",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-social-work",
+          "nameEn": "Social Work",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-society-and-sustainable-development",
+          "nameEn": "Society and Sustainable Development",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-sociology",
+          "nameEn": "Sociology",
+          "nameZh": "",
+          "facultyId": "social-science"
+        },
+        {
+          "id": "social-science-urban-studies",
+          "nameEn": "Urban Studies",
+          "nameZh": "",
+          "facultyId": "social-science"
+        }
+      ]
+    }
+  ]
+}
