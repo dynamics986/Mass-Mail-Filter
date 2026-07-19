@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from .clean import clean_body
+from .clean import clean_body, strip_decorative_emoji
 from .extract_deadline import extract_deadline
 from .extract_fields import extract_compensation, extract_requirements
 from .extract_schedule import extract_schedule
-from .extract_summary import extract_key_phrases, extract_summary
+from .extract_summary import extract_key_phrases, extract_summary, is_redundant_summary
 from .extract_taxonomy import extract_taxonomy
 from .models import MailItem, Taxonomy
 
@@ -29,20 +29,23 @@ def enrich_item(
     digest_iso = digest_date if "-" in digest_date else f"{digest_date[:4]}-{digest_date[4:6]}-{digest_date[6:]}"
     fetched_at = fetched_at or datetime.now(UTC).isoformat().replace("+00:00", "Z")
     published_at = published_at or f"{digest_iso}T00:00:00+08:00"
+    clean_title = strip_decorative_emoji(title)
     cleaned = clean_body(body_text)
     working = cleaned or body_text
     summary, evidence = extract_summary(working)
+    if is_redundant_summary(clean_title, summary):
+        summary, evidence = "", []
     deadline = extract_deadline(working, digest_iso)
-    taxonomy = extract_taxonomy(title, working)
+    taxonomy = extract_taxonomy(clean_title, working)
     tags = _tags_from_taxonomy(taxonomy)
-    phrases = extract_key_phrases(f"{title}\n{working}")
+    phrases = extract_key_phrases(f"{clean_title}\n{working}")
     time_marks = extract_schedule(working, digest_iso, published_at=published_at)
     return MailItem(
         id=id,
         digestDate=digest_iso,
         category=category,
-        title=title,
-        bodyText=body_text[:30000],
+        title=clean_title,
+        bodyText=strip_decorative_emoji(body_text)[:30000],
         cleanBody=working[:20000],
         summary=summary,
         summaryEvidence=evidence,
@@ -55,7 +58,7 @@ def enrich_item(
         deadlineConfidence=deadline.confidence,
         deadlineEvidence=deadline.evidence,
         timeMarks=time_marks,
-        compensation=extract_compensation(f"{title}\n{working}"),
+        compensation=extract_compensation(f"{clean_title}\n{working}"),
         taxonomy=taxonomy,
         tags=tags,
         keyPhrases=phrases,

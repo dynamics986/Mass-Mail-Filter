@@ -17,6 +17,23 @@ CHROME_PATTERNS = [
 
 CHROME_RE = [re.compile(p, re.I | re.M) for p in CHROME_PATTERNS]
 SEPARATOR_RE = re.compile(r"^-{20,}\s*$", re.M)
+EMOJI_RE = re.compile(
+    "["
+    "\U0001F1E6-\U0001F1FF"
+    "\U0001F300-\U0001FAFF"
+    "\U00002600-\U000027BF"
+    "]",
+)
+EMOJI_MARKS_RE = re.compile("[\u200d\ufe0e\ufe0f\U0001F3FB-\U0001F3FF]")
+
+
+def strip_decorative_emoji(text: str) -> str:
+    """Remove decorative emoji while retaining words, punctuation and line breaks."""
+    cleaned = EMOJI_RE.sub("", text)
+    cleaned = EMOJI_MARKS_RE.sub("", cleaned)
+    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
+    cleaned = re.sub(r" *\n *", "\n", cleaned)
+    return cleaned.strip()
 
 
 def strip_cuhk_chrome(text: str) -> str:
@@ -53,5 +70,5 @@ def try_talon_extract(text: str) -> str:
 
 
 def clean_body(raw: str) -> str:
-    base = strip_cuhk_chrome(raw)
+    base = strip_decorative_emoji(strip_cuhk_chrome(raw))
     return try_talon_extract(base) or base

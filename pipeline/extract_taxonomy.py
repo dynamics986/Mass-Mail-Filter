@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+import re
 from typing import Any
 
 import yaml
@@ -17,11 +18,16 @@ def load_rules() -> dict[str, Any]:
 
 
 def _hits(text: str, words: list[str]) -> list[str]:
-    lower = f" {text.lower()} "
+    lower = text.lower()
     found = []
     for w in words:
         token = w.lower()
-        if token in lower or token in text.lower():
+        matched = (
+            bool(re.search(rf"(?<!\w){re.escape(token)}(?!\w)", lower))
+            if re.search(r"[a-z0-9]", token)
+            else token in lower
+        )
+        if token and matched:
             found.append(w)
     return found
 
@@ -51,6 +57,16 @@ def extract_taxonomy(title: str, body: str) -> Taxonomy:
             ]
         ):
             score = max(0, score - 3)
+        expense_notice = any(
+            re.search(pattern, lower, re.I)
+            for pattern in [r"service\s+charge", r"consultation", r"priced\s+at", r"for\s+purchase", r"收費", r"優惠價", r"選購", r"診症"]
+        )
+        employment_signal = any(
+            re.search(pattern, lower, re.I)
+            for pattern in [r"\brecruit", r"\bjob\b", r"\bemployment\b", r"student\s+helper", r"research\s+assistant", r"hourly\s+rate", r"薪金", r"工資", r"招募"]
+        )
+        if name == "paid_work" and expense_notice and not employment_signal:
+            score = 0
         if name == "research" and any(x in lower for x in ["research assistant", "研究助理"]):
             score += 4
         if score > best_score:

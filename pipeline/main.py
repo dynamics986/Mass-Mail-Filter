@@ -8,7 +8,7 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from .cuhk import LIST_URL, candidate_dates, collect_digest, create_session
+from .cuhk import DIGEST_LOOKBACK_DAYS, LIST_URL, candidate_dates, collect_digest, create_session
 from .enrich import reenrich_raw_dict
 from .models import FeedMeta, MailItem
 
@@ -35,10 +35,10 @@ def load_existing() -> list[MailItem]:
     raw = json.loads(FEED.read_text(encoding="utf-8"))
     adapter = TypeAdapter(list[MailItem])
     try:
-        return adapter.validate_python(raw)
+        return [item for item in adapter.validate_python(raw) if not item.id.startswith("sample-")]
     except Exception:
         # Legacy feed without taxonomy/summary — re-enrich on load.
-        return [reenrich_raw_dict(item) for item in raw]
+        return [reenrich_raw_dict(item) for item in raw if not str(item.get("id", "")).startswith("sample-")]
 
 
 def write_feed(items: list[MailItem]) -> None:
@@ -97,7 +97,12 @@ def migrate_legacy(path: Path) -> int:
 def cli() -> int:
     parser = argparse.ArgumentParser(description="CU Link digest pipeline")
     parser.add_argument("--date", action="append", help="Digest date YYYYMMDD")
-    parser.add_argument("--lookback-days", type=int, default=63)
+    parser.add_argument(
+        "--lookback-days",
+        type=int,
+        default=DIGEST_LOOKBACK_DAYS,
+        help="Calendar days to probe when no explicit date is supplied (default: recent four weeks)",
+    )
     parser.add_argument("--migrate", type=Path, help="Re-enrich a legacy feed.json")
     args = parser.parse_args()
     if args.migrate:

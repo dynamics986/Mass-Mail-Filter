@@ -17,6 +17,7 @@ from .models import MailItem
 BASE = "http://cumassmail.itsc.cuhk.edu.hk"
 LIST_URL = BASE + "/weekly/Digest/List/UG/{date}/Announcements"
 MESSAGE_RE = re.compile(r"/weekly/Digest/Message/UG/(\d{8})/(\d+)", re.I)
+DIGEST_LOOKBACK_DAYS = 28
 
 
 @dataclass(frozen=True)
@@ -38,7 +39,7 @@ def create_session() -> requests.Session:
     return session
 
 
-def candidate_dates(start: date | None = None, days: int = 63) -> list[str]:
+def candidate_dates(start: date | None = None, days: int = DIGEST_LOOKBACK_DAYS) -> list[str]:
     start = start or datetime.now().astimezone().date()
     return [(start - timedelta(days=i)).strftime("%Y%m%d") for i in range(days)]
 

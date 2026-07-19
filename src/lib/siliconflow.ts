@@ -1,9 +1,8 @@
 /** SiliconFlow OpenAI-compatible chat for summary + translation. */
 
-import { aiReady, loadSecrets, type AppSecrets } from "./secrets";
+import { activeProvider, aiReady, loadSecrets, type AppSecrets } from "./secrets";
 import type { Compensation, L1Type, Requirement } from "../types";
-
-const BASE = "https://api.siliconflow.cn/v1/chat/completions";
+import { nonRedundantSummary } from "./textCleanup";
 
 /** Prompt schema version — bump when output format changes (pairs with polish store v2). */
 export const POLISH_PROMPT_VERSION = 2;
@@ -34,34 +33,53 @@ const ALLOWED_CATEGORIES_EN =
 
 export async function siliconChat(
   messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
-  opts?: { maxTokens?: number; temperature?: number; secrets?: AppSecrets },
+  opts?: { maxTokens?: number; temperature?: number; secrets?: AppSecrets; timeoutMs?: number },
 ): Promise<string> {
   const secrets = opts?.secrets ?? loadSecrets();
-  if (!aiReady(secrets)) throw new Error("SiliconFlow API key not configured");
+  if (!aiReady(secrets)) throw new Error("AI_CONFIG_INCOMPLETE");
+  const { config, baseUrl } = activeProvider(secrets);
+  const endpoint = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), opts?.timeoutMs ?? 30000);
 
-  const res = await fetch(BASE, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${secrets.siliconflowApiKey.trim()}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: secrets.siliconflowModel || "Qwen/Qwen2.5-14B-Instruct",
-      messages,
-      max_tokens: opts?.maxTokens ?? 320,
-      temperature: opts?.temperature ?? 0.2,
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.apiKey.trim()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: config.model.trim(),
+        messages,
+        max_tokens: opts?.maxTokens ?? 320,
+        temperature: opts?.temperature ?? 0.2,
+      }),
+      signal: controller.signal,
+    });
+  } catch {
+    if (controller.signal.aborted) throw new Error("AI_TIMEOUT");
+    throw new Error("AI_NETWORK_ERROR");
+  } finally {
+    window.clearTimeout(timeout);
+  }
 
   if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`SiliconFlow ${res.status}: ${body.slice(0, 180)}`);
+    if (res.status === 401) throw new Error("AI_AUTH_INVALID");
+    if (res.status === 403) throw new Error("AI_PERMISSION_DENIED");
+    if (res.status === 404 || res.status === 400) throw new Error("AI_MODEL_UNAVAILABLE");
+    if (res.status === 429) throw new Error("AI_RATE_LIMITED");
+    throw new Error(`AI_HTTP_${res.status}`);
   }
-  const data = (await res.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
+  let data: { choices?: Array<{ message?: { content?: string } }> };
+  try {
+    data = (await res.json()) as typeof data;
+  } catch {
+    throw new Error("AI_RESPONSE_INVALID");
+  }
   const text = data.choices?.[0]?.message?.content?.trim();
-  if (!text) throw new Error("SiliconFlow empty response");
+  if (!text) throw new Error("AI_RESPONSE_INVALID");
   return text.replace(/^["']|["']$/g, "").trim();
 }
 
@@ -90,9 +108,30 @@ function formatCompensation(c?: Compensation): string {
 
 function formatRequirements(reqs: Requirement[]): string {
   return reqs
-    .slice(0, 8)
-    .map(r => `${r.field} ${r.operator} ${r.value}`)
+    .slice(0, 5)
+    .map(r => `${r.field}:${r.operator}:${String(r.value).slice(0, 48)}`)
     .join("; ");
+}
+
+const RELEVANT_SOURCE = /(?:hk\$|hkd|薪|酬|津貼|津贴|獎金|奖金|截止|deadline|apply|eligible|eligibility|資格|资格|對象|对象|year|student|language|語言|语言|hour|date|日期)/i;
+
+/** Build a compact evidence excerpt instead of paying to resend the full email. */
+export function compactPolishExcerpt(title: string, summary: string, bodyText: string, maxChars = 900): string {
+  const normalizedTitle = title.replace(/\s+/g, " ").trim();
+  const normalizedSummary = summary.replace(/\s+/g, " ").trim();
+  const chunks = bodyText
+    .split(/\n+|(?<=[。！？.!?])\s+/)
+    .map(part => part.replace(/\s+/g, " ").trim())
+    .filter(part => part.length >= 12 && part !== normalizedTitle && part !== normalizedSummary);
+  const selected: string[] = [];
+  const add = (part: string) => {
+    if (!part || selected.includes(part)) return;
+    const next = [...selected, part].join("\n");
+    if (next.length <= maxChars) selected.push(part);
+  };
+  chunks.filter(part => RELEVANT_SOURCE.test(part)).slice(0, 8).forEach(add);
+  chunks.slice(0, 3).forEach(add);
+  return selected.join("\n").slice(0, maxChars);
 }
 
 function hintCategory(taxonomyType: L1Type | undefined, category: string | undefined, lang: "zh" | "en"): string {
@@ -115,24 +154,20 @@ function buildUserPayload(input: {
   tags?: string[];
 }): string {
   const hint = hintCategory(input.taxonomyType, input.category, input.lang);
+  const usefulSummary = nonRedundantSummary(input.title, input.summary);
+  const excerpt = compactPolishExcerpt(input.title, usefulSummary || "", input.bodyText || "");
   const lines = [
-    `hint_category: ${hint}`,
-    `taxonomy_type: ${input.taxonomyType || "unknown"}`,
-    `raw_category: ${input.category || ""}`,
-    `compensation: ${formatCompensation(input.compensation) || "unknown"}`,
-    `deadline: ${input.deadline || "unknown"}`,
-    `deadline_kind: ${input.deadlineKind || "unknown"}`,
-    `deadline_evidence: ${(input.deadlineEvidence || "").slice(0, 200)}`,
-    `requirements: ${formatRequirements(input.requirements || []) || "none"}`,
-    `tags: ${(input.tags || []).slice(0, 8).join(", ")}`,
-    "",
-    `title: ${input.title}`,
-    `existing_summary: ${input.summary || ""}`,
-    "",
-    "body:",
-    (input.bodyText || "").slice(0, 1600),
+    `category=${hint}`,
+    `pay=${formatCompensation(input.compensation) || "unknown"}`,
+    `deadline=${input.deadline || input.deadlineKind || "unknown"}`,
+    `deadline_evidence=${(input.deadlineEvidence || "").slice(0, 120)}`,
+    `requirements=${formatRequirements(input.requirements || []) || "none"}`,
+    `tags=${(input.tags || []).slice(0, 4).join(",")}`,
+    `title=${input.title.slice(0, 500)}`,
+    usefulSummary ? `summary=${usefulSummary.slice(0, 280)}` : "",
+    excerpt ? `evidence=${excerpt}` : "",
   ];
-  return lines.join("\n");
+  return lines.filter(Boolean).join("\n");
 }
 
 function normalizeSummary(
@@ -175,36 +210,21 @@ export async function aiPolishOpportunity(input: {
   const hint = hintCategory(input.taxonomyType, input.category, input.lang);
 
   const systemZh = [
-    "你是港中文（CUHK）Undergraduate Digest 机会卡片文案编辑。",
-    "只输出一个 JSON 对象，不要 markdown 代码块，不要解释。",
-    '格式严格为：{"category":"...","title":"...","summary":"..."}',
-    `category 必须是以下之一：${ALLOWED_CATEGORIES_ZH}。优先采用 user 里的 hint_category / taxonomy_type。`,
-    "title：短标题，不要带【类目】前缀，不要整句广告腔。",
-    "summary 必须是单段纯文本，固定骨架（顺序不可改）：",
-    "【类目】一句话说明是什么/做什么。薪酬：…。截止：…。对象：…。",
-    "规则：",
-    "- 以【类目】开头（类目=category）。",
-    "- 薪酬：有金额写 HK$…（时薪/津贴/奖金照抄）；明确无薪写「无薪/志愿」；看不出写「未标明」。",
-    "- 截止：申请截止或活动日期；滚动招募写「滚动」；看不出写「未标明」。可参考 deadline 字段。",
-    "- 对象：年级/学院/身份；看不出写「未标明」。",
-    "- 总长约 60–120 汉字；禁止列表、禁止 bullet、禁止「以下是」类开场白。",
-    "- 专有名词可保留英文。",
+    "编辑 CUHK 机会卡片。只输出 JSON，无 Markdown/解释。",
+    '格式：{"category":"...","title":"...","summary":"..."}',
+    `category 仅限：${ALLOWED_CATEGORIES_ZH}；优先使用 category 提示。`,
+    "title 为简短标题，保留专有名词，不加类目前缀。",
+    "summary 为60–120字单段：【类目】是什么/做什么。薪酬：…。截止：…。对象：…。",
+    "金额、日期、资格只依据输入；未知写「未标明」，不得推测。禁止列表。",
   ].join("\n");
 
   const systemEn = [
-    "You edit CUHK Undergraduate Digest opportunity cards.",
-    "Return ONLY one JSON object. No markdown fences. No preamble.",
+    "Edit a CUHK opportunity card. Return JSON only; no Markdown or explanation.",
     'Schema: {"category":"...","title":"...","summary":"..."}',
-    `category must be one of: ${ALLOWED_CATEGORIES_EN}. Prefer hint_category / taxonomy_type from the user message.`,
-    "title: short headline without a category prefix.",
-    "summary must be one plain paragraph with this exact skeleton (order fixed):",
-    "[Category] One sentence on what it is. Pay: …. Deadline: …. For: ….",
-    "Rules:",
-    "- Start with [Category] where Category equals category.",
-    "- Pay: amount as HK$… when known; unpaid/volunteer if clear; else 'not stated'.",
-    "- Deadline: apply-by or event date; 'rolling' if rolling; else 'not stated'. Use deadline fields when present.",
-    "- For: year/faculty/who; else 'not stated'.",
-    "- 2–3 short sentences total. No bullets, no markdown, no preamble.",
+    `category: one of ${ALLOWED_CATEGORIES_EN}; prefer the category hint.`,
+    "title: short, no category prefix; preserve proper names.",
+    "summary: one short paragraph: [Category] what it is. Pay: …. Deadline: …. For: ….",
+    "Use only supplied facts for money, dates, and eligibility; write 'not stated' when unknown. No bullets.",
   ].join("\n");
 
   const raw = await siliconChat(
@@ -212,7 +232,7 @@ export async function aiPolishOpportunity(input: {
       { role: "system", content: input.lang === "zh" ? systemZh : systemEn },
       { role: "user", content: buildUserPayload(input) },
     ],
-    { maxTokens: 400, temperature: 0.2 },
+    { maxTokens: 220, temperature: 0.1 },
   );
 
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
@@ -247,9 +267,27 @@ export async function aiSummarizeOpportunity(input: {
   return (await aiPolishOpportunity(input)).summary;
 }
 
-export async function testSiliconflowKey(secrets?: AppSecrets): Promise<string> {
+export async function testAiConnection(secrets?: AppSecrets): Promise<string> {
+  // Testing validates the current form values even when the optional AI
+  // feature is switched off. The global toggle only controls normal usage.
+  const testingSecrets = { ...(secrets ?? loadSecrets()), aiEnabled: true };
   return siliconChat(
     [{ role: "user", content: "Reply with exactly: OK" }],
-    { maxTokens: 8, temperature: 0, secrets },
+    { maxTokens: 8, temperature: 0, secrets: testingSecrets, timeoutMs: 20000 },
   );
+}
+
+export function aiErrorMessage(error: unknown, lang: "zh" | "en"): string {
+  const code = error instanceof Error ? error.message : "";
+  const messages: Record<string, { zh: string; en: string }> = {
+    AI_CONFIG_INCOMPLETE: { zh: "请填写 API Key 和模型 ID。", en: "Enter an API key and model ID." },
+    AI_AUTH_INVALID: { zh: "认证失败（401）：请确认 Key 属于当前所选服务商。", en: "Authentication failed (401). Check that the key belongs to the selected provider." },
+    AI_PERMISSION_DENIED: { zh: "请求被拒绝（403）：请检查 Key 或模型权限。", en: "Request denied (403). Check key and model permissions." },
+    AI_MODEL_UNAVAILABLE: { zh: "模型不可用：请核对模型/接入点 ID 和 Base URL。", en: "Model unavailable. Check the model/endpoint ID and Base URL." },
+    AI_RATE_LIMITED: { zh: "请求过于频繁或额度不足，请稍后重试并检查账户余额。", en: "Rate limit or quota reached. Try later and check the account balance." },
+    AI_NETWORK_ERROR: { zh: "无法连接服务商。请检查网络、Base URL，以及该平台是否允许浏览器跨域请求。", en: "Could not reach the provider. Check the network, Base URL, and browser CORS support." },
+    AI_TIMEOUT: { zh: "连接测试超时（20 秒）。请检查网络、Base URL 或服务商状态后重试。", en: "Connection test timed out after 20 seconds. Check the network, Base URL, or provider status and try again." },
+    AI_RESPONSE_INVALID: { zh: "服务商返回了无法识别的响应。", en: "The provider returned an unsupported response." },
+  };
+  return messages[code]?.[lang] ?? (lang === "zh" ? "连接失败，请检查配置后重试。" : "Connection failed. Check the configuration and try again.");
 }

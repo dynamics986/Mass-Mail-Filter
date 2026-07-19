@@ -1,6 +1,6 @@
 /** One-click AI polish with shared persistent cache (no repeat API calls). */
 
-import { aiReady, loadSecrets } from "./secrets";
+import { activeProvider, aiReady, loadSecrets } from "./secrets";
 import { aiPolishOpportunity, POLISH_PROMPT_VERSION } from "./siliconflow";
 import { looksMostlyEnglish, translateToZh, wantsChineseHelp } from "./translate";
 import type { MailItem, Profile } from "../types";
@@ -16,6 +16,7 @@ export interface PolishRecord {
   summary: string;
   polishedAt: string;
   model: string;
+  provider: string;
   promptVersion: number;
 }
 
@@ -71,7 +72,7 @@ function hashText(text: string): string {
 }
 
 export function sourceHash(item: MailItem): string {
-  return hashText(`${item.title}\n${item.summary || ""}\n${(item.bodyText || "").slice(0, 800)}`);
+  return hashText(`${item.title}\n${item.summary || ""}\n${item.cleanBody || item.bodyText || ""}`);
 }
 
 export function targetSummaryLang(profile: Profile): "zh" | "en" {
@@ -90,6 +91,11 @@ export function peekPolish(item: MailItem, profile: Profile): PolishRecord | und
   if (!hit) return undefined;
   if (hit.sourceHash !== sourceHash(item)) return undefined;
   if (hit.promptVersion !== POLISH_PROMPT_VERSION) return undefined;
+  const secrets = loadSecrets();
+  if (aiReady(secrets)) {
+    const { definition, config } = activeProvider(secrets);
+    if (hit.provider !== definition.id || hit.model !== config.model) return undefined;
+  }
   return hit;
 }
 
@@ -153,7 +159,8 @@ export async function polishItem(
       title,
       summary,
       polishedAt: new Date().toISOString(),
-      model: aiReady(secrets) ? secrets.siliconflowModel : "local",
+      model: aiReady(secrets) ? activeProvider(secrets).config.model : "local",
+      provider: aiReady(secrets) ? activeProvider(secrets).definition.id : "local",
       promptVersion: POLISH_PROMPT_VERSION,
     };
     const all = readStore();
@@ -170,17 +177,19 @@ export async function polishMany(
   items: MailItem[],
   profile: Profile,
   opts?: { concurrency?: number; onProgress?: (done: number, total: number) => void },
-): Promise<{ polished: number; skipped: number; failed: number }> {
+): Promise<{ polished: number; skipped: number; failed: number; unprocessed: number; firstError?: string }> {
   const concurrency = opts?.concurrency ?? 2;
   let polished = 0;
   let skipped = 0;
   let failed = 0;
+  let firstError: string | undefined;
+  let stopped = false;
   let done = 0;
   const total = items.length;
   const queue = [...items];
 
   const worker = async () => {
-    while (queue.length) {
+    while (queue.length && !stopped) {
       const item = queue.shift();
       if (!item) break;
       try {
@@ -190,8 +199,13 @@ export async function polishMany(
           await polishItem(item, profile);
           polished += 1;
         }
-      } catch {
+      } catch (error) {
         failed += 1;
+        const code = error instanceof Error ? error.message : "AI_UNKNOWN_ERROR";
+        firstError ||= code;
+        // Provider/configuration failures will affect every remaining item.
+        // Stop instead of repeating the same doomed request across the page.
+        if (code.startsWith("AI_")) stopped = true;
       } finally {
         done += 1;
         opts?.onProgress?.(done, total);
@@ -200,7 +214,7 @@ export async function polishMany(
   };
 
   await Promise.all(Array.from({ length: Math.min(concurrency, total) }, () => worker()));
-  return { polished, skipped, failed };
+  return { polished, skipped, failed, unprocessed: queue.length, firstError };
 }
 
 /** @deprecated use peekPolish */

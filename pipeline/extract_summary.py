@@ -9,6 +9,21 @@ SKIP_LEAD = re.compile(
 )
 
 
+def _comparable(value: str) -> str:
+    return re.sub(r"[\W_]+", "", value, flags=re.UNICODE).casefold()
+
+
+def is_redundant_summary(title: str, summary: str) -> bool:
+    """Detect title copies, including truncated sections from their middle."""
+    title_key = _comparable(title)
+    summary_key = _comparable(summary)
+    if not title_key or not summary_key:
+        return False
+    if title_key in summary_key:
+        return True
+    return len(summary_key) >= 40 and summary_key in title_key
+
+
 def _sentences(text: str) -> list[str]:
     chunks = re.split(r"(?<=[。！？.!?])\s+|\n+", text)
     out: list[str] = []

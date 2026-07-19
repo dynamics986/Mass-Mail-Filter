@@ -34,7 +34,9 @@ jobs:
           if [ -n "${{ inputs.digest_date }}" ]; then
             python -m pipeline.main --date "${{ inputs.digest_date }}"
           else
-            python -m pipeline.main
+            # Probe every date in the recent four-week window. CUHK publishes
+            # weekly, so this discovers and retains the latest four issues.
+            python -m pipeline.main --lookback-days 28
           fi
       - name: Commit only when the feed changed
         run: |

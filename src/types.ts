@@ -136,7 +136,6 @@ export interface Profile {
   goals: GoalType[];
   skills: string[];
   excluded: string[];
-  preferPaid: boolean;
   age?: number;
   gender?: string;
   residency?: string;
@@ -185,6 +184,7 @@ export interface LocalState {
   favorites: Record<string, FavoriteSnapshot>;
   corrections: string[];
   importedItems: MailItem[];
+  itemFeedback: Record<string, "less" | "more">;
 }
 
 export interface Programme {

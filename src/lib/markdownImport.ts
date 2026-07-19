@@ -1,4 +1,5 @@
 import type { MailItem, TimeMark, Taxonomy } from "../types";
+import { cleanMailText } from "./textCleanup";
 
 /**
  * OpenClaw / mailbox export format (cu-link-export v1)
@@ -209,7 +210,7 @@ export function parseCuLinkMarkdown(markdown: string): MailItem[] {
     const timeMarks = buildTimeMarks({ date, deadline, event, start, end });
     const taxonomy = guessTaxonomy(title, body, tags);
 
-    return {
+    return cleanMailText({
       id,
       digestDate: date,
       category: "Imported",
@@ -234,7 +235,7 @@ export function parseCuLinkMarkdown(markdown: string): MailItem[] {
       publishedAt: `${date}T00:00:00+08:00`,
       fetchedAt: now,
       source: "import" as const,
-    };
+    });
   });
 }
 

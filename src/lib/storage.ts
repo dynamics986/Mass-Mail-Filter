@@ -22,7 +22,6 @@ export const defaultProfile: Profile = {
   goals: ["paid", "research"],
   skills: [],
   excluded: ["clinical patient recruitment"],
-  preferPaid: true,
   weights: { ...defaultWeights },
   language: "zh",
   onboarded: false,
@@ -34,6 +33,7 @@ export const defaultState: LocalState = {
   favorites: {},
   corrections: [],
   importedItems: [],
+  itemFeedback: {},
 };
 
 export function loadState(): LocalState {
@@ -41,10 +41,14 @@ export function loadState(): LocalState {
     const raw = localStorage.getItem(KEY);
     if (!raw) return structuredClone(defaultState);
     const parsed = JSON.parse(raw) as LocalState;
-    const profile = {
+    const legacyProfile = parsed.profile as Profile & { preferPaid?: boolean };
+    const { preferPaid: legacyPreferPaid, ...savedProfile } = legacyProfile;
+    const savedGoals = savedProfile.goals ?? defaultProfile.goals;
+    const profile: Profile = {
       ...defaultProfile,
-      ...parsed.profile,
-      weights: { ...defaultWeights, ...parsed.profile?.weights },
+      ...savedProfile,
+      goals: legacyPreferPaid && !savedGoals.includes("paid") ? [...savedGoals, "paid"] : savedGoals,
+      weights: { ...defaultWeights, ...savedProfile.weights },
     };
     profile.nativeLanguages = normalizeLanguageList(profile.nativeLanguages ?? defaultProfile.nativeLanguages);
     profile.spokenLanguages = normalizeLanguageList(profile.spokenLanguages ?? defaultProfile.spokenLanguages);
@@ -56,6 +60,7 @@ export function loadState(): LocalState {
       hidden: parsed.hidden ?? [],
       corrections: parsed.corrections ?? [],
       importedItems: parsed.importedItems ?? [],
+      itemFeedback: parsed.itemFeedback ?? {},
     };
   } catch {
     return structuredClone(defaultState);

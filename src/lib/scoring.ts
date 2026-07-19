@@ -204,6 +204,7 @@ function scoreFit(item: MailItem, profile: Profile, eligibility: Eligibility, re
 function scoreValue(item: MailItem, profile: Profile, reasons: ScoreReason[]): number {
   let score = 35;
   const comp = item.compensation;
+  const prefersPaid = profile.goals.includes("paid");
   if (comp) {
     const amount = comp.maxHkd ?? comp.minHkd ?? 0;
     if (comp.type === "cash" || comp.type === "allowance") {
@@ -212,12 +213,12 @@ function scoreValue(item: MailItem, profile: Profile, reasons: ScoreReason[]): n
     else if (comp.type === "prize") score = 42;
     else score = 50;
     reasons.push({ key: "compensation", dimension: "value", points: score, label: "Has compensation" });
-    if (profile.preferPaid) score = clamp(score + 8);
+    if (prefersPaid) score = clamp(score + 8);
   } else if (item.taxonomy?.roles?.includes("ra") || item.taxonomy?.roles?.includes("intern")) {
     score = 50;
     reasons.push({ key: "experience-value", dimension: "value", points: 50, label: "Experience / CV value" });
-    if (profile.preferPaid) score = clamp(score - 8);
-  } else if (profile.preferPaid && item.taxonomy?.type === "service") {
+    if (prefersPaid) score = clamp(score - 8);
+  } else if (prefersPaid && item.taxonomy?.type === "service") {
     score = 28;
     reasons.push({ key: "unpaid-service", dimension: "value", points: 28, label: "Unpaid service (prefer paid)" });
   }
@@ -274,7 +275,7 @@ function scoreImportant(item: MailItem, profile: Profile, reasons: ScoreReason[]
   return clamp(score);
 }
 
-export function evaluateItem(item: MailItem, profile: Profile): Evaluation {
+export function evaluateItem(item: MailItem, profile: Profile, feedback?: "less" | "more"): Evaluation {
   const { eligibility, evidence } = evaluateEligibility(item, profile);
   const reasons: ScoreReason[] = [];
   const scores: ScoreBreakdown = {
@@ -285,6 +286,16 @@ export function evaluateItem(item: MailItem, profile: Profile): Evaluation {
     important: scoreImportant(item, profile, reasons),
     total: 0,
   };
+  if (feedback) {
+    const points = feedback === "more" ? 18 : -28;
+    scores.fit = clamp(scores.fit + points);
+    reasons.push({
+      key: `feedback-${feedback}`,
+      dimension: "fit",
+      points,
+      label: feedback === "more" ? "You asked for more like this" : "You asked for less like this",
+    });
+  }
   const w = profile.weights;
   const weightSum = w.fit + w.urgent + w.value + w.meaningful + w.important || 1;
   scores.total = clamp(

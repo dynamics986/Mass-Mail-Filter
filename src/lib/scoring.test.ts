@@ -53,6 +53,12 @@ describe("evaluateItem", () => {
     expect(ev.eligibility).toBe("unknown");
   });
 
+  it("uses the paid-work goal as the value preference", () => {
+    const paid = evaluateItem(baseItem, { ...defaultProfile, goals: ["paid"] });
+    const noPaid = evaluateItem(baseItem, { ...defaultProfile, goals: ["research"] });
+    expect(paid.scores.value).toBeGreaterThan(noPaid.scores.value);
+  });
+
   it("marks language conflict as ineligible", () => {
     const item: MailItem = {
       ...baseItem,

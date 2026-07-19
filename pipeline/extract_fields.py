@@ -9,10 +9,26 @@ PAID_WORDS = [
     "reward", "酬", "津貼", "津贴", "現金", "现金", "禮券", "礼券", "hourly rate",
 ]
 
+EXPENSE_PATTERNS = [
+    r"service\s+charge", r"consultation", r"priced\s+at", r"for\s+purchase",
+    r"收費", r"收费", r"優惠價", r"优惠价", r"選購", r"选购", r"每個只需", r"每个只需",
+    r"原價", r"原价", r"額外.{0,12}收費", r"额外.{0,12}收费", r"診症", r"诊症",
+]
+BENEFIT_PATTERNS = [
+    r"compensation", r"reward", r"honorarium", r"salary", r"wages?", r"hourly\s+rate",
+    r"cash\s+incentive", r"stipend", r"allowance", r"報酬", r"报酬", r"可獲", r"可获",
+    r"酬謝", r"酬谢", r"津貼", r"津贴", r"薪金", r"工資", r"工资",
+]
+
 
 def extract_compensation(text: str) -> Compensation | None:
     lower = text.lower()
     if not any(w in lower for w in PAID_WORDS):
+        return None
+    # Prices paid by the reader are not compensation received by the reader.
+    has_expense_context = any(re.search(pattern, lower, re.I) for pattern in EXPENSE_PATTERNS)
+    has_benefit_context = any(re.search(pattern, lower, re.I) for pattern in BENEFIT_PATTERNS)
+    if has_expense_context and not has_benefit_context:
         return None
     values = [int(x.replace(",", "")) for x in re.findall(r"(?:hk\s*\$|hkd\s*\$?|\$)\s*([0-9][0-9,]*)", lower, re.I)]
     if any(x in lower for x in ["voucher", "coupon", "禮券", "礼券"]):

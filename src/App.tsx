@@ -22,7 +22,7 @@ import {
   listRequirementChecks,
   relativeDeadline,
 } from "./lib/scoring";
-import { taxonomyLabel } from "./lib/taxonomyLabels";
+import { tagLabel, taxonomyLabel } from "./lib/taxonomyLabels";
 import {
   clearState,
   defaultState,
@@ -37,13 +37,14 @@ import {
   onPolishStoreChange,
   peekPolish,
   polishCount,
-  polishItem,
   polishMany,
-  type PolishRecord,
 } from "./lib/enhance";
 import { LANGUAGE_OPTIONS, toggleLanguage } from "./lib/languages";
-import { loadSecrets, maskKey, saveSecrets, type AppSecrets } from "./lib/secrets";
-import { testSiliconflowKey } from "./lib/siliconflow";
+import { categoryFeedback, toggleItemFeedback } from "./lib/feedback";
+import { getOriginalSourceUrl, isUsableSourceUrl } from "./lib/sourceLinks";
+import { nonRedundantSummary } from "./lib/textCleanup";
+import { activeProvider, aiReady, AI_PROVIDERS, loadSecrets, maskKey, saveSecrets, type AiProvider, type AppSecrets } from "./lib/secrets";
+import { aiErrorMessage, testAiConnection } from "./lib/siliconflow";
 import { wantsChineseHelp, warmTranslator } from "./lib/translate";
 import type {
   Evaluation,
@@ -71,6 +72,13 @@ const GOAL_OPTIONS: { id: GoalType; zh: string; en: string }[] = [
   { id: "event", zh: "讲座活动", en: "Events" },
 ];
 
+function yearLabel(year: YearLevel, lang: "zh" | "en"): string {
+  if (lang === "en") return year;
+  if (year === "Final") return "毕业年级";
+  if (year === "PG") return "研究生";
+  return `${year.slice(1)} 年级`;
+}
+
 function dimLabel(key: DimKey, lang: "zh" | "en"): string {
   const map: Record<DimKey, { zh: string; en: string }> = {
     fit: { zh: "契合", en: "Fit" },
@@ -91,7 +99,7 @@ function ScoreMeters({
   keys?: Array<keyof Omit<ScoreBreakdown, "total">>;
 }) {
   return (
-    <div className="score-meters" aria-label="Score breakdown">
+    <div className="score-meters" aria-label={lang === "zh" ? "分数明细" : "Score breakdown"}>
       {keys.map(key => {
         const value = scores[key];
         const label =
@@ -110,86 +118,6 @@ function ScoreMeters({
           </div>
         );
       })}
-    </div>
-  );
-}
-
-/** Manual one-click polish; results are shared in localStorage and reused everywhere. */
-function PolishBlock({
-  item,
-  profile,
-  titleAs = "h3",
-  summaryClass = "summary",
-  compact,
-}: {
-  item: MailItem;
-  profile: Profile;
-  titleAs?: "h1" | "h3";
-  summaryClass?: string;
-  compact?: boolean;
-}) {
-  const lang = profile.language;
-  const [record, setRecord] = useState<PolishRecord | undefined>(() => peekPolish(item, profile));
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
-
-  useEffect(() => {
-    const sync = () => setRecord(peekPolish(item, profile));
-    sync();
-    return onPolishStoreChange(sync);
-  }, [item.id, item.title, item.summary, item.bodyText, profile.language, profile.nativeLanguages]);
-
-  const run = async (force = false) => {
-    setBusy(true);
-    setErr("");
-    try {
-      setRecord(await polishItem(item, profile, { force }));
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : lang === "zh" ? "润色失败" : "Polish failed");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const TitleTag = titleAs;
-  const title = record?.title || item.title;
-  const summary =
-    record?.summary ||
-    item.summary ||
-    (lang === "zh" ? "暂无梗概，请查看原文。" : "No summary yet—open the original.");
-  const cached = !!record;
-
-  return (
-    <div className="polish-block">
-      <TitleTag>{title}</TitleTag>
-      <p className={summaryClass}>{summary}</p>
-      <div className="polish-actions">
-        {cached ? (
-          <>
-            <span className="polish-cached">{lang === "zh" ? "已润色并已缓存" : "Polished · cached"}</span>
-            {!compact && (
-              <button type="button" className="linkish" disabled={busy} onClick={() => run(true)}>
-                {busy ? (lang === "zh" ? "润色中…" : "Polishing…") : lang === "zh" ? "重新润色" : "Re-polish"}
-              </button>
-            )}
-          </>
-        ) : (
-          <button type="button" className="chip polish-btn" disabled={busy} onClick={() => run(false)}>
-            {busy ? (lang === "zh" ? "润色中…" : "Polishing…") : lang === "zh" ? "一键润色" : "Polish"}
-          </button>
-        )}
-      </div>
-      {cached && item.summary && record && record.summary !== item.summary && (
-        <details className="zh-original">
-          <summary>{lang === "zh" ? "查看原文" : "Show original"}</summary>
-          <p>
-            <b>{item.title}</b>
-            <br />
-            {item.summary}
-          </p>
-        </details>
-      )}
-      {err && <p className="translate-hint">{err}</p>}
     </div>
   );
 }
@@ -266,7 +194,7 @@ function App() {
         setMeta(data.meta);
         setOffline(data.offline);
       })
-      .catch(() => setError("Unable to load the data feed."));
+      .catch(() => setError("feed-load"));
     loadFaculties()
       .then(setFaculties)
       .catch(() => undefined);
@@ -305,13 +233,19 @@ function App() {
     <div className="app-shell">
       <Header local={local} setLocal={setLocal} />
       {(offline || error) && (
-        <div className="notice warning">{offline ? t(local.profile.language, "offline") : error}</div>
+        <div className="notice warning">
+          {offline
+            ? t(local.profile.language, "offline")
+            : local.profile.language === "zh"
+              ? "无法载入邮件数据。"
+              : "Unable to load the data feed."}
+        </div>
       )}
       {meta && Date.now() - new Date(meta.fetchedAt).getTime() > 10 * 86400000 && (
         <div className="notice warning">
           <span>{t(local.profile.language, "stale")}</span>
           <a href={meta.sourceUrl} target="_blank" rel="noreferrer">
-            Digest ↗
+            {local.profile.language === "zh" ? "查看数据源" : "View source"} ↗
           </a>
         </div>
       )}
@@ -347,6 +281,7 @@ function App() {
           />
         </Routes>
       </main>
+      <footer className="app-footer">dynamics986@2026.</footer>
       <BottomNav lang={local.profile.language} />
       {toast && (
         <div className="toast" role="status">
@@ -398,6 +333,7 @@ function Header({ local, setLocal }: { local: LocalState; setLocal: (state: Loca
           <small>Mass Mail Filter</small>
         </span>
       </NavLink>
+      <span className="header-motto">{t(lang, "motto")}</span>
       <nav>
         <NavLink to="/">{t(lang, "home")}</NavLink>
         <NavLink to="/timeline">{t(lang, "timeline")}</NavLink>
@@ -408,7 +344,7 @@ function Header({ local, setLocal }: { local: LocalState; setLocal: (state: Loca
       </nav>
       <button
         className="lang-button"
-        aria-label="Toggle language"
+        aria-label={lang === "zh" ? "切换为英文" : "Switch to Chinese"}
         onClick={() =>
           setLocal({ ...local, profile: { ...local.profile, language: lang === "zh" ? "en" : "zh" } })
         }
@@ -497,7 +433,7 @@ function Home({
   const evaluated = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items
-      .map(item => ({ item, evaluation: evaluateItem(item, local.profile) }))
+      .map(item => ({ item, evaluation: evaluateItem(item, local.profile, categoryFeedback(item, items, local.itemFeedback)) }))
       .filter(x => !local.hidden.includes(x.item.id) && !isExcluded(x.item, local.profile))
       .filter(x => showIneligible || x.evaluation.eligibility !== "ineligible")
       .filter(x => {
@@ -592,11 +528,6 @@ function Home({
         });
         return;
       }
-      if (e.key === "p") {
-        polishItem(current, local.profile)
-          .then(() => showToast(lang === "zh" ? "已润色" : "Polished"))
-          .catch(() => undefined);
-      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -638,10 +569,18 @@ function Home({
   };
   const bulkPolish = async () => {
     if (!selectedItems.length || bulkBusy) return;
+    if (!aiReady(loadSecrets())) {
+      showToast(lang === "zh" ? "请先在个人设置中启用并配置 AI 服务。" : "Enable and configure AI Services in Settings first.");
+      return;
+    }
     setBulkBusy(true);
     try {
-      await polishMany(selectedItems, local.profile, { concurrency: 2 });
-      showToast(lang === "zh" ? "已润色所选" : "Polished selected");
+      const result = await polishMany(selectedItems, local.profile, { concurrency: 1 });
+      if (result.firstError) {
+        showToast(aiErrorMessage(new Error(result.firstError), lang));
+      } else {
+        showToast(lang === "zh" ? "已润色所选" : "Polished selected");
+      }
     } finally {
       setBulkBusy(false);
       setSelected(new Set());
@@ -662,6 +601,14 @@ function Home({
 
   const runBatchPolish = async () => {
     if (!evaluated.length || batchBusy) return;
+    if (!aiReady(loadSecrets())) {
+      setBatchMsg(
+        lang === "zh"
+          ? "请先在个人设置中启用 AI 服务，并填写当前服务商的 API Key 与模型 ID。"
+          : "Enable AI Services in Settings and enter an API key and model ID for the selected provider.",
+      );
+      return;
+    }
     setBatchBusy(true);
     setBatchMsg(lang === "zh" ? "正在润色…" : "Polishing…");
     try {
@@ -669,18 +616,18 @@ function Home({
         evaluated.map(x => x.item),
         local.profile,
         {
-          concurrency: 2,
+          concurrency: 1,
           onProgress: (done, total) =>
             setBatchMsg(lang === "zh" ? `润色中 ${done}/${total}` : `Polishing ${done}/${total}`),
         },
       );
-      setBatchMsg(
-        lang === "zh"
-          ? `完成：新润色 ${result.polished}，跳过已缓存 ${result.skipped}${result.failed ? `，失败 ${result.failed}` : ""}（库内共 ${polishCount()} 条）`
-          : `Done: ${result.polished} new, ${result.skipped} cached skipped${result.failed ? `, ${result.failed} failed` : ""} (${polishCount()} in store)`,
+      const errorText = result.firstError ? aiErrorMessage(new Error(result.firstError), lang) : "";
+      setBatchMsg(lang === "zh"
+        ? `完成：新润色 ${result.polished}，跳过已缓存 ${result.skipped}${result.failed ? `，失败 ${result.failed}` : ""}${result.unprocessed ? `，已停止且未处理 ${result.unprocessed}` : ""}（库内共 ${polishCount()} 条）${errorText ? `。原因：${errorText}` : ""}`
+        : `Done: ${result.polished} new, ${result.skipped} cached${result.failed ? `, ${result.failed} failed` : ""}${result.unprocessed ? `, stopped with ${result.unprocessed} unprocessed` : ""} (${polishCount()} in store)${errorText ? `. Reason: ${errorText}` : ""}`,
       );
-    } catch (e) {
-      setBatchMsg(e instanceof Error ? e.message : "Failed");
+    } catch {
+      setBatchMsg(lang === "zh" ? "润色失败，请检查 AI 设置后重试。" : "Polish failed. Check AI settings and try again.");
     } finally {
       setBatchBusy(false);
     }
@@ -689,14 +636,7 @@ function Home({
   return (
     <>
       <section className="hero compact-mobile">
-        <p className="eyebrow">CUHK · Undergraduate Digest</p>
-        <p className="motto">{t(lang, "motto")}</p>
-        <h1>{lang === "zh" ? "适合你的机会，排在前面" : "Opportunities that fit, first."}</h1>
-        <p>
-          {lang === "zh"
-            ? "按紧急、价值、契合与意义综合排序。每条推荐都能展开依据，画像只留在本机。"
-            : "Ranked by urgency, value, fit, and meaning—with clear evidence. Your profile never leaves this device."}
-        </p>
+        <h1>{lang === "zh" ? "机会精选" : "Curated opportunities"}</h1>
       </section>
       {meta && (
         <div className="freshness-strip">
@@ -737,7 +677,7 @@ function Home({
         </div>
       )}
       <section className="toolbar">
-        <div>
+        <div className="control-group control-mode">
           <p className="section-kicker">{lang === "zh" ? "模式" : "Mode"}</p>
           <div className="chips">
             <button
@@ -756,7 +696,7 @@ function Home({
             </button>
           </div>
         </div>
-        <div>
+        <div className="control-group control-search">
           <p className="section-kicker">{lang === "zh" ? "搜索" : "Search"}</p>
           <input
             ref={searchRef}
@@ -769,7 +709,7 @@ function Home({
             onChange={e => setQuery(e.target.value)}
           />
         </div>
-        <div>
+        <div className="control-group control-filters">
           <p className="section-kicker">{lang === "zh" ? "筛选" : "Filters"}</p>
           <div className="chips">
             {[
@@ -786,7 +726,7 @@ function Home({
             ))}
           </div>
         </div>
-        <div>
+        <div className="control-group control-sort">
           <p className="section-kicker">{lang === "zh" ? "排序" : "Sort"}</p>
           <div className="chips">
             {(
@@ -803,7 +743,7 @@ function Home({
             ))}
           </div>
         </div>
-        <label className="switch">
+        <label className="eligibility-scope">
           <input
             type="checkbox"
             checked={showIneligible}
@@ -814,7 +754,15 @@ function Home({
               setParams(next, { replace: true });
             }}
           />
-          <span>{t(lang, "showIneligible")}</span>
+          <span className="toggle-track" aria-hidden="true"><span /></span>
+          <span className="scope-copy">
+            <strong>{lang === "zh" ? "包含资格不符项目" : "Include ineligible items"}</strong>
+            <small>
+              {lang === "zh"
+                ? "默认隐藏与个人资料明确冲突的邮件"
+                : "Items that clearly conflict with your profile are hidden by default"}
+            </small>
+          </span>
         </label>
         <div className="dim-filters">
           <div className="dim-filters-head">
@@ -847,10 +795,7 @@ function Home({
       </section>
       <section className="feed">
         <div className="feed-heading">
-          <div>
-            <p className="section-kicker">{lang === "zh" ? "最近有效机会" : "Recent & open"}</p>
-            <h2>{t(lang, "home")}</h2>
-          </div>
+          <h2>{t(lang, "home")}</h2>
           <div className="feed-heading-actions">
             <button
               type="button"
@@ -956,9 +901,6 @@ function Home({
                 <kbd>s</kbd> {lang === "zh" ? "收藏 / 取消收藏" : "Toggle save"}
               </li>
               <li>
-                <kbd>p</kbd> {lang === "zh" ? "润色当前项" : "Polish current item"}
-              </li>
-              <li>
                 <kbd>/</kbd> {lang === "zh" ? "聚焦搜索框" : "Focus search"}
               </li>
               <li>
@@ -998,39 +940,53 @@ function OpportunityCard({
 }) {
   const lang = local.profile.language;
   const favorite = !!local.favorites[item.id];
+  const polished = peekPolish(item, local.profile);
+  const displayTitle = polished?.title || item.title;
+  const displaySummary = nonRedundantSummary(displayTitle, polished?.summary || item.summary);
   const deadlineLabel = relativeDeadline(item, lang);
   const hot = isClosingSoon(item);
   const highConfidenceReqs = listRequirementChecks(item, local.profile)
     .filter(c => c.req.confidence === "high")
     .slice(0, 2);
   return (
-    <article className={focused ? "opportunity-card focused" : "opportunity-card"}>
+    <article className={`opportunity-card${focused ? " focused" : ""}${selected ? " card-selected" : ""}`}>
       <div className="card-top">
-        {onToggleSelect && (
-          <label className="card-select" onClick={e => e.stopPropagation()}>
-            <input
-              type="checkbox"
-              checked={!!selected}
-              onChange={() => onToggleSelect(item.id)}
-              aria-label={lang === "zh" ? "选择此项" : "Select this item"}
-            />
-          </label>
-        )}
-        <span className={`status ${evaluation.eligibility}`}>{t(lang, evaluation.eligibility)}</span>
-        {item.source === "import" && (
-          <span className="import-badge">{lang === "zh" ? "已导入" : "Imported"}</span>
-        )}
-        <span className="score-total">
-          <b>{evaluation.score}</b>/100
-        </span>
+        <div className="card-heading-meta">
+          <span className="category">
+            {taxonomyLabel(item.taxonomy?.type, lang)} · {fmtDate(item.digestDate, lang)}
+          </span>
+          <span className={`status ${evaluation.eligibility}`}>{t(lang, evaluation.eligibility)}</span>
+          {item.source === "import" && (
+            <span className="import-badge">{lang === "zh" ? "已导入" : "Imported"}</span>
+          )}
+        </div>
+        <div className="card-top-actions">
+          <span className="score-total">
+            <b>{evaluation.score}</b>/100
+          </span>
+          {onToggleSelect && (
+            <button
+              type="button"
+              className={selected ? "card-select-button selected" : "card-select-button"}
+              aria-pressed={!!selected}
+              aria-label={selected
+                ? (lang === "zh" ? "取消选择此项" : "Deselect this item")
+                : (lang === "zh" ? "选择此项" : "Select this item")}
+              title={selected
+                ? (lang === "zh" ? "取消选择" : "Deselect")
+                : (lang === "zh" ? "加入批量操作" : "Add to bulk actions")}
+              onClick={() => onToggleSelect(item.id)}
+            >
+              {selected ? "✓" : "+"}
+            </button>
+          )}
+        </div>
       </div>
-      <p className="category">
-        {item.taxonomy?.type?.replace("_", " ") ?? item.category} · {fmtDate(item.digestDate, lang)}
-      </p>
-      <PolishBlock item={item} profile={local.profile} titleAs="h3" summaryClass="summary" compact />
+      <h3>{displayTitle}</h3>
+      {displaySummary && <p className="summary">{displaySummary}</p>}
       <div className="tags">
         {(item.tags.length ? item.tags : item.taxonomy?.domains ?? []).slice(0, 3).map(tag => (
-          <span key={tag}>{tag}</span>
+          <span key={tag}>{tagLabel(tag, lang)}</span>
         ))}
       </div>
       {!!highConfidenceReqs.length && (
@@ -1102,12 +1058,47 @@ function Detail({
   const navigate = useNavigate();
   const item = items.find(i => i.id === id);
   const lang = local.profile.language;
-  const [feedbackState, setFeedbackState] = useState({ disliked: false, liked: false });
-  const [lastExcluded, setLastExcluded] = useState<string[] | null>(null);
   if (!item) return <Empty text={lang === "zh" ? "找不到此项目，可能已经归档。" : "This item may have been archived."} />;
-  const evaluation = evaluateItem(item, local.profile);
-  const topic = item.taxonomy?.type ?? item.tags[0] ?? item.category;
+  const feedback = local.itemFeedback[item.id];
+  const originalSourceUrl = getOriginalSourceUrl(item);
+  const polished = peekPolish(item, local.profile);
+  const displayTitle = polished?.title || item.title;
+  const displaySummary = nonRedundantSummary(displayTitle, polished?.summary || item.summary);
+  const evaluation = evaluateItem(item, local.profile, categoryFeedback(item, items, local.itemFeedback));
   const reqChecks = listRequirementChecks(item, local.profile);
+  const feedbackActions = (
+    <section className="feedback detail-feedback">
+      <button
+        className={feedback === "less" ? "confirmed" : ""}
+        aria-pressed={feedback === "less"}
+        onClick={() => updateLocal(s => ({
+          ...s,
+          itemFeedback: toggleItemFeedback(s.itemFeedback, item.id, "less"),
+        }))}
+      >
+        {feedback === "less" ? (lang === "zh" ? "✓ 已减少此类" : "✓ Showing less") : t(lang, "dislike")}
+      </button>
+      <button
+        className={feedback === "more" ? "confirmed" : ""}
+        aria-pressed={feedback === "more"}
+        onClick={() => updateLocal(s => ({
+          ...s,
+          itemFeedback: toggleItemFeedback(s.itemFeedback, item.id, "more"),
+        }))}
+      >
+        {feedback === "more" ? (lang === "zh" ? "✓ 已加强此类" : "✓ Preference saved") : t(lang, "addInterest")}
+      </button>
+      <button onClick={() => updateLocal(s => ({
+        ...s,
+        corrections: s.corrections.includes(item.id)
+          ? s.corrections.filter(correctionId => correctionId !== item.id)
+          : [...s.corrections, item.id],
+      }))}>
+        {local.corrections.includes(item.id) ? "✓ " : ""}
+        {t(lang, "correction")}
+      </button>
+    </section>
+  );
   return (
     <article className="detail">
       <button className="back" onClick={() => navigate(-1)}>
@@ -1117,9 +1108,10 @@ function Detail({
         <div>
           <span className={`status ${evaluation.eligibility}`}>{t(lang, evaluation.eligibility)}</span>
           <p className="category">
-            {item.category} · {fmtDate(item.digestDate, lang)}
+            {taxonomyLabel(item.taxonomy?.type, lang)} · {fmtDate(item.digestDate, lang)}
           </p>
-          <PolishBlock item={item} profile={local.profile} titleAs="h1" summaryClass="page-intro" />
+          <h1>{displayTitle}</h1>
+          {displaySummary && <p className="detail-summary">{displaySummary}</p>}
         </div>
         <div className="score-ring">
           <strong>{evaluation.score}</strong>
@@ -1136,30 +1128,6 @@ function Detail({
               keys={["fit", "urgent", "value", "meaningful", "important"]}
             />
           </div>
-          <div className="reasons large">
-            {evaluation.reasons.map((r, i) => (
-              <div key={`${r.key}-${i}`}>
-                <b>
-                  {r.points > 0 ? "+" : ""}
-                  {r.points}
-                </b>
-                <span>
-                  [{r.dimension}] {r.label}
-                </span>
-              </div>
-            ))}
-          </div>
-          {evaluation.evidence.length ? (
-            <ul className="evidence">
-              {evaluation.evidence.map((x, i) => (
-                <li key={i}>{x}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="muted">
-              {lang === "zh" ? "邮件没有足够明确的资格信息，请核对原文。" : "Not enough explicit eligibility text. Check the original."}
-            </p>
-          )}
           <section className="requirements-block">
             <h2>{t(lang, "requirements")}</h2>
             {reqChecks.length ? (
@@ -1170,7 +1138,6 @@ function Detail({
                       {c.result === "match" ? "✓" : c.result === "conflict" ? "✗" : "?"}
                     </span>
                     <span>{formatRequirementLabel(c.req, lang)}</span>
-                    <small className="muted">{c.req.evidence}</small>
                   </li>
                 ))}
               </ul>
@@ -1200,6 +1167,7 @@ function Detail({
               </ul>
             </details>
           )}
+          {feedbackActions}
         </section>
         <aside>
           <div className="fact-grid">
@@ -1211,6 +1179,15 @@ function Detail({
           <Info label={lang === "zh" ? "截止证据" : "Deadline evidence"} value={item.deadlineEvidence || "—"} />
           <Info label={lang === "zh" ? "主办方" : "Organizer"} value={item.organizer ?? "—"} />
           {item.contactEmail && <a href={`mailto:${item.contactEmail}`}>{item.contactEmail}</a>}
+          {originalSourceUrl ? (
+            <a className="source-link" href={originalSourceUrl} target="_blank" rel="noreferrer">
+              {lang === "zh" ? "查看原文" : "View source"} ↗
+            </a>
+          ) : (
+            <p className="source-unavailable">
+              {lang === "zh" ? "此项目没有可用的原文链接。" : "No original source is available for this item."}
+            </p>
+          )}
           <div className="info">
             <span>{lang === "zh" ? "时间节点" : "Schedule"}</span>
             <ul className="mini-schedule">
@@ -1223,85 +1200,6 @@ function Detail({
           </div>
         </aside>
       </div>
-      <section className="message">
-        <h2>{t(lang, "body")}</h2>
-        <p>{item.cleanBody || item.bodyText}</p>
-      </section>
-      <section className="link-list">
-        <a className="primary" href={item.sourceUrl} target="_blank" rel="noreferrer">
-          {t(lang, "source")} ↗
-        </a>
-        {item.applicationUrls.map(url => (
-          <a key={url} href={url} target="_blank" rel="noreferrer">
-            {t(lang, "apply")} ↗
-          </a>
-        ))}
-      </section>
-      <section className="feedback">
-        <button
-          className={feedbackState.disliked ? "confirmed" : ""}
-          aria-pressed={feedbackState.disliked}
-          onClick={() => {
-            const additions = [...new Set([topic, taxonomyLabel(item.taxonomy?.type, lang)])];
-            updateLocal(s => ({
-              ...s,
-              profile: { ...s.profile, excluded: [...new Set([...s.profile.excluded, ...additions])] },
-            }));
-            setLastExcluded(additions);
-            setFeedbackState(state => ({ ...state, disliked: true }));
-          }}
-        >
-          {feedbackState.disliked ? (lang === "zh" ? "✓ 已减少此类" : "✓ Showing less") : t(lang, "dislike")}
-        </button>
-        {feedbackState.disliked && lastExcluded && (
-          <button
-            type="button"
-            className="linkish"
-            onClick={() => {
-              updateLocal(s => ({
-                ...s,
-                profile: {
-                  ...s.profile,
-                  excluded: s.profile.excluded.filter(x => !lastExcluded.includes(x)),
-                },
-              }));
-              setLastExcluded(null);
-              setFeedbackState(state => ({ ...state, disliked: false }));
-            }}
-          >
-            {t(lang, "undo")}
-          </button>
-        )}
-        <button
-          className={feedbackState.liked ? "confirmed" : ""}
-          aria-pressed={feedbackState.liked}
-          onClick={() => {
-            const goalMap: Record<string, GoalType> = {
-              paid_work: "paid",
-              research: "research",
-              competition: "competition",
-              service: "volunteer",
-              event: "event",
-              programme: "event",
-            };
-            const goal = goalMap[item.taxonomy?.type ?? ""];
-            updateLocal(s => ({
-              ...s,
-              profile: {
-                ...s.profile,
-                goals: goal ? [...new Set([...s.profile.goals, goal])] : s.profile.goals,
-              },
-            }));
-            setFeedbackState(state => ({ ...state, liked: true }));
-          }}
-        >
-          {feedbackState.liked ? (lang === "zh" ? "✓ 已加强此类" : "✓ Preference saved") : t(lang, "addInterest")}
-        </button>
-        <button onClick={() => updateLocal(s => ({ ...s, corrections: [...new Set([...s.corrections, item.id])] }))}>
-          {local.corrections.includes(item.id) ? "✓ " : ""}
-          {t(lang, "correction")}
-        </button>
-      </section>
     </article>
   );
 }
@@ -1342,7 +1240,6 @@ function History({
       : [];
   return (
     <section className="page">
-      <p className="eyebrow">Archive · Search</p>
       <h1>{t(lang, "history")}</h1>
       <p className="page-intro">
         {lang === "zh" ? (
@@ -1380,7 +1277,7 @@ function History({
             <OpportunityCard
               key={item.id}
               item={item}
-              evaluation={evaluateItem(item, local.profile)}
+              evaluation={evaluateItem(item, local.profile, categoryFeedback(item, items, local.itemFeedback))}
               local={local}
               updateLocal={updateLocal}
               hiddenView={view === "hidden"}
@@ -1391,9 +1288,11 @@ function History({
               <span>{lang === "zh" ? "已归档收藏" : "Archived favorite"}</span>
               <h3>{item.title}</h3>
               <p className="summary">{item.summary}</p>
-              <a href={item.sourceUrl} target="_blank" rel="noreferrer">
-                {t(lang, "source")} ↗
-              </a>
+              {isUsableSourceUrl(item.sourceUrl) && (
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer">
+                  {t(lang, "source")} ↗
+                </a>
+              )}
             </article>
           ))}
         </div>
@@ -1404,48 +1303,29 @@ function History({
 
 function DigestArchive({ items, local }: { items: MailItem[]; local: LocalState }) {
   const lang = local.profile.language;
-  const digests = [...new Set(items.map(item => item.digestDate))].sort((a, b) => b.localeCompare(a));
+  const digests = [...new Set(items.map(item => item.digestDate))]
+    .sort((a, b) => b.localeCompare(a))
+    .slice(0, 4);
   return (
     <section className="page digests">
-      <p className="eyebrow">CUHK · Weekly announcements</p>
       <h1>{t(lang, "digests")}</h1>
       <p className="page-intro">
         {lang === "zh"
-          ? "每期除外链 Announcements 外，还可直接打开本站已收录条目。"
-          : "Besides the official announcements page, jump into indexed items on CU Link."}
+          ? "查看最近四周的 Undergraduate Digest 公告总表；具体通知请从机会详情页打开原网页。"
+          : "Open the Undergraduate Digest announcement lists from the most recent four weeks. Individual messages remain available from opportunity details."}
       </p>
       {digests.length ? (
         <div className="digest-list">
           {digests.map(date => {
-            const rowItems = items
-              .filter(item => item.digestDate === date)
-              .map(item => ({ item, evaluation: evaluateItem(item, local.profile) }))
-              .sort((a, b) => b.evaluation.score - a.evaluation.score);
+            const count = items.filter(item => item.digestDate === date).length;
             return (
-              <div className="digest-block" key={date}>
-                <a className="digest-row" href={getAnnouncementsUrl(date)} target="_blank" rel="noreferrer">
-                  <span>
-                    <strong>{fmtDate(date, lang)}</strong>
-                    <small>
-                      {rowItems.length} {lang === "zh" ? "项已收录" : "items indexed"}
-                    </small>
-                  </span>
-                  <b>{lang === "zh" ? "官方 Digest ↗" : "Official digest ↗"}</b>
-                </a>
-                <ul className="digest-items">
-                  {rowItems.slice(0, 12).map(({ item, evaluation }) => (
-                    <li key={item.id}>
-                      <NavLink to={`/item/${item.id}`}>{item.title}</NavLink>
-                      <span className="score-pill">{evaluation.score}</span>
-                    </li>
-                  ))}
-                  {rowItems.length > 12 && (
-                    <li className="muted">
-                      {lang === "zh" ? `另有 ${rowItems.length - 12} 项…` : `+${rowItems.length - 12} more…`}
-                    </li>
-                  )}
-                </ul>
-              </div>
+              <a className="digest-row" href={getAnnouncementsUrl(date)} target="_blank" rel="noreferrer" key={date}>
+                <span>
+                  <strong>{fmtDate(date, lang)}</strong>
+                  <small>{count} {lang === "zh" ? "项已收录" : "items indexed"}</small>
+                </span>
+                <b>{lang === "zh" ? "查看该期 CUHK Digest ↗" : "Open this CUHK Digest ↗"}</b>
+              </a>
             );
           })}
         </div>
@@ -1468,8 +1348,22 @@ function Settings({
   const [draft, setDraft] = useState<Profile>(local.profile);
   const [secrets, setSecrets] = useState<AppSecrets>(() => loadSecrets());
   const [aiTest, setAiTest] = useState("");
+  const [aiTesting, setAiTesting] = useState(false);
+  const [aiTestTone, setAiTestTone] = useState<"idle" | "testing" | "success" | "error">("idle");
   const fileRef = useRef<HTMLInputElement>(null);
   const lang = draft.language;
+  useEffect(() => {
+    setDraft(current => current.language === local.profile.language
+      ? current
+      : { ...current, language: local.profile.language });
+  }, [local.profile.language]);
+  const providerDefinition = AI_PROVIDERS.find(p => p.id === secrets.provider) ?? AI_PROVIDERS[0];
+  const providerConfig = secrets.providers[secrets.provider];
+  const updateProviderConfig = (values: Partial<typeof providerConfig>) =>
+    setSecrets(s => ({
+      ...s,
+      providers: { ...s.providers, [s.provider]: { ...s.providers[s.provider], ...values } },
+    }));
   const field = <K extends keyof Profile>(key: K, value: Profile[K]) => setDraft(d => ({ ...d, [key]: value }));
   const faculty = faculties?.faculties.find(f => f.id === draft.facultyId);
   const save = () => {
@@ -1478,15 +1372,14 @@ function Settings({
   };
   return (
     <section className="page settings">
-      <p className="eyebrow">Private · On-device</p>
       <h1>{t(lang, "settings")}</h1>
       <p className="privacy">◉ {t(lang, "privacy")}</p>
       <section className="ai-settings">
-        <h2>{lang === "zh" ? "硅基流动 AI（可选）" : "SiliconFlow AI (optional)"}</h2>
+        <h2>{lang === "zh" ? "AI 服务（Pro）" : "AI Services (Pro)"}</h2>
         <p className="muted">
           {lang === "zh"
-            ? "用于梗概润色与英→中翻译。Key 只存在本机，不会随画像导出，也不会提交到仓库。"
-            : "Used for summary polish and EN→ZH. The key stays on this device only—never exported with profile JSON."}
+            ? "用于梗概润色与英→中翻译。各服务商的 API Key 存在本浏览器，安全保密。"
+            : "Used for summary polishing and English-to-Chinese translation. Each provider's API Key is stored only in this browser and kept private."}
         </p>
         <label className="switch" style={{ margin: "12px 0" }}>
           <input
@@ -1496,72 +1389,95 @@ function Settings({
           />
           <span>{lang === "zh" ? "启用 AI 增强摘要 / 翻译" : "Enable AI summary & translation"}</span>
         </label>
-        <div className="form-grid">
-          <label style={{ gridColumn: "1 / -1" }}>
-            {lang === "zh" ? "API Key" : "API Key"}
+        <div className="ai-provider-form">
+          <label>
+            {lang === "zh" ? "服务商" : "Provider"}
+            <select
+              value={secrets.provider}
+              onChange={e => {
+                setSecrets(s => ({ ...s, provider: e.target.value as AiProvider }));
+                setAiTest("");
+                setAiTestTone("idle");
+              }}
+            >
+              {AI_PROVIDERS.map(provider => (
+                <option key={provider.id} value={provider.id}>{lang === "zh" ? provider.zh : provider.en}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            API Key
             <input
               type="password"
               autoComplete="off"
-              name="siliconflow-key"
-              placeholder={secrets.siliconflowApiKey ? maskKey(secrets.siliconflowApiKey) : "sk-…"}
-              value={secrets.siliconflowApiKey}
-              onChange={e => setSecrets(s => ({ ...s, siliconflowApiKey: e.target.value.trim() }))}
+              name={`${secrets.provider}-key`}
+              placeholder={providerConfig.apiKey ? maskKey(providerConfig.apiKey) : providerDefinition.keyHint[lang]}
+              value={providerConfig.apiKey}
+              onChange={e => updateProviderConfig({ apiKey: e.target.value.trim() })}
             />
           </label>
-          <label>
-            {lang === "zh" ? "模型" : "Model"}
-            <select
-              value={secrets.siliconflowModel}
-              onChange={e => setSecrets(s => ({ ...s, siliconflowModel: e.target.value }))}
-            >
-              <option value="Qwen/Qwen2.5-7B-Instruct">Qwen2.5-7B（快）</option>
-              <option value="Qwen/Qwen2.5-14B-Instruct">Qwen2.5-14B（默认）</option>
-              <option value="Qwen/Qwen2.5-32B-Instruct">Qwen2.5-32B</option>
-              <option value="deepseek-ai/DeepSeek-V3">DeepSeek-V3</option>
-            </select>
-          </label>
-          <div className="settings-actions" style={{ alignSelf: "end" }}>
+          <div className="ai-model-row">
+            <label>
+              {lang === "zh" ? "模型 / 接入点 ID" : "Model / endpoint ID"}
+              <input
+                value={providerConfig.model}
+                placeholder={providerDefinition.modelHint?.[lang] || providerDefinition.defaultModel}
+                onChange={e => updateProviderConfig({ model: e.target.value })}
+              />
+            </label>
             <button
+              className="ai-test-button"
               type="button"
+              disabled={aiTesting}
               onClick={async () => {
-                saveSecrets(secrets);
+                if (aiTesting) return;
+                setAiTesting(true);
+                setAiTestTone("testing");
                 setAiTest(lang === "zh" ? "测试中…" : "Testing…");
                 try {
-                  const reply = await testSiliconflowKey(secrets);
-                  setAiTest(lang === "zh" ? `连通正常：${reply}` : `OK: ${reply}`);
+                  const reply = await testAiConnection(secrets);
+                  const active = activeProvider(secrets);
+                  setAiTestTone("success");
+                  setAiTest(lang === "zh"
+                    ? `连接成功：${active.definition.zh} · ${active.config.model} · 模型回复：${reply}`
+                    : `Connected: ${active.definition.en} · ${active.config.model} · Model reply: ${reply}`);
                 } catch (err) {
-                  setAiTest(err instanceof Error ? err.message : "Failed");
+                  setAiTestTone("error");
+                  setAiTest(aiErrorMessage(err, lang));
+                } finally {
+                  setAiTesting(false);
                 }
               }}
             >
-              {lang === "zh" ? "测试连接" : "Test connection"}
+              {aiTesting ? (lang === "zh" ? "测试中…" : "Testing…") : (lang === "zh" ? "测试连接" : "Test connection")}
             </button>
           </div>
         </div>
-        {aiTest && <p className="translate-hint">{aiTest}</p>}
+        <details className="provider-advanced">
+          <summary>{lang === "zh" ? "高级设置：Base URL" : "Advanced: Base URL"}</summary>
+          <label>
+            Base URL
+            <input
+              value={providerConfig.baseUrl || ""}
+              placeholder={providerDefinition.baseUrl}
+              onChange={e => updateProviderConfig({ baseUrl: e.target.value })}
+            />
+          </label>
+          <p className="muted">
+            {lang === "zh"
+              ? "通常无需填写。只有服务商控制台提供了不同的兼容接口地址，或你使用代理、其他区域端点时才需要修改；留空会使用当前服务商的官方默认地址。"
+              : "Usually no change is needed. Edit this only when your provider gives you a different compatible API address, or when you use a proxy or another regional endpoint. Leave it blank to use the selected provider's official default address."}
+          </p>
+        </details>
+        {aiTest && (
+          <p className={`ai-connection-status ${aiTestTone}`} role="status" aria-live="polite">
+            <span aria-hidden="true">{aiTestTone === "success" ? "✓" : aiTestTone === "error" ? "✕" : "◌"}</span>
+            {aiTest}
+          </p>
+        )}
       </section>
-      <p className="section-kicker" style={{ marginTop: 20 }}>
-        {lang === "zh" ? "界面语言" : "Interface language"}
-      </p>
-      <div className="year-chips" style={{ marginBottom: 8 }}>
-        {(
-          [
-            ["zh", "中文"],
-            ["en", "English"],
-          ] as const
-        ).map(([code, label]) => (
-          <button
-            key={code}
-            type="button"
-            className={draft.language === code ? "chip active" : "chip"}
-            onClick={() => field("language", code)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <p className="section-kicker" style={{ marginTop: 16 }}>
-        {t(lang, "goals")}
+      <p className="section-kicker settings-section-label" style={{ marginTop: 16 }}>
+        {lang === "zh" ? "目标类型 · Goals" : "Goals · 目标类型"}
       </p>
       <div className="goal-chips" style={{ marginBottom: 16 }}>
         {GOAL_OPTIONS.map(g => {
@@ -1630,7 +1546,7 @@ function Settings({
             <option value="">{lang === "zh" ? "请选择" : "Select…"}</option>
             {(["Y1", "Y2", "Y3", "Y4", "Y5", "Final", "PG"] as const).map(y => (
               <option key={y} value={y}>
-                {y}
+                {yearLabel(y, lang)}
               </option>
             ))}
           </select>
@@ -1638,8 +1554,8 @@ function Settings({
         <label>
           {lang === "zh" ? "学生阶段" : "Student level"}
           <select value={draft.studentLevel} onChange={e => field("studentLevel", e.target.value as Profile["studentLevel"])}>
-            <option value="undergraduate">Undergraduate</option>
-            <option value="postgraduate">Postgraduate</option>
+            <option value="undergraduate">{lang === "zh" ? "本科生" : "Undergraduate"}</option>
+            <option value="postgraduate">{lang === "zh" ? "研究生" : "Postgraduate"}</option>
           </select>
         </label>
         <LanguageChecklist
@@ -1660,17 +1576,15 @@ function Settings({
           value={draft.excluded}
           onChange={v => field("excluded", v)}
         />
-        <label className="switch" style={{ alignSelf: "end" }}>
-          <input type="checkbox" checked={draft.preferPaid} onChange={e => field("preferPaid", e.target.checked)} />
-          <span>{lang === "zh" ? "更偏好有报酬机会" : "Prefer paid opportunities"}</span>
-        </label>
       </div>
       <section className="weights">
         <h2>{lang === "zh" ? "五维权重（高级）" : "Dimension weights (advanced)"}</h2>
         {Object.entries(draft.weights).map(([key, value]) => (
           <label key={key}>
             <span>
-              {key}
+              {key === "important"
+                ? (lang === "zh" ? "重要" : "Important")
+                : dimLabel(key as DimKey, lang)}
               <b>{value}</b>
             </span>
             <input
@@ -1760,8 +1674,6 @@ function Onboarding({
     <div className="modal-backdrop">
       <section className="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
         <span className="brand-mark">CU</span>
-        <p className="eyebrow">Welcome to CU Link</p>
-        <p className="motto">{t(lang, "motto")}</p>
         <h1 id="onboard-title">{lang === "zh" ? "先告诉我们你是谁" : "Tell us who you are"}</h1>
         <p>
           {lang === "zh"
@@ -1781,7 +1693,7 @@ function Onboarding({
                 <option value="">{lang === "zh" ? "请选择学院…" : "Select faculty…"}</option>
                 {faculties?.faculties.map(f => (
                   <option key={f.id} value={f.id}>
-                    {lang === "zh" ? `${f.nameZh} · ${f.nameEn}` : f.nameEn}
+                    {lang === "zh" ? f.nameZh || f.nameEn : f.nameEn}
                   </option>
                 ))}
               </select>
@@ -1818,7 +1730,7 @@ function Onboarding({
                   className={draft.year === y ? "chip active" : "chip"}
                   onClick={() => setDraft(d => ({ ...d, year: y, studentLevel: y === "PG" ? "postgraduate" : "undergraduate" }))}
                 >
-                  {y}
+                  {yearLabel(y, lang)}
                 </button>
               ))}
             </div>
@@ -1937,7 +1849,7 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
       if (!showAll && local.hidden.includes(item.id)) return false;
       if (!showAll && isExcluded(item, local.profile)) return false;
       if (!showAll) {
-        const el = evaluateItem(item, local.profile).eligibility;
+        const el = evaluateItem(item, local.profile, categoryFeedback(item, items, local.itemFeedback)).eligibility;
         if (el === "ineligible") return false;
       }
       return true;
@@ -1979,14 +1891,8 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
 
   return (
     <section className="page timeline-page">
-      <p className="eyebrow">Schedule · Calendar</p>
       <h1>{t(lang, "timeline")}</h1>
-      <p className="page-intro">
-        {lang === "zh"
-          ? "默认隐藏已隐藏/不符合项。月历：点=单日，条=时段。"
-          : "Hidden/ineligible items are filtered by default. Dots = days; bars = ranges."}
-      </p>
-      <div className="chips" style={{ marginBottom: 12 }}>
+      <div className="chips timeline-primary-filters">
         <button
           type="button"
           className={deadlinesOnly ? "chip active" : "chip"}
@@ -1994,7 +1900,7 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
         >
           {t(lang, "deadlinesOnly")}
         </button>
-        <label className="switch" style={{ marginLeft: 8 }}>
+        <label className="switch timeline-show-all">
           <input type="checkbox" checked={showAll} onChange={e => setShowAll(e.target.checked)} />
           <span>{t(lang, "showAllTimeline")}</span>
         </label>
@@ -2035,7 +1941,7 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
           <div className="month-cal-nav">
             <button
               type="button"
-              aria-label="Previous month"
+              aria-label={lang === "zh" ? "上个月" : "Previous month"}
               onClick={() => setCursor(c => shiftMonth(c.year, c.month, -1))}
             >
               ←
@@ -2048,7 +1954,7 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
             </button>
             <button
               type="button"
-              aria-label="Next month"
+              aria-label={lang === "zh" ? "下个月" : "Next month"}
               onClick={() => setCursor(c => shiftMonth(c.year, c.month, 1))}
             >
               →
@@ -2174,9 +2080,9 @@ function ImportPage({ local, setLocal }: { local: LocalState; setLocal: (s: Loca
       setError("");
       setDraft(text);
       setMergedOk(0);
-    } catch (err) {
+    } catch {
       setPreview([]);
-      setError(err instanceof Error ? err.message : "Parse failed");
+      setError(lang === "zh" ? "解析失败，请检查 Markdown 格式。" : "Parse failed. Check the Markdown format.");
     }
   };
 
@@ -2213,12 +2119,30 @@ function ImportPage({ local, setLocal }: { local: LocalState; setLocal: (s: Loca
 
   return (
     <section className="page import-page">
-      <p className="eyebrow">OpenClaw · Markdown bridge</p>
       <h1>{t(lang, "importMail")}</h1>
-      <p className="page-intro">
+      <p className="page-intro import-intro">
         {lang === "zh"
-          ? "让 OpenClaw 读完邮箱后导出 Markdown（cu-link-export v1），在此粘贴或上传。解析只在本机完成，可并入推荐流与时间线。"
-          : "Have OpenClaw dump mailbox messages as cu-link-export v1 Markdown, then paste or upload here. Parsing stays on-device and merges into Home / Timeline."}
+          ? "通过 OpenClaw 导出邮件 Markdown，并在此上传或粘贴；内容仅在本浏览器解析，可合并至推荐与时间线。"
+          : "Export email as Markdown with OpenClaw, then upload or paste it here; processing stays in this browser and can be merged into recommendations and the timeline."}
+      </p>
+      <ol className="import-guide">
+        <li>
+          <b>1</b>
+          <span><strong>{lang === "zh" ? "获取模板" : "Get the template"}</strong>{lang === "zh" ? "下载或打开示例 Markdown。" : "Download or open the example Markdown."}</span>
+        </li>
+        <li>
+          <b>2</b>
+          <span><strong>{lang === "zh" ? "让 OpenClaw 导出" : "Export with OpenClaw"}</strong>{lang === "zh" ? "让它按模板读取邮箱并生成 .md 文件。" : "Ask it to read the mailbox and produce a matching .md file."}</span>
+        </li>
+        <li>
+          <b>3</b>
+          <span><strong>{lang === "zh" ? "解析并合并" : "Parse and merge"}</strong>{lang === "zh" ? "上传或粘贴内容，预览无误后合并。" : "Upload or paste it, review the preview, then merge."}</span>
+        </li>
+      </ol>
+      <p className="import-privacy">
+        {lang === "zh"
+          ? "隐私提示：解析和保存均在本机浏览器完成。导出文件可能含私人邮件，请勿提交到代码仓库或公开分享。"
+          : "Privacy: parsing and storage stay in this browser. Exports may contain private mail—do not commit or share them publicly."}
       </p>
       <div className="import-actions">
         <button type="button" className="primary" onClick={downloadTemplate}>

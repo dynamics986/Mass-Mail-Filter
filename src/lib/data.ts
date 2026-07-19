@@ -1,5 +1,7 @@
 import { z } from "zod";
 import type { FacultiesFile, FeedMeta, MailItem } from "../types";
+import { isPublishedMailItem } from "./sourceLinks";
+import { cleanMailText } from "./textCleanup";
 
 const taxonomySchema = z.object({
   type: z.enum(["paid_work", "research", "event", "programme", "competition", "service", "admin"]),
@@ -91,7 +93,7 @@ export async function loadFeed(): Promise<{ items: MailItem[]; meta: FeedMeta; o
     if (!feedRes.ok || !metaRes.ok) throw new Error("feed fetch failed");
     const rawItems = await feedRes.json();
     const rawMeta = await metaRes.json();
-    const items = z.array(itemSchema).parse(rawItems) as MailItem[];
+    const items = (z.array(itemSchema).parse(rawItems) as MailItem[]).filter(isPublishedMailItem).map(cleanMailText);
     const meta = metaSchema.parse(rawMeta) as FeedMeta;
     localStorage.setItem(FEED_CACHE, JSON.stringify(items));
     localStorage.setItem(META_CACHE, JSON.stringify(meta));
@@ -101,7 +103,7 @@ export async function loadFeed(): Promise<{ items: MailItem[]; meta: FeedMeta; o
     const cachedMeta = localStorage.getItem(META_CACHE);
     if (cachedItems && cachedMeta) {
       return {
-        items: JSON.parse(cachedItems) as MailItem[],
+        items: (JSON.parse(cachedItems) as MailItem[]).filter(isPublishedMailItem).map(cleanMailText),
         meta: JSON.parse(cachedMeta) as FeedMeta,
         offline: true,
       };
