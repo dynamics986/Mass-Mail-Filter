@@ -1,27 +1,104 @@
-import type { LocalState, MailItem, Profile } from "../types";
+import type { FavoriteSnapshot, LocalState, MailItem, Profile } from "../types";
+import { normalizeLanguageList } from "./languages";
 
-const KEY = "cu-link-state-v1";
-export const defaultProfile: Profile = {
-  studentLevel: "undergraduate", major: "Engineering", nativeLanguages: ["Mandarin"], spokenLanguages: ["Mandarin", "Cantonese", "English"],
-  health: [], skills: ["Python", "Web", "AI", "Data analysis"], interests: ["engineering", "software", "AI", "data analysis", "research assistant", "student helper"],
-  excluded: ["clinical patient recruitment", "children recruitment"], preferPaid: true,
-  weights: { engineering: 30, paid: 25, interests: 20, language: 15, helper: 10 }, language: "zh", onboarded: false
+const KEY = "cu-link-state-v2";
+
+export const defaultWeights = {
+  fit: 30,
+  urgent: 20,
+  value: 20,
+  meaningful: 20,
+  important: 10,
 };
-export const defaultState: LocalState = { profile: defaultProfile, hidden: [], favorites: {}, corrections: [] };
+
+export const defaultProfile: Profile = {
+  studentLevel: "undergraduate",
+  facultyId: "",
+  programmeId: "",
+  major: "",
+  year: "",
+  nativeLanguages: ["Cantonese"],
+  spokenLanguages: ["Cantonese", "Mandarin", "English"],
+  goals: ["paid", "research"],
+  skills: [],
+  excluded: ["clinical patient recruitment"],
+  weights: { ...defaultWeights },
+  language: "zh",
+  onboarded: false,
+};
+
+export const defaultState: LocalState = {
+  profile: { ...defaultProfile },
+  hidden: [],
+  favorites: {},
+  corrections: [],
+  importedItems: [],
+  itemFeedback: {},
+};
 
 export function loadState(): LocalState {
-  try { const raw = localStorage.getItem(KEY); return raw ? { ...defaultState, ...JSON.parse(raw), profile: { ...defaultProfile, ...JSON.parse(raw).profile, weights: { ...defaultProfile.weights, ...JSON.parse(raw).profile?.weights } } } : defaultState; }
-  catch { return defaultState; }
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return structuredClone(defaultState);
+    const parsed = JSON.parse(raw) as LocalState;
+    const legacyProfile = parsed.profile as Profile & { preferPaid?: boolean };
+    const { preferPaid: legacyPreferPaid, ...savedProfile } = legacyProfile;
+    const savedGoals = savedProfile.goals ?? defaultProfile.goals;
+    const profile: Profile = {
+      ...defaultProfile,
+      ...savedProfile,
+      goals: legacyPreferPaid && !savedGoals.includes("paid") ? [...savedGoals, "paid"] : savedGoals,
+      weights: { ...defaultWeights, ...savedProfile.weights },
+    };
+    profile.nativeLanguages = normalizeLanguageList(profile.nativeLanguages ?? defaultProfile.nativeLanguages);
+    profile.spokenLanguages = normalizeLanguageList(profile.spokenLanguages ?? defaultProfile.spokenLanguages);
+    return {
+      ...defaultState,
+      ...parsed,
+      profile,
+      favorites: parsed.favorites ?? {},
+      hidden: parsed.hidden ?? [],
+      corrections: parsed.corrections ?? [],
+      importedItems: parsed.importedItems ?? [],
+      itemFeedback: parsed.itemFeedback ?? {},
+    };
+  } catch {
+    return structuredClone(defaultState);
+  }
 }
-export function saveState(state: LocalState) { localStorage.setItem(KEY, JSON.stringify(state)); }
-export function favoriteSnapshot(item: MailItem) { return { id: item.id, title: item.title, digestDate: item.digestDate, sourceUrl: item.sourceUrl, category: item.category, deadline: item.deadline, tags: item.tags }; }
-export function exportState(state: LocalState) {
+
+export function saveState(state: LocalState): void {
+  localStorage.setItem(KEY, JSON.stringify(state));
+}
+
+export function clearState(): void {
+  localStorage.removeItem(KEY);
+}
+
+export function favoriteSnapshot(item: MailItem): FavoriteSnapshot {
+  return {
+    id: item.id,
+    title: item.title,
+    sourceUrl: item.sourceUrl,
+    deadline: item.deadline,
+    summary: item.summary,
+    savedAt: new Date().toISOString(),
+  };
+}
+
+export function exportState(state: LocalState): void {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "cu-link-settings.json"; a.click(); URL.revokeObjectURL(a.href);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "cu-link-settings.json";
+  a.click();
+  URL.revokeObjectURL(url);
 }
+
 export async function importState(file: File): Promise<LocalState> {
-  const parsed = JSON.parse(await file.text());
-  if (!parsed.profile || !Array.isArray(parsed.hidden) || typeof parsed.favorites !== "object") throw new Error("Invalid settings file");
-  return { ...defaultState, ...parsed, profile: { ...defaultProfile, ...parsed.profile, weights: { ...defaultProfile.weights, ...parsed.profile.weights } } };
+  const text = await file.text();
+  const parsed = JSON.parse(text) as LocalState;
+  saveState(parsed);
+  return loadState();
 }
-export function clearState() { localStorage.removeItem(KEY); localStorage.removeItem("cu-link-feed-cache"); localStorage.removeItem("cu-link-meta-cache"); }

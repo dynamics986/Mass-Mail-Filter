@@ -1,0 +1,200 @@
+l1:
+  paid_work:
+    weight: 3
+    any:
+      - student helper
+      - 學生助理
+      - 学生助理
+      - part-time
+      - part time
+      - 兼職
+      - 兼职
+      - intern
+      - internship
+      - 實習
+      - hourly rate
+      - hk$/hr
+      - hk$
+  research:
+    weight: 2
+    any:
+      - research assistant
+      - 研究助理
+      - looking for participants
+      - call for participants
+      - experiment
+      - 實驗
+      - 实验
+      - study on
+      - online experiment
+      - 招募參與者
+      - 招募参与者
+  competition:
+    weight: 3
+    any:
+      - competition
+      - contest
+      - hackathon
+      - 比賽
+      - 竞赛
+      - 大賽
+  programme:
+    weight: 2
+    any:
+      - training programme
+      - training program
+      - workshop series
+      - certificate
+      - 訓練計劃
+      - 训练计划
+      - 課程
+      - 课程
+  event:
+    weight: 1
+    any:
+      - seminar
+      - talk
+      - webinar
+      - info session
+      - 講座
+      - 讲座
+      - 分享會
+      - 分享会
+      - welcome day
+  service:
+    weight: 2
+    any:
+      - volunteer
+      - 義工
+      - 义工
+      - community service
+  admin:
+    weight: 1
+    any:
+      - office hours
+      - system maintenance
+      - administrative notice only
+      - notice only
+      - 行政通知
+      - 系統維護
+      - 系统维护
+
+l2:
+  Engineering:
+    - engineering
+    - 工程
+    - mechanical
+    - electronic engineering
+    - biomedical engineering
+  CS_AI:
+    - computer science
+    - artificial intelligence
+    - machine learning
+    - 人工智能
+    - programming
+    - software
+    - 程式
+    - 编程
+    - 編程
+    - data science
+  Business:
+    - business
+    - finance
+    - accounting
+    - marketing
+    - 商學院
+    - 金融
+    - 會計
+  Medicine:
+    - medicine
+    - clinical
+    - nursing
+    - 醫學
+    - 临床
+    - 臨床
+    - patient
+  Arts:
+    - english department
+    - literature
+    - history
+    - philosophy
+    - fine arts
+    - 文學
+    - 歷史
+  Education:
+    - education
+    - teaching
+    - 教育
+    - learning enhancement
+  Science:
+    - physics
+    - chemistry
+    - biology
+    - mathematics
+    - 物理
+    - 化學
+    - 生物
+    - 數學
+  SocialScience:
+    - psychology
+    - sociology
+    - economics
+    - journalism
+    - 心理
+    - 社會
+    - 經濟
+  Law:
+    - faculty of law
+    - legal
+    - 法律
+  Language:
+    - cantonese
+    - mandarin
+    - putonghua
+    - native english
+    - 粵語
+    - 粤语
+    - 普通話
+    - 普通话
+    - language production
+  Cross:
+    - interdisciplinary
+    - cross-disciplinary
+    - 跨學科
+
+l3:
+  helper:
+    - student helper
+    - 學生助理
+    - 学生助理
+  ra:
+    - research assistant
+    - 研究助理
+  intern:
+    - intern
+    - internship
+    - 實習
+  volunteer:
+    - volunteer
+    - 義工
+    - 义工
+  applicant:
+    - apply
+    - application
+    - 報名
+    - 申请
+    - 申請
+  attendee:
+    - register to attend
+    - welcome to join
+    - 歡迎參加
+    - 欢迎参加
+
+subject_recruitment:
+  - looking for participants
+  - call for participants
+  - recruiting participants
+  - 招募參與者
+  - 招募参与者
+  - human subjects
+  - clinical trial

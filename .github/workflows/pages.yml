@@ -1,7 +1,7 @@
 name: Build and deploy GitHub Pages
 on:
   push:
-    branches: [main]
+    branches: [main, cu-link]
   workflow_dispatch:
   workflow_run:
     workflows: ["Update CUHK digest data"]
@@ -12,8 +12,6 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  # A failed updater also emits workflow_run. Do not let that short, skipped
-  # run cancel a manual or push-triggered deployment that is already building.
   cancel-in-progress: false
 jobs:
   test-and-build:

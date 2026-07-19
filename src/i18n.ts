@@ -1,8 +1,66 @@
-import type { Language } from "./types";
+import type { Lang } from "./types";
 
-const copy = {
-  zh: { home: "为你推荐", history: "搜索与历史", settings: "个人资料与规则", saved: "收藏", updated: "最后更新", newThisWeek: "本期新增", matches: "符合或可能符合", search: "搜索标题、正文或标签", all: "全部", paid: "有酬劳", engineering: "工程相关", language: "语言匹配", helper: "学生工作", deadline: "即将截止", showIneligible: "显示不符合", eligible: "符合", likely: "可能符合", unknown: "待确认", ineligible: "不符合", score: "推荐", view: "查看详情", source: "查看 CUHK 原文", hide: "隐藏", favorite: "收藏", unfavorite: "取消收藏", dislike: "不想看类似内容", addInterest: "增加兴趣", correction: "标记判断错误", offline: "正在显示离线缓存", stale: "数据超过十天未更新，请检查原始 Digest。", noResults: "暂时没有符合当前条件的机会。", archived: "已归档收藏", profileIntro: "先告诉我们什么机会适合你。", save: "保存设置", export: "导出设置", import: "导入设置", clear: "清除本地数据", languageName: "界面语言", privacy: "所有偏好仅保存在浏览器，不会上传。", evidence: "资格依据", compensation: "酬劳", apply: "报名链接", body: "邮件正文", back: "返回", filters: "快速筛选", recent: "最近四期及仍有效项目" },
-  en: { home: "For you", history: "Search & history", settings: "Profile & rules", saved: "Saved", updated: "Updated", newThisWeek: "New this issue", matches: "Eligible or likely", search: "Search title, body, or tags", all: "All", paid: "Paid", engineering: "Engineering", language: "Language match", helper: "Student work", deadline: "Closing soon", showIneligible: "Show ineligible", eligible: "Eligible", likely: "Likely eligible", unknown: "Needs review", ineligible: "Ineligible", score: "Match", view: "View details", source: "Open CUHK original", hide: "Hide", favorite: "Save", unfavorite: "Unsave", dislike: "Less like this", addInterest: "Add interest", correction: "Flag wrong decision", offline: "Showing cached offline data", stale: "Data is over ten days old. Check the original Digest.", noResults: "No opportunities match these filters yet.", archived: "Archived favorite", profileIntro: "Tell us what fits you.", save: "Save settings", export: "Export settings", import: "Import settings", clear: "Clear local data", languageName: "Interface language", privacy: "All preferences stay in this browser and are never uploaded.", evidence: "Eligibility evidence", compensation: "Compensation", apply: "Application links", body: "Message", back: "Back", filters: "Quick filters", recent: "Latest four issues and active opportunities" }
-};
-export const t = (lang: Language, key: keyof typeof copy.zh) =>
-  lang === "zh" && key === "dislike" ? "不想看此类内容" : copy[lang][key];
+const dict = {
+  home: { zh: "为你推荐", en: "For you" },
+  history: { zh: "归档检索", en: "Archive" },
+  digests: { zh: "每周公告", en: "Weekly digests" },
+  timeline: { zh: "日程一览", en: "Timeline" },
+  importMail: { zh: "导入邮件", en: "Import" },
+  settings: { zh: "个人设置", en: "Settings" },
+  view: { zh: "查看详情", en: "View" },
+  favorite: { zh: "收藏", en: "Save" },
+  unfavorite: { zh: "取消收藏", en: "Unsave" },
+  hide: { zh: "隐藏", en: "Hide" },
+  back: { zh: "返回", en: "Back" },
+  save: { zh: "保存", en: "Save" },
+  export: { zh: "导出", en: "Export" },
+  import: { zh: "导入", en: "Import" },
+  clear: { zh: "清除本地数据", en: "Clear local data" },
+  search: { zh: "搜索标题或梗概…", en: "Search title or summary…" },
+  all: { zh: "全部", en: "All" },
+  saved: { zh: "已收藏", en: "Saved" },
+  offline: { zh: "离线模式：显示最近缓存的数据。", en: "Offline: showing cached data." },
+  stale: { zh: "数据可能已过期，请稍后刷新。", en: "Feed may be stale." },
+  noResults: { zh: "暂时没有符合当前条件的机会。", en: "No opportunities match the current filters." },
+  eligible: { zh: "符合", en: "Eligible" },
+  likely: { zh: "可能符合", en: "Likely" },
+  unknown: { zh: "待确认", en: "Unknown" },
+  ineligible: { zh: "不符合", en: "Ineligible" },
+  showIneligible: { zh: "包含资格不符项目", en: "Include ineligible items" },
+  sortTotal: { zh: "综合", en: "Overall" },
+  sortUrgent: { zh: "紧急", en: "Urgent" },
+  sortValue: { zh: "价值", en: "Value" },
+  sortFit: { zh: "契合", en: "Fit" },
+  privacy: { zh: "画像仅保存在本机，不会上传。", en: "Your profile stays on this device." },
+  completeProfile: { zh: "补全学院与年级，推荐会更准。", en: "Add faculty and year for better ranking." },
+  source: { zh: "原文", en: "Source" },
+  apply: { zh: "申请链接", en: "Apply" },
+  body: { zh: "邮件正文", en: "Message" },
+  evidence: { zh: "匹配概览", en: "Match overview" },
+  compensation: { zh: "报酬", en: "Pay" },
+  dislike: { zh: "减少此类", en: "Show less like this" },
+  addInterest: { zh: "更多此类", en: "More like this" },
+  correction: { zh: "标记抽取有误", en: "Flag extraction error" },
+  motto: { zh: "博文約禮", en: "Through learning and temperance to virtue" },
+  unhide: { zh: "取消隐藏", en: "Unhide" },
+  actionInbox: { zh: "本周行动", en: "This week" },
+  forYou: { zh: "推荐", en: "For you" },
+  shortcuts: { zh: "快捷键", en: "Shortcuts" },
+  bulkHide: { zh: "隐藏所选", en: "Hide selected" },
+  bulkSave: { zh: "收藏所选", en: "Save selected" },
+  bulkPolish: { zh: "润色所选", en: "Polish selected" },
+  showAllTimeline: { zh: "显示全部（含已隐藏）", en: "Show all (incl. hidden)" },
+  deadlinesOnly: { zh: "仅截止", en: "Deadlines only" },
+  undo: { zh: "撤销", en: "Undo" },
+  hiddenToast: { zh: "已隐藏", en: "Hidden" },
+  goals: { zh: "目标类型", en: "Goals" },
+  requirements: { zh: "资格要求", en: "Requirements" },
+  freshness: { zh: "数据新鲜度", en: "Feed freshness" },
+  dismissTips: { zh: "知道了", en: "Got it" },
+} as const;
+
+export type I18nKey = keyof typeof dict;
+
+export function t(lang: Lang, key: I18nKey): string {
+  return dict[key][lang];
+}

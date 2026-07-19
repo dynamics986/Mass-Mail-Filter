@@ -10,24 +10,37 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg"],
       manifest: {
-        name: "CU Link — CUHK Mass Mail Filter",
+        name: "CU Link — CUHK Opportunity Filter",
         short_name: "CU Link",
-        description: "A private, explainable opportunity filter for CUHK Mass Mail.",
-        theme_color: "#0b4f45",
-        background_color: "#f7f4eb",
+        description: "CUHK digest filter: ranked opportunities, timeline, optional on-device AI polish.",
+        theme_color: "#5B2C6F",
+        background_color: "#F7F2FA",
         display: "standalone",
         start_url: "./",
-        icons: [{ src: "favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }]
+        icons: [{ src: "favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
       },
       workbox: {
         navigateFallback: "index.html",
-        runtimeCaching: [{
-          urlPattern: /\/data\/(feed|meta)\.json$/,
-          handler: "NetworkFirst",
-          options: { cacheName: "cuhk-feed", networkTimeoutSeconds: 5, expiration: { maxEntries: 4, maxAgeSeconds: 60 * 60 * 24 * 30 } }
-        }]
-      }
-    })
+        runtimeCaching: [
+          {
+            urlPattern: /\/data\/(feed|meta|faculties)\.json$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "cu-link-data",
+              networkTimeoutSeconds: 5,
+              expiration: { maxEntries: 8, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+        ],
+      },
+    }),
   ],
-  test: { environment: "jsdom", setupFiles: "./src/test/setup.ts", include: ["src/**/*.test.{ts,tsx}"] }
+  optimizeDeps: {
+    exclude: ["@xenova/transformers"],
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./src/test/setup.ts",
+    include: ["src/**/*.test.{ts,tsx}"],
+  },
 });
