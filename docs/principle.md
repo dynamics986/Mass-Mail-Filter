@@ -1,6 +1,6 @@
-# CU Link 的 Mass Mail 推荐与评分原则
+# CUHK MailRoute 的 Mass Mail 推荐与评分原则
 
-本文档说明 CU Link 当前如何根据 CUHK Mass Mail / Undergraduate Digest 中抽取的信息，对机会进行资格判断、五维评分、个性化调整、过滤和排序。
+本文档说明 CUHK MailRoute 当前如何根据 CUHK Mass Mail / Undergraduate Digest 中抽取的信息，对机会进行资格判断、五维评分、个性化调整、过滤和排序。
 
 > **先看结论**
 >

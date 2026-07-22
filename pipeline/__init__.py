@@ -1,1 +1,1 @@
-"""CU Link data pipeline: fetch, clean, extract, enrich."""
+"""CUHK MailRoute data pipeline: fetch, clean, extract, enrich."""

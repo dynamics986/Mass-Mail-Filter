@@ -190,7 +190,7 @@ def run(use_network: bool = True) -> Path:
         try:
             import requests
 
-            resp = requests.get(SOURCE, timeout=30, headers={"User-Agent": "CU-Link/2.0"})
+            resp = requests.get(SOURCE, timeout=30, headers={"User-Agent": "CUHK-MailRoute/2.0"})
             resp.raise_for_status()
             faculties = scrape_html(resp.text)
         except Exception as exc:

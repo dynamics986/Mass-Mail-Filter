@@ -1,6 +1,6 @@
-# Exporting Mail from OpenClaw to CU Link
+# Exporting Mail from OpenClaw to CUHK MailRoute
 
-OpenClaw can convert mailbox messages into a Markdown file that CU Link parses in the browser. Imported opportunities can then appear in **For you**, **Timeline**, and **Archive** alongside the public CUHK Digest feed.
+OpenClaw can convert mailbox messages into a Markdown file that CUHK MailRoute parses in the browser. Imported opportunities can then appear in **For you**, **Timeline**, and **Archive** alongside the public CUHK Digest feed.
 
 > **Privacy first**
 >
@@ -20,11 +20,11 @@ OpenClaw can convert mailbox messages into a Markdown file that CU Link parses i
 
 ## Quick start
 
-1. In CU Link, open **Import**.
+1. In CUHK MailRoute, open **Import**.
 2. Select **Download template** or **Open template**.
 3. Ask OpenClaw to read the relevant mailbox or Mass Mail folder and produce Markdown using the downloaded structure.
 4. Remove any example items and retain only real messages you intend to import.
-5. Upload the `.md` file or paste its contents into CU Link.
+5. Upload the `.md` file or paste its contents into CUHK MailRoute.
 6. Select **Parse preview** and check the titles, summaries, dates, and item count.
 7. Select **Merge** only after the preview is correct.
 
@@ -39,7 +39,7 @@ Read the messages in [MAILBOX OR FOLDER] received between [START DATE] and
 [END DATE]. Export only opportunity-related messages that I am allowed to
 process.
 
-Use the CU Link Markdown format below. Create one "## Item:" block per email.
+Use the CUHK MailRoute Markdown format below. Create one "## Item:" block per email.
 Preserve factual amounts, dates, eligibility, organizer names, contact email,
 and the authoritative original-message URL. Do not invent missing values.
 
@@ -67,7 +67,7 @@ Give OpenClaw the template from `public/templates/cu-link-mail-export.example.md
 The file needs either the export marker or at least one `## Item:` heading. Keeping both is recommended.
 
 ```markdown
-# CU Link Mail Export
+# CUHK MailRoute Mail Export
 <!-- cu-link-export: v1 -->
 
 ## Item: Opportunity title
@@ -99,16 +99,16 @@ Each opportunity must begin with `## Item:`. Its metadata, `### Summary`, and `#
 | Field | Format | Guidance |
 |---|---|---|
 | `## Item:` | Text heading | The opportunity title. It must not be empty. |
-| `date` | `YYYY-MM-DD` | Published or received date. If omitted, CU Link uses the import date, so an explicit value is strongly recommended. |
+| `date` | `YYYY-MM-DD` | Published or received date. If omitted, CUHK MailRoute uses the import date, so an explicit value is strongly recommended. |
 | `### Body` | Plain text | Source text used for local parsing, categorization, summaries, and optional AI polish. Keep relevant facts. |
 
-The `### Summary` section is strongly recommended. When it is absent, CU Link derives a short summary from the first substantial body line.
+The `### Summary` section is strongly recommended. When it is absent, CUHK MailRoute derives a short summary from the first substantial body line.
 
 ### Optional metadata
 
-| Field | Accepted value | How CU Link uses it |
+| Field | Accepted value | How CUHK MailRoute uses it |
 |---|---|---|
-| `id` | Stable unique text | Used for merge deduplication. If absent, CU Link generates an ID from the title and item position. |
+| `id` | Stable unique text | Used for merge deduplication. If absent, CUHK MailRoute generates an ID from the title and item position. |
 | `from` | Organizer name | Displayed as organizer information. |
 | `email` | Email address | Displayed as the contact email. |
 | `deadline` | One date | Creates an application-deadline mark and the card deadline. |
@@ -135,14 +135,14 @@ Use complete dates with a four-digit year. The parser accepts `-`, `/`, or `.` s
 | `end: 2026-12-15` | Project-end point |
 | Both `start` and `end` | Work-period range |
 
-For ranges, the parser accepts `to`, `–`, `—`, `-`, `至`, `到`, `～`, or `~` between two complete dates. Do not use relative phrases such as “next Friday” or incomplete dates such as “August 20”; OpenClaw should resolve them from the email context.
+For ranges, the parser accepts `to`, `-`, `至`, `到`, `～`, or `~` between two complete dates. Do not use relative phrases such as "next Friday" or incomplete dates such as "August 20"; OpenClaw should resolve them from the email context.
 
 If a deadline is rolling or not stated, omit `deadline` and describe it accurately in the summary or body. Do not invent a date.
 
 ## Complete example
 
 ```markdown
-# CU Link Mail Export
+# CUHK MailRoute Mail Export
 <!-- cu-link-export: v1 -->
 
 ## Item: Student Helper for Orientation Events — HK$70/hour
@@ -188,7 +188,7 @@ The second item intentionally has no `source` or `deadline`: missing authoritati
 
 ## Import behavior
 
-When CU Link parses a valid file, it:
+When CUHK MailRoute parses a valid file, it:
 
 - removes repeated decorative emoji and cleans obvious text noise;
 - keeps at most 30,000 body characters per item and a 20,000-character cleaned copy;
@@ -202,7 +202,7 @@ Imported items do not modify `public/data/feed.json`. Clearing imported mail rem
 
 ## Troubleshooting
 
-### “Not a CU Link mail export”
+### “Not a CUHK MailRoute mail export”
 
 Add this marker near the top:
 
@@ -228,11 +228,11 @@ The `source` field must contain a usable HTTP(S) address. Prefer the exact CUHK 
 
 ### Duplicate items appear
 
-Give every message a stable `id`. Reusing it lets CU Link replace the earlier imported version instead of adding another item.
+Give every message a stable `id`. Reusing it lets CUHK MailRoute replace the earlier imported version instead of adding another item.
 
 ### A summary repeats the title
 
-Ask OpenClaw for one or two factual sentences that add organizer, work, compensation, deadline, audience, or participation details not already present in the title. CU Link may suppress substantially redundant summaries.
+Ask OpenClaw for one or two factual sentences that add organizer, work, compensation, deadline, audience, or participation details not already present in the title. CUHK MailRoute may suppress substantially redundant summaries.
 
 ### Merge succeeds but AI polish does not
 
@@ -252,4 +252,4 @@ Before importing, confirm that:
 - [ ] Stable IDs are present when available.
 - [ ] Private reply chains, tokens, and unrelated correspondence are removed.
 - [ ] Example items have been deleted.
-- [ ] The CU Link preview is correct before selecting **Merge**.
+- [ ] The CUHK MailRoute preview is correct before selecting **Merge**.

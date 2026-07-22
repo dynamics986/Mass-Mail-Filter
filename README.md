@@ -1,15 +1,15 @@
-# CU Link - Mass Mail Filter
+# CUHK MailRoute - Mass Mail Filter
 
 [English](./README.md) | [中文](./README_zh.md)
 
-CU Link turns the CUHK Undergraduate Digest into a focused opportunity feed. It helps students compare opportunities, understand eligibility, track dates, and return to the authoritative CUHK message without reproducing the full email in the app.
+CUHK MailRoute turns the CUHK Undergraduate Digest into a focused opportunity feed. It helps students compare opportunities, understand eligibility, track dates, and return to the authoritative CUHK message without reproducing the full email in the app.
 
 ## What you can do
 
 - Rank opportunities by fit, urgency, value, meaning, and overall score.
 - Filter paid work, research, activities, compensated opportunities, and items closing soon.
 - Save, hide, select, and search opportunities.
-- Tell CU Link to show fewer or more opportunities of a similar type.
+- Tell CUHK MailRoute to show fewer or more opportunities of a similar type.
 - Review deadlines and event dates on a timeline and calendar.
 - Open the original CUHK message from one verified **View original** link.
 - Import mailbox exports as Markdown and merge them into the local feed.
@@ -20,7 +20,7 @@ CU Link turns the CUHK Undergraduate Digest into a focused opportunity feed. It 
 
 Use the deployed site:
 
-[https://rachelzzz1921.github.io/Mass-Mail-Filter/](https://rachelzzz1921.github.io/Mass-Mail-Filter/)
+[https://dynamics986.github.io/Mass-Mail-Filter/](https://dynamics986.github.io/Mass-Mail-Filter/)
 
 The site is installable as a Progressive Web App in supported browsers. Cached public data may remain available when the network is temporarily unavailable.
 
@@ -28,7 +28,7 @@ The site is installable as a Progressive Web App in supported browsers. Cached p
 
 ### 1. Set up your profile
 
-On the first visit, complete the short profile guide. CU Link uses the selected faculty, programme, study stage, goals, and language preferences to calculate recommendation scores.
+On the first visit, complete the short profile guide. CUHK MailRoute uses the selected faculty, programme, study stage, goals, and language preferences to calculate recommendation scores.
 
 You can update these choices later under **Settings**.
 
@@ -49,7 +49,7 @@ Each card contains a concise title and summary, useful tags, score dimensions, k
 
 Select **View** to inspect the matching overview, normalized eligibility requirements, and key information. The full email body is intentionally not reproduced.
 
-Use the single **View original** link to verify details on the authoritative CUHK page. CU Link's extracted and AI-polished fields are reading aids and may be incomplete; the original message remains authoritative.
+Use the single **View original** link to verify details on the authoritative CUHK page. CUHK MailRoute's extracted and AI-polished fields are reading aids and may be incomplete; the original message remains authoritative.
 
 ### 4. Improve recommendations
 
@@ -85,7 +85,7 @@ Parsing happens in the browser. Imported content remains in that browser's local
 
 ## AI Services (Pro)
 
-AI is optional. CU Link currently supports these OpenAI-compatible providers:
+AI is optional. CUHK MailRoute currently supports these OpenAI-compatible providers:
 
 - SiliconFlow
 - DeepSeek
@@ -115,7 +115,7 @@ The API-key placeholder changes by provider. Not every credential starts with `s
 
 ### Polish opportunities
 
-Use **Polish this page** from the recommendation feed. CU Link:
+Use **Polish this page** from the recommendation feed. CUHK MailRoute:
 
 - skips valid cached results;
 - sends only compact, fact-focused email evidence to the selected provider;
@@ -133,7 +133,7 @@ Browser local storage is not an encrypted credential vault. Use a restricted API
 
 ## Local data and privacy
 
-CU Link is a browser-only application. The following data is stored locally:
+CUHK MailRoute is a browser-only application. The following data is stored locally:
 
 - profile and recommendation preferences;
 - saved, hidden, and imported opportunities;
@@ -209,10 +209,10 @@ For a fork, enable GitHub Pages with **GitHub Actions** as the source and update
 
 ## Project documentation
 
-- [`docs/design.md`](./docs/design.md) — product and interface design requirements.
-- [`docs/principle.md`](./docs/principle.md) — current Mass Mail eligibility, scoring, personalization, filtering, and ranking principles.
-- [`docs/openclaw-mail-export.md`](./docs/openclaw-mail-export.md) — detailed OpenClaw Markdown export and import guide.
-- [`docs/July19.md`](./docs/July19.md) — July 19, 2026 implementation log.
+- [`docs/design.md`](./docs/design.md) - product and interface design requirements.
+- [`docs/principle.md`](./docs/principle.md) - current Mass Mail eligibility, scoring, personalization, filtering, and ranking principles.
+- [`docs/openclaw_usage.md`](./docs/openclaw_usage.md) - detailed OpenClaw Markdown export and import guide.
+- [`docs/update_July19.md`](./docs/update_July19.md) - July 19, 2026 implementation log.
 - [`README_zh.md`](./README_zh.md) — Chinese usage guide.
 
 When changing user-visible behavior, update `docs/design.md` and the relevant usage documentation in the same change.

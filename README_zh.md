@@ -1,8 +1,8 @@
-# CU Link — CUHK Mass Mail筛选器
+# CUHK MailRoute — CUHK Mass Mail筛选器
 
 [English](./README.md) | [中文](./README_zh.md)
 
-CU Link 将香港中文大学 Undergraduate Digest 整理为清晰的机会推荐流，帮助学生比较机会、判断资格、跟踪日期，并返回权威的 CUHK 原始网页核对信息。网站不会在详情页重复展示完整邮件正文。
+CUHK MailRoute 将香港中文大学 Undergraduate Digest 整理为清晰的机会推荐流，帮助学生比较机会、判断资格、跟踪日期，并返回权威的 CUHK 原始网页核对信息。网站不会在详情页重复展示完整邮件正文。
 
 ## 主要功能
 
@@ -20,7 +20,7 @@ CU Link 将香港中文大学 Undergraduate Digest 整理为清晰的机会推�
 
 在线版本：
 
-[https://rachelzzz1921.github.io/Mass-Mail-Filter/](https://rachelzzz1921.github.io/Mass-Mail-Filter/)
+[https://dynamics986.github.io/Mass-Mail-Filter/](https://dynamics986.github.io/Mass-Mail-Filter/)
 
 网站支持渐进式 Web 应用。在兼容浏览器中可以安装到设备；网络暂时不可用时，浏览器可能继续使用已缓存的公开数据。
 
@@ -28,7 +28,7 @@ CU Link 将香港中文大学 Undergraduate Digest 整理为清晰的机会推�
 
 ### 1. 完成个人画像
 
-第一次打开网站时，请完成简短的资料引导。CU Link 会根据学院、专业、学习阶段、目标类型和语言偏好计算推荐分数。
+第一次打开网站时，请完成简短的资料引导。CUHK MailRoute 会根据学院、专业、学习阶段、目标类型和语言偏好计算推荐分数。
 
 之后可以在“个人设置”中修改这些信息。
 
@@ -115,7 +115,7 @@ API Key 输入提示会根据服务商变化。并非所有凭据都以 `sk-` �
 
 ### 一键润色
 
-在推荐页点击“一键润色本页”。CU Link 会：
+在推荐页点击“一键润色本页”。CUHK MailRoute 会：
 
 - 跳过仍然有效的本机缓存；
 - 只向当前服务商发送经过压缩且与事实相关的邮件片段；
@@ -133,7 +133,7 @@ API Key 输入提示会根据服务商变化。并非所有凭据都以 `sk-` �
 
 ## 本机数据与隐私
 
-CU Link 是纯前端浏览器应用，以下内容会保存在当前浏览器：
+CUHK MailRoute 是纯前端浏览器应用，以下内容会保存在当前浏览器：
 
 - 个人画像和推荐偏好；
 - 已收藏、已隐藏和导入的机会；

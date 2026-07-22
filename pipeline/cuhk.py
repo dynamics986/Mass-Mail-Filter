@@ -35,7 +35,7 @@ def create_session() -> requests.Session:
     retries = Retry(total=3, backoff_factor=1, status_forcelist=(429, 500, 502, 503, 504), allowed_methods=("GET",))
     session.mount("http://", HTTPAdapter(max_retries=retries))
     session.mount("https://", HTTPAdapter(max_retries=retries))
-    session.headers.update({"User-Agent": "CU-Link/2.0 personal academic project; low-frequency weekly fetch"})
+    session.headers.update({"User-Agent": "CUHK-MailRoute/2.0 personal academic project; low-frequency weekly fetch"})
     return session
 
 

@@ -327,9 +327,9 @@ function Header({ local, setLocal }: { local: LocalState; setLocal: (state: Loca
   return (
     <header className="topbar">
       <NavLink to="/" className="brand">
-        <span className="brand-mark">CU</span>
+        <img className="brand-mark" src="./icon-192.png" alt="" />
         <span>
-          <b>CU Link</b>
+          <b>CUHK MailRoute</b>
           <small>Mass Mail Filter</small>
         </span>
       </NavLink>
@@ -1673,7 +1673,7 @@ function Onboarding({
   return (
     <div className="modal-backdrop">
       <section className="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
-        <span className="brand-mark">CU</span>
+        <img className="brand-mark" src="./icon-192.png" alt="" />
         <h1 id="onboard-title">{lang === "zh" ? "先告诉我们你是谁" : "Tell us who you are"}</h1>
         <p>
           {lang === "zh"

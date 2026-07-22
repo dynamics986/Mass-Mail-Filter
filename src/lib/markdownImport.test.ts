@@ -13,6 +13,6 @@ describe("parseCuLinkMarkdown", () => {
   });
 
   it("rejects unrelated markdown", () => {
-    expect(() => parseCuLinkMarkdown("# Hello\n\nNo items")).toThrow(/CU Link mail export/i);
+    expect(() => parseCuLinkMarkdown("# Hello\n\nNo items")).toThrow(/CUHK MailRoute mail export/i);
   });
 });

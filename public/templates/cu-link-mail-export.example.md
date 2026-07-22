@@ -1,10 +1,10 @@
-# CU Link Mail Export
+# CUHK MailRoute Mail Export
 <!-- cu-link-export: v1 -->
 <!--
   OpenClaw workflow:
   1) Read mailbox messages (Mass Mail / personal inbox).
   2) For each opportunity-like email, append one "## Item:" block using the fields below.
-  3) In CU Link, open Import → paste or upload this markdown → Merge into feed.
+  3) In CUHK MailRoute, open Import → paste or upload this markdown → Merge into feed.
 -->
 
 ## Item: Example — Student Helper Recruitment (HK$64/hr)

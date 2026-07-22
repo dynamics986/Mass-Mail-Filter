@@ -23,7 +23,7 @@ This document records the product, interface, data, and engineering changes comp
 - Standardized page titles, top spacing, and responsive sizing. The home title is now **机会精选 / Opportunity Highlights** and aligns with titles on other routes.
 - Removed redundant eyebrow labels and promotional descriptions from page headers.
 - Standardized the six Chinese navigation labels to four characters: **为你推荐、日程一览、导入邮件、归档检索、每周公告、个人设置**.
-- Moved **博文约礼** into the persistent header between the CU Link brand and navigation, and increased its size.
+- Moved **博文约礼** into the persistent header between the CUHK MailRoute brand and navigation, and increased its size.
 - Applied one shared maximum-width container and horizontal gutter system to the header and all pages so both left and right edges align.
 - Reserved stable scrollbar space to prevent visible horizontal movement when switching between short and long routes.
 - Added the in-flow footer text `dynamics986@2026.` to every page without using an overlay.

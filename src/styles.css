@@ -59,12 +59,9 @@ button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand-mark {
   width: 42px; height: 42px;
-  border-radius: 12px 12px 12px 4px;
-  background: linear-gradient(135deg, var(--purple) 50%, var(--gold) 50%);
-  color: white;
-  display: grid; place-items: center;
-  font-family: var(--font-display);
-  font-weight: 700; font-size: 15px; letter-spacing: -0.5px;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
 }
 .brand b {
   display: block;

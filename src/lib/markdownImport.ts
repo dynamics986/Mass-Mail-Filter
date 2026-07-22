@@ -4,7 +4,7 @@ import { cleanMailText } from "./textCleanup";
 /**
  * OpenClaw / mailbox export format (cu-link-export v1)
  *
- * # CU Link Mail Export
+ * # CUHK MailRoute Mail Export
  * <!-- cu-link-export: v1 -->
  *
  * ## Item: Title of the opportunity
@@ -181,7 +181,7 @@ function buildTimeMarks(fields: {
 export function parseCuLinkMarkdown(markdown: string): MailItem[] {
   const text = markdown.replace(/^\uFEFF/, "");
   if (!/cu-link-export/i.test(text) && !/^##\s+Item\s*:/m.test(text)) {
-    throw new Error("Not a CU Link mail export. Expect <!-- cu-link-export: v1 --> or ## Item: headings.");
+    throw new Error("Not a CUHK MailRoute mail export. Expect <!-- cu-link-export: v1 --> or ## Item: headings.");
   }
   const parts = text.split(/^##\s+Item\s*:\s*/im).slice(1);
   if (!parts.length) throw new Error("No ## Item: blocks found in the markdown.");
@@ -239,9 +239,9 @@ export function parseCuLinkMarkdown(markdown: string): MailItem[] {
   });
 }
 
-export const EXPORT_TEMPLATE = `# CU Link Mail Export
+export const EXPORT_TEMPLATE = `# CUHK MailRoute Mail Export
 <!-- cu-link-export: v1 -->
-<!-- OpenClaw: dump mailbox messages into Item blocks below, then import in CU Link → Import -->
+<!-- OpenClaw: dump mailbox messages into Item blocks below, then import in CUHK MailRoute → Import -->
 
 ## Item: Example — Student Helper Recruitment (HK$64/hr)
 - id: example-helper-1

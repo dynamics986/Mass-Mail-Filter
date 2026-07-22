@@ -95,7 +95,7 @@ def migrate_legacy(path: Path) -> int:
 
 
 def cli() -> int:
-    parser = argparse.ArgumentParser(description="CU Link digest pipeline")
+    parser = argparse.ArgumentParser(description="CUHK MailRoute digest pipeline")
     parser.add_argument("--date", action="append", help="Digest date YYYYMMDD")
     parser.add_argument(
         "--lookback-days",

@@ -8,7 +8,7 @@ Every change that affects user-visible behavior, information architecture, visua
 
 Maintain matching user guides in `README.md` (English) and `README_zh.md` (Chinese). Both documents must provide a visible language-switch link to the other version, and user-facing workflow or privacy changes must be reflected in both guides.
 
-Keep `docs/openclaw-mail-export.md` aligned with the actual Markdown parser and Import interface. It must distinguish required and optional fields, document timeline mapping and local-storage behavior, require authoritative source links, discourage invented values, and include privacy guidance plus a usable OpenClaw prompt.
+Keep `docs/openclaw-usage.md` aligned with the actual Markdown parser and Import interface. It must distinguish required and optional fields, document timeline mapping and local-storage behavior, require authoritative source links, discourage invented values, and include privacy guidance plus a usable OpenClaw prompt.
 
 Keep `docs/principle.md` synchronized with the implemented eligibility checks, five scoring dimensions, default weights, category-feedback overlay, filtering order, and sorting behavior. It must state that scores are heuristic ranking aids rather than probabilities or official decisions, and document known limitations without overstating accuracy.
 
@@ -78,7 +78,7 @@ The interface should feel calm, professional, readable, and trustworthy. It shou
 - Use whitespace to separate sections; do not use oversized empty areas to push controls to the bottom of the screen.
 - Secondary pages should begin directly with one clear page title. Do not place decorative eyebrow text above it when that text merely repeats the page name, source, privacy claim, or navigation category.
 - Page titles and their introductory copy must share one left edge and use a consistent vertical rhythm; avoid negative margins that make title blocks feel crowded or misaligned.
-- Show the university motto once in the persistent header, positioned between the CU Link brand and primary navigation, so it is available consistently without competing with page titles.
+- Show the university motto once in the persistent header, positioned between the CUHK MailRoute brand and primary navigation, so it is available consistently without competing with page titles.
 - The persistent header and every page body must use the same maximum-width container and identical horizontal gutters. Their left and right content edges must align; flexible whitespace belongs only inside the shared boundaries.
 - The home title and secondary-page titles must share the same top offset, responsive font size, line height, and margin. Do not give the home hero a separate title scale.
 - Reserve stable vertical-scrollbar space across routes so switching between short and long pages never shifts the shared centered container horizontally.
@@ -295,7 +295,7 @@ For every relevant UI or behavior change, verify:
 ### 2026-07-19 — Persistent header motto
 
 - Removed the Undergraduate Digest eyebrow and motto from the home hero, and removed the duplicate onboarding motto.
-- Placed the localized motto between the CU Link brand and primary navigation in the persistent header on every page.
+- Placed the localized motto between the CUHK MailRoute brand and primary navigation in the persistent header on every page.
 
 ### 2026-07-19 — Global copyright footer
 
