@@ -38,6 +38,8 @@ jobs:
             # weekly, so this discovers and retains the latest four issues.
             python -m pipeline.main --lookback-days 28
           fi
+      - name: Verify feed contains the latest four available issues
+        run: python -m pipeline.main --verify-recent --lookback-days 28
       - name: Commit only when the feed changed
         run: |
           if git diff --quiet -- public/data; then

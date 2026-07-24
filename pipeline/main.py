@@ -8,7 +8,7 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from .cuhk import DIGEST_LOOKBACK_DAYS, LIST_URL, candidate_dates, collect_digest, create_session
+from .cuhk import DIGEST_LOOKBACK_DAYS, LIST_URL, candidate_dates, collect_digest, create_session, fetch_html, parse_list
 from .enrich import reenrich_raw_dict
 from .models import FeedMeta, MailItem
 
@@ -94,6 +94,30 @@ def migrate_legacy(path: Path) -> int:
     return 0
 
 
+def verify_recent(days: int = DIGEST_LOOKBACK_DAYS, expected: int = 4) -> int:
+    """Fail if the published feed misses any of the latest available issues."""
+    existing_dates = {item.digestDate for item in load_existing()}
+    session = create_session()
+    available: list[str] = []
+    for compact_date in candidate_dates(days=max(1, days)):
+        try:
+            if parse_list(fetch_html(session, LIST_URL.format(date=compact_date)), compact_date):
+                available.append(f"{compact_date[:4]}-{compact_date[4:6]}-{compact_date[6:]}")
+        except Exception as exc:
+            print(f"Could not verify {compact_date}: {exc}")
+        if len(available) >= expected:
+            break
+    missing = [digest_date for digest_date in available if digest_date not in existing_dates]
+    if missing:
+        print(f"Feed is stale; missing available digest issues: {', '.join(missing)}")
+        return 1
+    if len(available) < expected:
+        print(f"Could verify only {len(available)} digest issues; expected {expected}.")
+        return 1
+    print(f"Feed contains the latest {expected} available digest issues: {', '.join(available)}")
+    return 0
+
+
 def cli() -> int:
     parser = argparse.ArgumentParser(description="CUHK MailRoute digest pipeline")
     parser.add_argument("--date", action="append", help="Digest date YYYYMMDD")
@@ -104,9 +128,12 @@ def cli() -> int:
         help="Calendar days to probe when no explicit date is supplied (default: recent four weeks)",
     )
     parser.add_argument("--migrate", type=Path, help="Re-enrich a legacy feed.json")
+    parser.add_argument("--verify-recent", action="store_true", help="Verify feed contains the latest available digest issues")
     args = parser.parse_args()
     if args.migrate:
         return migrate_legacy(args.migrate)
+    if args.verify_recent:
+        return verify_recent(days=max(1, args.lookback_days))
     return run(args.date or candidate_dates(days=max(1, args.lookback_days)))
 
 

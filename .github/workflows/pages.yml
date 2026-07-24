@@ -1,7 +1,7 @@
 name: Build and deploy GitHub Pages
 on:
   push:
-    branches: [main, cu-link]
+    branches: [main]
   workflow_dispatch:
   workflow_run:
     workflows: ["Update CUHK digest data"]
