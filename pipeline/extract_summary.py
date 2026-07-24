@@ -19,7 +19,14 @@ def is_redundant_summary(title: str, summary: str) -> bool:
     summary_key = _comparable(summary)
     if not title_key or not summary_key:
         return False
-    if title_key in summary_key:
+    # Preserve punctuation boundaries for short titles. Removing all punctuation
+    # can otherwise join adjacent Chinese sentences (for example "讲座。报名")
+    # into a false match for a title such as "讲座报名".
+    title_phrase = re.sub(r"\s+", " ", title).strip().casefold()
+    summary_phrase = re.sub(r"\s+", " ", summary).strip().casefold()
+    if title_phrase in summary_phrase:
+        return True
+    if len(title_key) >= 8 and title_key in summary_key:
         return True
     return len(summary_key) >= 40 and summary_key in title_key
 

@@ -90,3 +90,9 @@ def test_redundant_summary_keeps_new_team_introduction():
     title = "招募聽力損失長者及其孫子女參與互動實驗"
     summary = "我們是香港中文大學大腦與認知研究所（BMI）的研究團隊。我們團隊誠摯邀請有聽力損失的長者及其孫子女來參與一項互動研究。"
     assert not is_redundant_summary(title, summary)
+
+
+def test_redundant_summary_preserves_chinese_sentence_boundary():
+    title = "讲座报名"
+    summary = "欢迎同学参加就业讲座。报名截止日期：2026年8月5日。名额有限。"
+    assert not is_redundant_summary(title, summary)
