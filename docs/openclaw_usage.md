@@ -2,9 +2,7 @@
 
 OpenClaw can convert mailbox messages into a Markdown file that CUHK MailRoute parses in the browser. Imported opportunities can then appear in **For you**, **Timeline**, and **Archive** alongside the public CUHK Digest feed.
 
-> **Privacy first**
->
-> Parsing and storage happen in the current browser. The exported Markdown may still contain private email content. Keep it on a trusted device, and never commit it to Git, attach it to a public issue, or send it to project maintainers.
+> **Privacy first**: Parsing and storage happen in the current browser. The exported Markdown may still contain private email content. Keep it on a trusted device, and never commit it to Git, attach it to a public issue, or send it to project maintainers.
 
 ## Contents
 

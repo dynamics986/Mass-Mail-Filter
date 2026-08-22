@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { NavLink, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { NavLink, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { t } from "./i18n";
 import { buildMonthGrid, monthLabel, shiftMonth, weekdayHeaders } from "./lib/calendar";
 import { getAnnouncementsUrl, loadFaculties, loadFeed } from "./lib/data";
@@ -333,7 +333,6 @@ function Header({ local, setLocal }: { local: LocalState; setLocal: (state: Loca
           <small>Mass Mail Filter</small>
         </span>
       </NavLink>
-      <span className="header-motto">{t(lang, "motto")}</span>
       <nav>
         <NavLink to="/">{t(lang, "home")}</NavLink>
         <NavLink to="/timeline">{t(lang, "timeline")}</NavLink>
@@ -427,6 +426,12 @@ function Home({
     const next = new URLSearchParams(params);
     if (!value) next.delete("q");
     else next.set("q", value);
+    setParams(next, { replace: true });
+  };
+  const toggleIneligible = () => {
+    const next = new URLSearchParams(params);
+    if (showIneligible) next.delete("ineligible");
+    else next.set("ineligible", "1");
     setParams(next, { replace: true });
   };
 
@@ -602,11 +607,10 @@ function Home({
   const runBatchPolish = async () => {
     if (!evaluated.length || batchBusy) return;
     if (!aiReady(loadSecrets())) {
-      setBatchMsg(
-        lang === "zh"
-          ? "请先在个人设置中启用 AI 服务，并填写当前服务商的 API Key 与模型 ID。"
-          : "Enable AI Services in Settings and enter an API key and model ID for the selected provider.",
-      );
+      const missingAiMessage = lang === "zh"
+        ? "请先在个人设置中启用 AI 服务，并填写当前服务商的 API Key 与模型 ID。"
+        : "Enable AI Services in Settings and enter an API key and model ID for the selected provider.";
+      setBatchMsg(current => current === missingAiMessage ? "" : missingAiMessage);
       return;
     }
     setBatchBusy(true);
@@ -636,13 +640,13 @@ function Home({
   return (
     <>
       <section className="hero compact-mobile">
-        <h1>{lang === "zh" ? "机会精选" : "Curated opportunities"}</h1>
+        <h1>{t(lang, "home")}</h1>
       </section>
       {meta && (
         <div className="freshness-strip">
           <span>
             {lang === "zh"
-              ? `${digestCount} 期 Digest · 更新于 ${fmtDate(meta.fetchedAt, lang)}`
+              ? `${digestCount} 期摘要 · 更新于 ${fmtDate(meta.fetchedAt, lang)}`
               : `${digestCount} digests · updated ${fmtDate(meta.fetchedAt, lang)}`}
           </span>
           {stale && (
@@ -743,35 +747,17 @@ function Home({
             ))}
           </div>
         </div>
-        <label className="eligibility-scope">
-          <input
-            type="checkbox"
-            checked={showIneligible}
-            onChange={e => {
-              const next = new URLSearchParams(params);
-              if (e.target.checked) next.set("ineligible", "1");
-              else next.delete("ineligible");
-              setParams(next, { replace: true });
-            }}
-          />
-          <span className="toggle-track" aria-hidden="true"><span /></span>
-          <span className="scope-copy">
-            <strong>{lang === "zh" ? "包含资格不符项目" : "Include ineligible items"}</strong>
-            <small>
-              {lang === "zh"
-                ? "默认隐藏与个人资料明确冲突的邮件"
-                : "Items that clearly conflict with your profile are hidden by default"}
-            </small>
-          </span>
-        </label>
         <div className="dim-filters">
           <div className="dim-filters-head">
             <p className="section-kicker">{lang === "zh" ? "分数门槛" : "Score thresholds"}</p>
-            {hasDimFilter && (
-              <button type="button" className="linkish" onClick={clearMins}>
-                {lang === "zh" ? "重置拉杆" : "Reset sliders"}
-              </button>
-            )}
+            <button
+              type="button"
+              className={`linkish dim-reset${hasDimFilter ? "" : " is-hidden"}`}
+              disabled={!hasDimFilter}
+              onClick={clearMins}
+            >
+              {lang === "zh" ? "重置拉杆" : "Reset sliders"}
+            </button>
           </div>
           <div className="dim-filters-grid">
             {DIM_KEYS.map(key => (
@@ -795,8 +781,21 @@ function Home({
       </section>
       <section className="feed">
         <div className="feed-heading">
-          <h2>{t(lang, "home")}</h2>
+          <h2>{t(lang, "curatedOpportunities")}</h2>
           <div className="feed-heading-actions">
+            <button
+              type="button"
+              className={`chip eligibility-btn${showIneligible ? " active" : ""}`}
+              aria-pressed={showIneligible}
+              onClick={toggleIneligible}
+              title={lang === "zh"
+                ? "默认隐藏与个人资料明确冲突的邮件"
+                : "Items that clearly conflict with your profile are hidden by default"}
+            >
+              {showIneligible
+                ? (lang === "zh" ? "已包含资格不符项目" : "Including ineligible")
+                : t(lang, "showIneligible")}
+            </button>
             <button
               type="button"
               className="chip polish-btn"
@@ -816,9 +815,6 @@ function Home({
                   ? `一键润色本页${pendingPolish ? `（${pendingPolish}）` : ""}`
                   : `Polish page${pendingPolish ? ` (${pendingPolish})` : ""}`}
             </button>
-            <span>
-              {evaluated.length} {lang === "zh" ? "项" : "items"}
-            </span>
           </div>
         </div>
         {batchMsg && <p className="translate-hint" style={{ marginTop: -8, marginBottom: 14 }}>{batchMsg}</p>}
@@ -984,20 +980,22 @@ function OpportunityCard({
       </div>
       <h3>{displayTitle}</h3>
       {displaySummary && <p className="summary">{displaySummary}</p>}
-      <div className="tags">
-        {(item.tags.length ? item.tags : item.taxonomy?.domains ?? []).slice(0, 3).map(tag => (
-          <span key={tag}>{tagLabel(tag, lang)}</span>
-        ))}
-      </div>
-      {!!highConfidenceReqs.length && (
-        <div className="req-tags">
-          {highConfidenceReqs.map((c, i) => (
-            <span key={i} className={`req-tag req-${c.result}`}>
-              {formatRequirementLabel(c.req, lang)}
-            </span>
+      <div className="card-labels">
+        <div className="tags">
+          {(item.tags.length ? item.tags : item.taxonomy?.domains ?? []).slice(0, 3).map(tag => (
+            <span key={tag}>{tagLabel(tag, lang)}</span>
           ))}
         </div>
-      )}
+        {!!highConfidenceReqs.length && (
+          <div className="req-tags">
+            {highConfidenceReqs.map((c, i) => (
+              <span key={i} className={`req-tag req-${c.result}`}>
+                {formatRequirementLabel(c.req, lang)}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
       <ScoreMeters scores={evaluation.scores} lang={lang} />
       <div className="card-meta">
         <span>{money(item)}</span>
@@ -1056,6 +1054,7 @@ function Detail({
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const item = items.find(i => i.id === id);
   const lang = local.profile.language;
   if (!item) return <Empty text={lang === "zh" ? "找不到此项目，可能已经归档。" : "This item may have been archived."} />;
@@ -1067,7 +1066,7 @@ function Detail({
   const evaluation = evaluateItem(item, local.profile, categoryFeedback(item, items, local.itemFeedback));
   const reqChecks = listRequirementChecks(item, local.profile);
   const feedbackActions = (
-    <section className="feedback detail-feedback">
+    <section className="feedback detail-head-feedback" aria-label={lang === "zh" ? "推荐反馈" : "Recommendation feedback"}>
       <button
         className={feedback === "less" ? "confirmed" : ""}
         aria-pressed={feedback === "less"}
@@ -1101,17 +1100,35 @@ function Detail({
   );
   return (
     <article className="detail">
-      <button className="back" onClick={() => navigate(-1)}>
-        ← {t(lang, "back")}
+      <button
+        type="button"
+        className="back"
+        onClick={() => location.key === "default" ? navigate("/") : navigate(-1)}
+      >
+        <span aria-hidden="true">←</span>
+        {t(lang, "back")}
       </button>
       <div className="detail-head">
         <div>
-          <span className={`status ${evaluation.eligibility}`}>{t(lang, evaluation.eligibility)}</span>
-          <p className="category">
-            {taxonomyLabel(item.taxonomy?.type, lang)} · {fmtDate(item.digestDate, lang)}
-          </p>
           <h1>{displayTitle}</h1>
           {displaySummary && <p className="detail-summary">{displaySummary}</p>}
+          <div className="detail-source-action">
+            {originalSourceUrl ? (
+              <a
+                className="primary detail-source-link"
+                href={originalSourceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {lang === "zh" ? "查看原文 ↗" : "View source ↗"}
+              </a>
+            ) : (
+              <p className="source-unavailable">
+                {lang === "zh" ? "此项目没有可用的原文链接。" : "No original source is available for this item."}
+              </p>
+            )}
+            {feedbackActions}
+          </div>
         </div>
         <div className="score-ring">
           <strong>{evaluation.score}</strong>
@@ -1167,7 +1184,6 @@ function Detail({
               </ul>
             </details>
           )}
-          {feedbackActions}
         </section>
         <aside>
           <div className="fact-grid">
@@ -1179,15 +1195,6 @@ function Detail({
           <Info label={lang === "zh" ? "截止证据" : "Deadline evidence"} value={item.deadlineEvidence || "—"} />
           <Info label={lang === "zh" ? "主办方" : "Organizer"} value={item.organizer ?? "—"} />
           {item.contactEmail && <a href={`mailto:${item.contactEmail}`}>{item.contactEmail}</a>}
-          {originalSourceUrl ? (
-            <a className="source-link" href={originalSourceUrl} target="_blank" rel="noreferrer">
-              {lang === "zh" ? "查看原文" : "View source"} ↗
-            </a>
-          ) : (
-            <p className="source-unavailable">
-              {lang === "zh" ? "此项目没有可用的原文链接。" : "No original source is available for this item."}
-            </p>
-          )}
           <div className="info">
             <span>{lang === "zh" ? "时间节点" : "Schedule"}</span>
             <ul className="mini-schedule">
@@ -1241,17 +1248,6 @@ function History({
   return (
     <section className="page">
       <h1>{t(lang, "history")}</h1>
-      <p className="page-intro">
-        {lang === "zh" ? (
-          <>
-            检索收藏与已隐藏项。也可打开 <NavLink to="/digests">{t(lang, "digests")}</NavLink>。
-          </>
-        ) : (
-          <>
-            Search saved and hidden items. Or open <NavLink to="/digests">{t(lang, "digests")}</NavLink>.
-          </>
-        )}
-      </p>
       <div className="search-row">
         <input
           type="search"
@@ -1311,8 +1307,8 @@ function DigestArchive({ items, local }: { items: MailItem[]; local: LocalState 
       <h1>{t(lang, "digests")}</h1>
       <p className="page-intro">
         {lang === "zh"
-          ? "查看最近四周的 Undergraduate Digest 公告总表；具体通知请从机会详情页打开原网页。"
-          : "Open the Undergraduate Digest announcement lists from the most recent four weeks. Individual messages remain available from opportunity details."}
+          ? "查看最近四周的 Undergraduate Digest 公告总表"
+          : "Open the Undergraduate Digest announcement lists from the most recent four weeks "}
       </p>
       {digests.length ? (
         <div className="digest-list">
@@ -1324,7 +1320,7 @@ function DigestArchive({ items, local }: { items: MailItem[]; local: LocalState 
                   <strong>{fmtDate(date, lang)}</strong>
                   <small>{count} {lang === "zh" ? "项已收录" : "items indexed"}</small>
                 </span>
-                <b>{lang === "zh" ? "查看该期 CUHK Digest ↗" : "Open this CUHK Digest ↗"}</b>
+                <b>{lang === "zh" ? "查看该期 CUHK Digest" : "Open this CUHK Digest ↗"}</b>
               </a>
             );
           })}
@@ -1892,19 +1888,6 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
   return (
     <section className="page timeline-page">
       <h1>{t(lang, "timeline")}</h1>
-      <div className="chips timeline-primary-filters">
-        <button
-          type="button"
-          className={deadlinesOnly ? "chip active" : "chip"}
-          onClick={() => setDeadlinesOnly(v => !v)}
-        >
-          {t(lang, "deadlinesOnly")}
-        </button>
-        <label className="switch timeline-show-all">
-          <input type="checkbox" checked={showAll} onChange={e => setShowAll(e.target.checked)} />
-          <span>{t(lang, "showAllTimeline")}</span>
-        </label>
-      </div>
       <div className="chips" style={{ marginBottom: 14 }}>
         {allKinds.map(kind => (
           <button
@@ -1937,7 +1920,27 @@ function TimelinePage({ items, local }: { items: MailItem[]; local: LocalState }
 
       <div className="month-cal">
         <div className="month-cal-head">
-          <h2>{monthLabel(cursor.year, cursor.month, lang)}</h2>
+          <div className="month-cal-title">
+            <h2>{monthLabel(cursor.year, cursor.month, lang)}</h2>
+            <div className="chips timeline-primary-filters">
+              <button
+                type="button"
+                className={deadlinesOnly ? "chip active" : "chip"}
+                aria-pressed={deadlinesOnly}
+                onClick={() => setDeadlinesOnly(v => !v)}
+              >
+                {t(lang, "deadlinesOnly")}
+              </button>
+              <button
+                type="button"
+                className={showAll ? "chip active" : "chip"}
+                aria-pressed={showAll}
+                onClick={() => setShowAll(v => !v)}
+              >
+                {t(lang, "showAllTimeline")}
+              </button>
+            </div>
+          </div>
           <div className="month-cal-nav">
             <button
               type="button"
@@ -2071,6 +2074,7 @@ function ImportPage({ local, setLocal }: { local: LocalState; setLocal: (s: Loca
   const [preview, setPreview] = useState<MailItem[]>([]);
   const [error, setError] = useState("");
   const [mergedOk, setMergedOk] = useState(0);
+  const [agentCopyStatus, setAgentCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const parseDraft = (text: string) => {
@@ -2117,64 +2121,95 @@ function ImportPage({ local, setLocal }: { local: LocalState; setLocal: (s: Loca
     URL.revokeObjectURL(url);
   };
 
+  const copyAgentPrompt = async () => {
+    const prompt = lang === "zh"
+      ? "请读取需要导入 CUHK MailRoute 的邮件，并严格按照 CUHK MailRoute Markdown 模板整理后导出为一个 .md 文件。每封邮件使用独立的 Item 区块，保留标题、日期、来源链接、正文摘要、截止日期和申请链接。"
+      : "Read the emails to be imported into CUHK MailRoute and export one .md file that strictly follows the CUHK MailRoute Markdown template. Use a separate Item block for each email and retain its title, date, source URL, summary, deadline, and application links.";
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setAgentCopyStatus("copied");
+    } catch {
+      setAgentCopyStatus("failed");
+    }
+    window.setTimeout(() => setAgentCopyStatus("idle"), 2000);
+  };
+
   return (
     <section className="page import-page">
       <h1>{t(lang, "importMail")}</h1>
-      <p className="page-intro import-intro">
-        {lang === "zh"
-          ? "通过 OpenClaw 导出邮件 Markdown，并在此上传或粘贴；内容仅在本浏览器解析，可合并至推荐与时间线。"
-          : "Export email as Markdown with OpenClaw, then upload or paste it here; processing stays in this browser and can be merged into recommendations and the timeline."}
-      </p>
       <ol className="import-guide">
         <li>
           <b>1</b>
-          <span><strong>{lang === "zh" ? "获取模板" : "Get the template"}</strong>{lang === "zh" ? "下载或打开示例 Markdown。" : "Download or open the example Markdown."}</span>
+          <div className="import-step">
+            <strong>{lang === "zh" ? "获取模板" : "Get the template"}</strong>
+            <p>{lang === "zh" ? "下载或打开示例 Markdown" : "Download or open the example Markdown"}</p>
+            <div className="import-step-actions">
+              <button type="button" className="primary" onClick={downloadTemplate}>
+                {lang === "zh" ? "下载模板" : "Download template"}
+              </button>
+              <a className="chip" href="./templates/cu-link-mail-export.example.md" target="_blank" rel="noreferrer">
+                {lang === "zh" ? "打开模板" : "Open template"}
+              </a>
+            </div>
+          </div>
         </li>
         <li>
           <b>2</b>
-          <span><strong>{lang === "zh" ? "让 OpenClaw 导出" : "Export with OpenClaw"}</strong>{lang === "zh" ? "让它按模板读取邮箱并生成 .md 文件。" : "Ask it to read the mailbox and produce a matching .md file."}</span>
+          <div className="import-step">
+            <strong>{lang === "zh" ? "Agent 导出" : "Export with an agent"}</strong>
+            <p>{lang === "zh" ? "让 Agent 按模板整理邮件" : "Ask an agent to format the emails and create a .md file"}</p>
+            <div className="import-step-actions">
+              <button type="button" className="primary" onClick={copyAgentPrompt}>
+                {agentCopyStatus === "copied"
+                  ? (lang === "zh" ? "已复制" : "Copied")
+                  : agentCopyStatus === "failed"
+                    ? (lang === "zh" ? "复制失败" : "Copy failed")
+                    : (lang === "zh" ? "复制 Agent 提示词" : "Copy agent prompt")}
+              </button>
+            </div>
+          </div>
         </li>
         <li>
           <b>3</b>
-          <span><strong>{lang === "zh" ? "解析并合并" : "Parse and merge"}</strong>{lang === "zh" ? "上传或粘贴内容，预览无误后合并。" : "Upload or paste it, review the preview, then merge."}</span>
+          <div className="import-step">
+            <strong>{lang === "zh" ? "解析并合并" : "Parse and merge"}</strong>
+            <p>{lang === "zh" ? "上传 Agent 生成的文件，再解析并合并" : "Upload the generated file, then parse and merge it"}</p>
+            <div className="import-step-actions">
+              <button
+                type="button"
+                className="primary"
+                onClick={() => fileRef.current?.click()}
+              >
+                {lang === "zh" ? "上传 .md" : "Upload .md"}
+              </button>
+              <input
+                ref={fileRef}
+                hidden
+                type="file"
+                accept=".md,text/markdown,text/plain"
+                onChange={async e => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  parseDraft(await file.text());
+                }}
+              />
+              <button type="button" className="chip danger" onClick={clearImported}>
+                {lang === "zh" ? `清除导入（${local.importedItems?.length ?? 0}）` : `Clear imported (${local.importedItems?.length ?? 0})`}
+              </button>
+            </div>
+          </div>
         </li>
       </ol>
       <p className="import-privacy">
         {lang === "zh"
-          ? "隐私提示：解析和保存均在本机浏览器完成。导出文件可能含私人邮件，请勿提交到代码仓库或公开分享。"
-          : "Privacy: parsing and storage stay in this browser. Exports may contain private mail—do not commit or share them publicly."}
+          ? "隐私提示：解析和保存均在本机浏览器完成。导出文件可能含私人邮件，请勿提交到代码仓库或公开分享"
+          : "Privacy: parsing and storage stay in this browser. Exports may contain private mail—do not commit or share them publicly"}
       </p>
-      <div className="import-actions">
-        <button type="button" className="primary" onClick={downloadTemplate}>
-          {lang === "zh" ? "下载模板" : "Download template"}
-        </button>
-        <a className="chip" href="./templates/cu-link-mail-export.example.md" target="_blank" rel="noreferrer">
-          {lang === "zh" ? "打开模板" : "Open template"}
-        </a>
-        <button type="button" onClick={() => fileRef.current?.click()}>
-          {lang === "zh" ? "上传 .md" : "Upload .md"}
-        </button>
-        <input
-          ref={fileRef}
-          hidden
-          type="file"
-          accept=".md,text/markdown,text/plain"
-          onChange={async e => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            parseDraft(await file.text());
-          }}
-        />
-        <button type="button" className="danger" onClick={clearImported}>
-          {lang === "zh" ? `清除已导入（${local.importedItems?.length ?? 0}）` : `Clear imported (${local.importedItems?.length ?? 0})`}
-        </button>
-      </div>
       <label className="import-editor">
-        <span>{lang === "zh" ? "Markdown 内容" : "Markdown content"}</span>
         <textarea
           value={draft}
           spellCheck={false}
-          placeholder={lang === "zh" ? "粘贴 OpenClaw 导出的 Markdown…" : "Paste OpenClaw export Markdown…"}
+          placeholder={lang === "zh" ? "粘贴 Markdown…" : "Paste Markdown…"}
           onChange={e => setDraft(e.target.value)}
         />
       </label>

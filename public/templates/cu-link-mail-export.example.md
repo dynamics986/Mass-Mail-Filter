@@ -1,5 +1,5 @@
 # CUHK MailRoute Mail Export
-<!-- cu-link-export: v1 -->
+<!-- cu-link-export -->
 <!--
   OpenClaw workflow:
   1) Read mailbox messages (Mass Mail / personal inbox).
@@ -8,14 +8,14 @@
 -->
 
 ## Item: Example — Student Helper Recruitment (HK$64/hr)
-- id: example-helper-1
-- date: 2026-07-17
+- id: example
+- date: 20YY-MM-DD
 - from: Centre for Learning Enhancement And Research
 - email: example@cuhk.edu.hk
-- deadline: 2026-08-20
-- event: 2026-08-26 to 2026-08-28
-- start: 2026-08-26
-- end: 2026-08-28
+- deadline: 20YY-MM-DD
+- event: 20YY-MM-DD to 20YY-MM-DD
+- start: 20YY-MM-DD
+- end: 20YY-MM-DD
 - tags: paid_work, helper
 - source: https://example.com/message/1
 - apply: https://example.com/apply/1
@@ -24,15 +24,14 @@
 Recruiting student helpers at HK$64/hr for on-site event logistics.
 
 ### Body
-The Centre is recruiting student helpers to provide logistical support for on-site events during 26-28 August 2026.
 Hourly Rate: HK$64
-Application deadline: 2026-08-20
+Application deadline: 20YY-MM-DD
 
 ## Item: Example — Research Assistant (rolling)
-- date: 2026-07-17
-- from: Faculty of Engineering
-- start: 2026-09-01
-- end: 2026-12-15
+- date: 20YY-MM-DD
+- from: Faculty
+- start: 20YY-MM-DD
+- end: 20YY-MM-DD
 - tags: research, ra
 - source: https://example.com/message/2
 
@@ -41,4 +40,4 @@ Part-time research assistant for an NLP project; applications reviewed on a roll
 
 ### Body
 Research Assistant wanted. Applications are reviewed on a rolling basis until the position is filled.
-Employment period: 2026-09-01 to 2026-12-15.
+Employment period: 20YY-MM-DD to 20YY-MM-DD.

@@ -2,7 +2,11 @@
 
 [English](./README.md) | [中文](./README_zh.md)
 
-CUHK MailRoute turns the CUHK Undergraduate Digest into a focused opportunity feed. It helps students compare opportunities, understand eligibility, track dates, and return to the authoritative CUHK message without reproducing the full email in the app.
+CUHK MailRoute turns the CUHK Undergraduate Digest into a focused opportunity feed. It helps students compare opportunities, understand eligibility, track dates, and return to the authoritative CUHK message without reproducing the full email in the app. Online demo:
+
+> [https://dynamics986.github.io/Mass-Mail-Filter/](https://dynamics986.github.io/Mass-Mail-Filter/)
+
+The site is installable as a Progressive Web App in supported browsers. Cached public data may remain available when the network is temporarily unavailable.
 
 ## What you can do
 
@@ -16,13 +20,6 @@ CUHK MailRoute turns the CUHK Undergraduate Digest into a focused opportunity fe
 - Optionally polish short titles and structured summaries with your own AI API key.
 - Switch the entire interface between Chinese and English from the header.
 
-## Open the website
-
-Use the deployed site:
-
-[https://dynamics986.github.io/Mass-Mail-Filter/](https://dynamics986.github.io/Mass-Mail-Filter/)
-
-The site is installable as a Progressive Web App in supported browsers. Cached public data may remain available when the network is temporarily unavailable.
 
 ## Getting started
 
@@ -152,8 +149,7 @@ Requirements:
 - npm
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev
 ```
 
 Open the local address printed by Vite, normally [http://localhost:5173/](http://localhost:5173/).
@@ -194,25 +190,13 @@ python -m pipeline.main --date 20260717
 
 The **Update CUHK digest data** GitHub Actions workflow runs on a schedule and can also be started manually. It tests the pipeline, checks the recent 28-day window, and commits `public/data` only when the feed changes.
 
-## GitHub Pages deployment
-
-The **Build and deploy GitHub Pages** workflow:
-
-1. installs dependencies with `npm ci`;
-2. runs the test suite;
-3. creates the production build;
-4. deploys `dist/` to GitHub Pages.
-
-It runs after pushes to configured deployment branches, through manual dispatch, and after a successful data-update workflow.
-
-For a fork, enable GitHub Pages with **GitHub Actions** as the source and update repository or workflow settings as needed. Vite uses a relative base path so the generated site works under a repository subpath.
 
 ## Project documentation
 
 - [`docs/design.md`](./docs/design.md) - product and interface design requirements.
 - [`docs/principle.md`](./docs/principle.md) - current Mass Mail eligibility, scoring, personalization, filtering, and ranking principles.
+- [`docs/updates.md`](./docs/updates.md) - consolidated website update record.
 - [`docs/openclaw_usage.md`](./docs/openclaw_usage.md) - detailed OpenClaw Markdown export and import guide.
-- [`docs/update_July19.md`](./docs/update_July19.md) - July 19, 2026 implementation log.
 - [`README_zh.md`](./README_zh.md) — Chinese usage guide.
 
 When changing user-visible behavior, update `docs/design.md` and the relevant usage documentation in the same change.

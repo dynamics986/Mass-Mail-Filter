@@ -1,379 +1,143 @@
-# CUHK MailRoute 的 Mass Mail 推荐与评分原则
+# How CUHK MailRoute Works / CUHK MailRoute 工作原理
 
-本文档说明 CUHK MailRoute 当前如何根据 CUHK Mass Mail / Undergraduate Digest 中抽取的信息，对机会进行资格判断、五维评分、个性化调整、过滤和排序。
+## English
 
-> **先看结论**
->
-> 当前分数不是录取概率、成功率或官方评价，也不是由大语言模型直接生成。它是一套在浏览器中执行的、可重复的启发式排序方法，用来减少阅读成本。邮件原文始终是最终依据。
+### What the site does
 
-## 目录
+CUHK MailRoute converts public CUHK Undergraduate Digest messages and locally imported Markdown into a searchable opportunity feed. It extracts structured facts, checks known requirements against the user's local profile, calculates five ranking dimensions, and presents the result through recommendations, a timeline, archive search, and weekly digest summaries.
 
-- [评分流程](#评分流程)
-- [使用的信息](#使用的信息)
-- [资格判断](#资格判断)
-- [五个评分维度](#五个评分维度)
-- [综合分计算](#综合分计算)
-- [用户反馈如何影响推荐](#用户反馈如何影响推荐)
-- [过滤与排序](#过滤与排序)
-- [AI 与评分的关系](#ai-与评分的关系)
-- [准确性与局限](#准确性与局限)
-- [示例](#示例)
+Scores are deterministic heuristics, not admission probabilities, official judgments, or AI-generated decisions. The original message is always authoritative.
 
-## 评分流程
+### Data flow and retention
 
-每条邮件大致经过以下步骤：
+1. The scheduled pipeline scans the most recent 28 days of public Digest announcements.
+2. It extracts titles, summaries, source URLs, opportunity types, domains, roles, compensation, deadlines, requirements, and useful tags.
+3. Validation checks source freshness and stops publication if recent available issues are missing.
+4. The public feed keeps the latest four Digest issues in full and may retain older items whose meaningful deadlines are still open.
+5. Markdown imported by a user is parsed and stored only in that browser; it is not uploaded to the project.
 
-1. 从公开 Digest 或本机导入的 Markdown 中读取标题、摘要、正文、发布日期和原文地址。
-2. 抽取机会类型、领域、角色、报酬、截止日期、资格要求和标签。
-3. 将资格要求与用户在“个人设置”中填写的资料进行比较。
-4. 分别计算契合、紧急、价值、意义和重要五个维度，范围均为 `0–100`。
-5. 根据用户设置的五维权重计算综合分。
-6. 将“减少此类 / 更多此类”形成的类目偏好叠加到契合分。
-7. 应用隐藏、排除关键词、资格、搜索、类目和分数门槛等过滤条件。
-8. 按用户选择的维度排序并显示卡片。
+### Eligibility
 
-同一份邮件、同一份个人画像、相同日期和相同偏好会得到相同结果。唯一会自然随时间变化的是“紧急”分，因为它取决于距离截止日期还有多少天。
+Structured requirements are compared with profile fields such as study level, major, language, age, gender, residency, health, and skills.
 
-## 使用的信息
-
-### 来自邮件的字段
-
-评分主要使用：
-
-- 机会类型：有薪工作、研究、课程项目、竞赛、服务、活动或行政通知；
-- 学科领域：工程、计算机与人工智能、商业、医学、理学、社会科学等；
-- 角色：例如研究助理、实习生、参与者或学生助理；
-- 报酬类型及金额；
-- 申请截止日期或滚动招募状态；
-- 年龄、学生阶段、专业、语言、身份、健康和技能等资格要求；
-- 标题、原始摘要、标签和正文中的证书、学分、推荐信、作品集等信号。
-
-### 来自个人设置的字段
-
-个性化计算使用：
-
-- 本科生或研究生阶段；
-- 学院、专业和年级；
-- 母语和会使用的语言；
-- 目标类型；
-- 技能关键词；
-- 排除关键词；
-- 可选的年龄、性别、身份和健康信息；
-- 五维权重；
-- 对相似类目的“减少 / 更多”反馈。
-
-没有填写的个人信息不会被当作“不符合”，通常会产生“待确认”状态。
-
-## 资格判断
-
-### 单项要求比较
-
-结构化资格要求支持以下比较：
-
-| 要求 | 比较方式 |
+| Status | Meaning |
 |---|---|
-| 年龄下限 | 用户年龄 `≥` 要求值 |
-| 年龄上限 | 用户年龄 `≤` 要求值 |
-| 学生阶段、专业、语言、身份、健康、技能等 | 不区分大小写的相等或包含比较 |
-| 用户未填写对应资料 | `unknown`，即无法确认 |
+| Eligible | Known requirements match and none remain unresolved. |
+| Likely eligible | At least one requirement matches, while another cannot be confirmed. |
+| Needs confirmation | Information is missing or no structured requirement was extracted. |
+| Ineligible | A high-confidence requirement conflicts with the profile. |
 
-每项要求得到 `match`、`conflict` 或 `unknown`。
+Missing profile information is treated as unknown, not as a conflict. Eligibility is only a reading aid; the organizer makes the real decision.
 
-### 汇总状态
+### Five ranking dimensions
 
-| 显示状态 | 当前判断原则 |
+Each dimension is rounded and limited to `0–100`.
+
+| Dimension | Main signals |
 |---|---|
-| 不符合 | 至少有一项高置信资格要求与用户资料冲突 |
-| 可能符合 | 至少一项匹配，同时仍有要求无法确认 |
-| 待确认 | 存在无法确认的要求，且没有已确认匹配；或邮件没有结构化资格要求 |
-| 符合 | 没有高置信冲突，也没有无法确认项 |
+| Fit | Eligibility, faculty/domain proximity, languages, goals, skills, and category feedback. |
+| Urgency | Application deadline: closer deadlines score higher; expired items score `0`; rolling and unstated deadlines receive conservative fixed values. |
+| Value | Verified compensation, relevant experience, certificates, credits, and the Paid work goal. |
+| Meaning | Opportunity-type prior plus research-participant and growth/portfolio signals. |
+| Importance | The relationship between the user's study stage and the opportunity type. |
 
-资格判断只反映邮件中成功抽取并且用户已填写的字段。显示“符合”不代表主办方已经确认资格；显示“待确认”也不代表不符合。
-
-## 五个评分维度
-
-每个维度最终都会四舍五入并限制在 `0–100`。
-
-### 1. 契合 Fit
-
-契合分衡量机会与个人资料、学院、目标、语言和技能的相关程度。
-
-#### 资格基础分
-
-| 资格状态 | 基础分 |
-|---|---:|
-| 符合 | 75 |
-| 可能符合 | 58 |
-| 待确认 | 42 |
-| 不符合 | 0，并直接结束该维度计算 |
-
-#### 学科领域
-
-- 邮件领域与用户学院对应领域一致：`+18`。
-- 属于相邻领域：`+10`。
-
-相邻关系包括工程、计算机与人工智能、理学之间的关联，商业与社会科学 / 法律之间的关联，医学与理学之间的关联，以及艺术、语言、教育和社会科学之间的部分关联。
-
-#### 语言
-
-- 母语或会使用的语言与要求匹配：`+12`。
-- 存在语言冲突：契合分最高限制为 `25`。
-
-#### 目标类型
-
-目标与机会类型匹配时，每个命中目标增加 `8` 分，最多 `+20`：
-
-| 用户目标 | 对应机会类型 |
-|---|---|
-| 有薪工作 | 有薪工作 |
-| 研究体验 | 研究 |
-| 竞赛项目 | 竞赛 |
-| 志愿服务 | 服务 |
-| 活动课程 | 活动、课程项目 |
-
-#### 技能关键词
-
-如果用户填写的技能出现在标题、摘要或标签中，每个命中增加 `4` 分，最多 `+10`。
-
-#### 类目反馈
-
-“减少此类 / 更多此类”最终也作用于契合分，详见[用户反馈如何影响推荐](#用户反馈如何影响推荐)。
-
-### 2. 紧急 Urgent
-
-紧急分只使用申请截止日期，不把普通活动日期当作申请截止日期。
-
-| 截止情况 | 分数 |
-|---|---:|
-| 已截止 | 0 |
-| 今天或明天截止 | 100 |
-| 2–3 天 | 90 |
-| 4–7 天 | 75 |
-| 8–14 天 | 55 |
-| 15–30 天 | 35 |
-| 超过 30 天 | 18 |
-| 滚动招募 | 40 |
-| 未注明申请截止 | 28 |
-
-紧急分高只表示更需要及时查看，不代表机会质量更高。
-
-### 3. 价值 Value
-
-价值分首先使用报酬信息；如果没有明确报酬，再参考履历价值及证书、学分等信号。
-
-默认基础分为 `35`。
-
-#### 报酬
-
-现金或津贴使用已抽取的最高金额（没有最高金额时使用最低金额）：
-
-| 报酬 | 基础价值分 |
-|---|---:|
-| HK$200 或以上 | 90 |
-| HK$64–199 | 78 |
-| HK$1–63 | 65 |
-| 金额为 0 或未能确定金额 | 55 |
-| 代金券 | 48 |
-| 奖项 / 奖金 | 42 |
-| 其他或未知报酬类型 | 50 |
-
-如果用户选择了“有薪工作”目标，存在现金或津贴时再增加 `8` 分。
-
-#### 没有明确报酬时
-
-- 角色为研究助理或实习生：设为 `50`，表示可能有履历 / 经历价值。
-- 用户偏好有薪工作但邮件是服务类机会：设为 `28`。
-- 用户偏好有薪工作、角色像研究助理或实习生但未抽取到报酬：在 `50` 的基础上减 `8`。
-
-#### 证书和成长凭证
-
-标题、摘要或正文出现证书、学分、推荐信等信号时：`+12`。
-
-### 4. 意义 Meaningful
-
-意义分从机会类型先验值开始：
-
-| 机会类型 | 基础分 |
-|---|---:|
-| 研究 | 78 |
-| 有薪工作 | 72 |
-| 课程项目 | 70 |
-| 竞赛 | 68 |
-| 服务 | 55 |
-| 活动 | 48 |
-| 行政通知 | 22 |
-
-进一步调整：
-
-- 如果标题或摘要显示用户只是作为研究参与者 / 受试者：一般设为 `25`。
-- 如果用户选择了研究目标，而且没有明确排除参与者招募：在原类型分基础上减 `5`，保留一定研究相关性。
-- 出现作品集、研究经历、实践、履历 / CV 等成长信号：`+10`。
-- 行政通知最终不超过 `30`。
-
-这里的“意义”是用于信息排序的产品启发式，不是对活动社会价值或个人选择的道德评价。
-
-### 5. 重要 Important
-
-重要分表示机会类型与当前学习阶段的时机是否匹配。
-
-| 条件 | 分数 |
-|---|---:|
-| 未设置年级 | 50 |
-| Y1–Y2 的活动、课程项目或服务 | 70 |
-| Y3–Y5 / Final 的有薪工作、研究或竞赛 | 82 |
-| 研究生的研究机会 | 88 |
-| 行政通知 | 30 |
-| 其他年级与类型组合 | 50 |
-
-## 综合分计算
-
-综合分是五个维度的加权平均：
+The overall score is a normalized weighted average:
 
 ```text
-综合分 =
-  (契合 × 契合权重
-   + 紧急 × 紧急权重
-   + 价值 × 价值权重
-   + 意义 × 意义权重
-   + 重要 × 重要权重)
-  ÷ 权重总和
+(Fit×30 + Urgency×20 + Value×20 + Meaning×20 + Importance×10) ÷ 100
 ```
 
-默认权重：
+These are the default weights. Users may adjust every weight from `0` to `40`; the calculation divides by the actual weight sum, so the weights do not need to total `100`.
 
-| 维度 | 默认权重 |
-|---|---:|
-| 契合 | 30 |
-| 紧急 | 20 |
-| 价值 | 20 |
-| 意义 | 20 |
-| 重要 | 10 |
+### Personalization, filtering, and sorting
 
-默认总和为 `100`，因此可以近似理解为 `30% / 20% / 20% / 20% / 10%`。用户可以在“个人设置 → 五维权重（高级）”中把每项调整到 `0–40`。程序使用实际权重总和重新归一化，因此权重不必相加等于 100；全部为 0 时会用除数 1，综合分结果为 0。
+- **More like this** adds `18` points to Fit for the affected opportunity category; **Less like this** subtracts `28`. Feedback is reversible and the adjusted score remains within `0–100`.
+- Hidden items, excluded-keyword matches, and high-confidence ineligible items are omitted from the default recommendation view.
+- Users can search content, filter by opportunity traits, include ineligible items, and set minimum Fit, Urgency, Value, and Meaning scores.
+- Standard mode sorts by the selected score. This-week mode first limits items to relevant near-term time nodes, then orders them by action time and urgency.
 
-综合分最后四舍五入并限制在 `0–100`。
+### Local data, AI, and offline behavior
 
-## 用户反馈如何影响推荐
+- Profile settings, preferences, saved/hidden items, imports, feedback, AI credentials, and AI caches stay in the current browser.
+- AI is optional and is used only to shorten titles, structure summaries, or assist English-to-Chinese translation. It does not calculate eligibility or scores.
+- When AI is used, relevant email text is sent directly from the browser to the selected provider. Credentials are excluded from profile exports.
+- The service worker caches the application and public feed. If the network fails, the site may show the latest cached data with offline or stale warnings.
 
-“减少此类 / 更多此类”不是只修改当前卡片，而是形成同一一级机会类型的偏好叠加层。
+### Limits
 
-1. 汇总该类型下所有已保存反馈。
-2. 每个“更多此类”记 `+1`，每个“减少此类”记 `-1`。
-3. 总和大于 0 时，该类型的所有机会按“更多”处理；小于 0 时按“减少”处理；等于 0 时不调整。
-4. “更多”使契合分 `+18`；“减少”使契合分 `-28`。
-5. 调整后的契合分仍限制在 `0–100`，然后再参与综合分计算。
+- Extraction quality limits scoring quality; missing compensation or deadlines do not prove that none exist.
+- Compensation is not fully normalized by duration or unit, so a total payment and an hourly rate may not be economically comparable.
+- Keyword and skill matching are heuristic and may miss synonyms or context.
+- Scores are most useful for relative comparison for the same user and data version. Always verify important facts through **View source**.
 
-两个按钮互斥，再次点击当前选项会取消该条反馈。取消单项反馈不会修改个人设置中的目标和排除关键词。
+---
 
-## 过滤与排序
+## 中文
 
-评分和显示是两个不同过程。一个项目即使分数较高，也可能被过滤掉。
+### 网站做什么
 
-### 默认隐藏
+CUHK MailRoute 将公开的 CUHK Undergraduate Digest 和用户在本机导入的 Markdown 整理为可检索的机会列表。系统抽取结构化信息，将已知要求与浏览器内的个人设置比较，计算五个排序维度，再通过推荐、日程、归档检索和每周摘要展示结果。
 
-推荐页默认排除：
+分数是可重复的启发式排序，不是录取概率、官方判断，也不是 AI 直接作出的决定。邮件原文始终是最终依据。
 
-- 用户已隐藏的项目；
-- 标题、摘要或正文命中个人设置“排除关键词”的项目；
-- 被高置信资格冲突判定为“不符合”的项目。
+### 数据流程与保留
 
-用户可以启用“包含资格不符项目”查看最后一类；已隐藏项目需要在相应归档或时间线控制中查看。
+1. 定时流程扫描最近 28 天的公开 Digest 公告。
+2. 抽取标题、梗概、原文链接、机会类型、领域、角色、报酬、截止日期、资格要求和实用标签。
+3. 发布前验证来源新鲜度；如果缺少近期已发布的摘要，停止更新。
+4. 公共数据完整保留最新四期摘要，也可继续保留仍有有效截止日期的更早项目。
+5. 用户导入的 Markdown 只在当前浏览器解析和保存，不会上传到项目。
 
-### 页面筛选
+### 资格判断
 
-可以继续按以下条件缩小结果：
+系统把结构化要求与学生阶段、专业、语言、年龄、性别、身份、健康和技能等个人设置进行比较。
 
-- 搜索标题、摘要、标签、主办方和原始类目；
-- 有报酬、即将截止、研究、有薪工作、活动课程；
-- 契合、紧急、价值和意义的最低门槛；
-- “本周行动”模式。
+| 状态 | 含义 |
+|---|---|
+| 符合 | 已知要求均匹配，且没有待确认项。 |
+| 可能符合 | 至少一项匹配，同时仍有要求无法确认。 |
+| 待确认 | 资料不足，或邮件没有抽取出结构化要求。 |
+| 不符合 | 至少一项高置信要求与个人资料冲突。 |
 
-“即将截止”指申请截止日期在今天至未来 7 天内。
+未填写的信息会被视为未知，而不是冲突。资格状态只用于辅助阅读，最终资格由主办方判断。
 
-### 排序
+### 五个排序维度
 
-普通推荐模式支持：
+每个维度都会四舍五入并限制在 `0–100`。
 
-- 综合分；
-- 紧急分；
-- 价值分；
-- 契合分。
+| 维度 | 主要依据 |
+|---|---|
+| 契合 | 资格、学院与领域关系、语言、目标、技能和类目反馈。 |
+| 紧急 | 申请截止日期；越接近分数越高，已截止为 `0`，滚动招募和未注明截止使用保守固定值。 |
+| 价值 | 已确认的报酬、相关经历、证书、学分和“有薪工作”目标。 |
+| 意义 | 机会类型基础值，以及研究参与者和成长／作品集等信号。 |
+| 重要 | 当前学习阶段与机会类型之间的关系。 |
 
-“本周行动”模式只保留本周存在相关时间节点的项目，先按最近行动时间排序，时间相同时再按紧急分排序。
-
-## AI 与评分的关系
-
-AI 服务当前用于：
-
-- 重写更短的标题；
-- 生成结构化摘要；
-- 可选的英译中辅助。
-
-评分仍使用邮件保存的原始标题、摘要、正文和结构化抽取字段。AI 润色缓存不会改变资格、五维分数、综合分或过滤结果。
-
-因此：
-
-- 未配置 AI 也可以完整使用评分和推荐；
-- 更换 AI 服务商不会改变同一条邮件的分数；
-- AI 润色看起来更易读，不代表系统提高了该机会的评价。
-
-## 准确性与局限
-
-### 1. 抽取质量决定评分上限
-
-如果报酬、截止日期、资格或类目没有正确抽取，对应维度也会受到影响。遇到错误应打开原文核对，并使用“标记抽取有误”。
-
-### 2. 金额尚未按单位完全标准化
-
-当前价值分直接使用抽取金额，没有统一换算时薪、总津贴、奖金或多日总额。HK$200 总津贴和 HK$200 / 小时会落入相同金额档位，因此不能把价值分理解为精确的经济比较。
-
-### 3. “未注明”不等于“没有”
-
-没有抽取到报酬或截止日期时，系统使用保守的中低分，而不是断定无薪或没有截止日期。
-
-### 4. 文本匹配是启发式方法
-
-技能、排除关键词和成长信号主要依赖不区分大小写的文字包含关系，可能存在同义词遗漏或上下文误判。
-
-### 5. 资格判断不是官方决定
-
-邮件可能包含系统尚未支持的复合条件。用户画像也可能不完整。任何申请决定都应以原始邮件和主办方解释为准。
-
-### 6. 分数只适合相对排序
-
-`80` 分不代表 80% 成功率，也不代表一定优于所有 `70` 分机会。分数更适合在同一用户、相近时间和同一数据版本下进行快速比较。
-
-## 示例
-
-假设某项目具有以下信息：
-
-- 类型：有薪工作；
-- 资格状态：待确认；
-- 领域与用户学院一致；
-- 命中“有薪工作”目标；
-- 报酬 HK$90；
-- 10 天后截止；
-- 用户为 Y4；
-- 没有额外技能或证书信号；
-- 没有类目反馈。
-
-可能得到：
-
-| 维度 | 计算 | 得分 |
-|---|---|---:|
-| 契合 | 待确认 42 + 同领域 18 + 目标 8 | 68 |
-| 紧急 | 8–14 天 | 55 |
-| 价值 | HK$64–199 为 78 + 有薪目标 8 | 86 |
-| 意义 | 有薪工作类型先验 | 72 |
-| 重要 | Y4 × 有薪工作 | 82 |
-
-使用默认权重：
+综合分是归一化加权平均：
 
 ```text
-(68×30 + 55×20 + 86×20 + 72×20 + 82×10) ÷ 100
-= 71.2
+(契合×30 + 紧急×20 + 价值×20 + 意义×20 + 重要×10) ÷ 100
 ```
 
-页面显示时会四舍五入为综合分 `71`。
+以上是默认权重。用户可以把每项调整到 `0–40`；程序按实际权重总和重新归一化，因此权重不必相加等于 `100`。
 
-若该类目的反馈净值为“更多”，契合分会先从 `68` 调整为 `86`，再重新计算综合分。若项目命中排除关键词，则即使综合分较高，也不会出现在默认推荐列表中。
+### 个性化、过滤与排序
+
+- “更多此类”使相应机会类目的契合分增加 `18`；“减少此类”使其减少 `28`。反馈可以取消，调整后分数仍限制在 `0–100`。
+- 默认推荐会排除已隐藏、命中排除关键词和高置信“不符合”的项目。
+- 用户可以搜索内容、按机会特征筛选、包含资格不符项目，并设置契合、紧急、价值和意义的最低分数。
+- 普通模式按所选分数排序；本周行动模式先保留近期有相关时间节点的项目，再按行动时间和紧急度排列。
+
+### 本地数据、AI 与离线行为
+
+- 个人设置、偏好、收藏／隐藏、导入内容、反馈、AI 凭据和 AI 缓存都保存在当前浏览器。
+- AI 是可选功能，只用于缩短标题、整理梗概或辅助英译中，不参与资格判断和评分。
+- 使用 AI 时，相关邮件文本会由浏览器直接发送给所选服务商；凭据不会进入个人设置导出文件。
+- Service Worker 会缓存应用和公开数据。网络失败时，网站可能显示最近缓存的数据，并提示离线或数据可能过期。
+
+### 局限
+
+- 抽取质量决定评分质量；没有抽取到报酬或截止日期，不代表它们不存在。
+- 报酬尚未完全按时长和单位归一化，因此总报酬与时薪未必可以直接比较。
+- 关键词和技能匹配属于启发式方法，可能遗漏同义词或上下文。
+- 分数更适合在相同用户和数据版本下作相对比较。重要信息应通过“查看原文”核对。
