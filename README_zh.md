@@ -147,8 +147,7 @@ CUHK MailRoute 是纯前端浏览器应用，以下内容会保存在当前浏�
 - npm
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev
 ```
 
 打开 Vite 输出的本地地址，通常是 [http://localhost:5173/](http://localhost:5173/)。
@@ -197,5 +196,3 @@ GitHub Actions 中的 **Update CUHK digest data** 工作流会定时运行，也
 - [`docs/updates.md`](./docs/updates.md)：汇总的网站修改记录。
 - [`docs/openclaw_usage.md`](./docs/openclaw_usage.md)：OpenClaw Markdown 邮件导出与导入详细说明。
 - [`README.md`](./README.md)：英文使用说明。
-
-任何影响用户界面或行为的修改，都应在同一次变更中更新 `docs/design.md` 和相关使用说明。

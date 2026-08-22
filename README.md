@@ -10,7 +10,7 @@ The site is installable as a Progressive Web App in supported browsers. Cached p
 
 ## What you can do
 
-- Rank opportunities by fit, urgency, value, meaning, and overall score.
+- Rank opportunities by `fit, urgency, value, meaning, and overall score`.
 - Filter paid work, research, activities, compensated opportunities, and items closing soon.
 - Save, hide, select, and search opportunities.
 - Tell CUHK MailRoute to show fewer or more opportunities of a similar type.
@@ -198,5 +198,3 @@ The **Update CUHK digest data** GitHub Actions workflow runs on a schedule and c
 - [`docs/updates.md`](./docs/updates.md) - consolidated website update record.
 - [`docs/openclaw_usage.md`](./docs/openclaw_usage.md) - detailed OpenClaw Markdown export and import guide.
 - [`README_zh.md`](./README_zh.md) — Chinese usage guide.
-
-When changing user-visible behavior, update `docs/design.md` and the relevant usage documentation in the same change.
